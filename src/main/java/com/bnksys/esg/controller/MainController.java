@@ -4,11 +4,14 @@ import com.bnksys.esg.data.Member;
 import com.bnksys.esg.data.userboard;
 import com.bnksys.esg.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/main")
@@ -23,8 +26,12 @@ public class MainController {
     }
 
     @GetMapping("/boardid")
-    public List<userboard> getUserWithBoards(){
+    public ResponseEntity<Map<String, List<userboard>>> getUserWithBoards() {
         List<userboard> board = mainService.getUserWithBoards();
-        return  board;
+
+        Map<String, List<userboard>> response = new HashMap<>();
+        response.put("data", board);
+
+        return ResponseEntity.ok(response);
     }
 }
