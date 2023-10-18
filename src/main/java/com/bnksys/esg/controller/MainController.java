@@ -5,9 +5,7 @@ import com.bnksys.esg.data.userboard;
 import com.bnksys.esg.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,5 +31,17 @@ public class MainController {
         response.put("data", board);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/fetchData")
+    public String fetchData(
+            @RequestParam String sigunguCd,
+            @RequestParam String bjdongCd,
+            @RequestParam String bun,
+            @RequestParam String ji,
+            @RequestParam String useYm,
+            @RequestParam(required = false) String numOfRows,
+            @RequestParam(required = false) String pageNo){
+        return sigunguCd;
     }
 }
