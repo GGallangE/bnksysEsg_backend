@@ -4,9 +4,17 @@ import com.bnksys.esg.data.Member;
 import com.bnksys.esg.data.userboard;
 import com.bnksys.esg.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +50,10 @@ public class MainController {
             @RequestParam String useYm,
             @RequestParam(required = false) String numOfRows,
             @RequestParam(required = false) String pageNo){
-        return sigunguCd;
+        // URL 및 요청 파라미터를 설정
+        String apiResponse = mainService.electronicApi(sigunguCd, bjdongCd, bun, ji, useYm, numOfRows, pageNo);
+
+        // API 응답을 반환
+        return apiResponse;
     }
 }
