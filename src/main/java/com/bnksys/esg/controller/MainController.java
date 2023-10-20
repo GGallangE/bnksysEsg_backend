@@ -1,13 +1,12 @@
 package com.bnksys.esg.controller;
 
 import com.bnksys.esg.data.Member;
+import com.bnksys.esg.data.electronic;
 import com.bnksys.esg.data.userboard;
 import com.bnksys.esg.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,4 +33,24 @@ public class MainController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/fetchData")
+    public String fetchData(
+            @RequestParam String sigunguCd,
+            @RequestParam String bjdongCd,
+            @RequestParam String bun,
+            @RequestParam String ji,
+            @RequestParam String useYm,
+            @RequestParam(required = false) String numOfRows,
+            @RequestParam(required = false) String pageNo){
+        // URL 및 요청 파라미터를 설정
+        String apiResponse = mainService.electronicApi(sigunguCd, bjdongCd, bun, ji, useYm, numOfRows, pageNo);
+
+        // API 응답을 반환
+        return apiResponse;
+    }
+
+//    public ResponseEntity<String> saveData(@RequestBody electronic requestData){
+//
+//    }
 }
