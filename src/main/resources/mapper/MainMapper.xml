@@ -10,7 +10,7 @@
     </select>
 
     <select id = "getApiList" resultType="apiResult">
-        SELECT * FROM Api_List WHERE API_NAME LIKE CONCAT('%', #{name}, '%')
+        SELECT * FROM API_LIST WHERE API_NAME LIKE CONCAT('%', #{name}, '%')
     </select>
 
 </mapper>

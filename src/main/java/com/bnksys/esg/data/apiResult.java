@@ -9,6 +9,15 @@ public class apiResult {
     private String prvorg;
     private int view;
     private int nbruses;
+    private String apiexpl;
+
+    public String getApiexpl() {
+        return apiexpl;
+    }
+
+    public void setApiexpl(String apiexpl) {
+        this.apiexpl = apiexpl;
+    }
 
     public String getPrvorg() {
         return prvorg;
