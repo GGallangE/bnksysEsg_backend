@@ -1,7 +1,6 @@
 package com.bnksys.esg.controller;
 
-import com.bnksys.esg.data.Member;
-import com.bnksys.esg.data.electronic;
+import com.bnksys.esg.data.apiResult;
 import com.bnksys.esg.data.userboard;
 import com.bnksys.esg.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +12,10 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/main")
+@RequestMapping("/spring/main")
 public class MainController {
     @Autowired
     MainService mainService;
-
-    @GetMapping("/User")
-    public List<Member> getAllUsers(){
-        List<Member> users = mainService.getAllUser();
-        return users;
-    }
 
     @GetMapping("/boardid")
     public ResponseEntity<Map<String, List<userboard>>> getUserWithBoards() {
@@ -34,23 +27,14 @@ public class MainController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/fetchData")
-    public String fetchData(
-            @RequestParam String sigunguCd,
-            @RequestParam String bjdongCd,
-            @RequestParam String bun,
-            @RequestParam String ji,
-            @RequestParam String useYm,
-            @RequestParam(required = false) String numOfRows,
-            @RequestParam(required = false) String pageNo){
-        // URL 및 요청 파라미터를 설정
-        String apiResponse = mainService.electronicApi(sigunguCd, bjdongCd, bun, ji, useYm, numOfRows, pageNo);
 
-        // API 응답을 반환
-        return apiResponse;
+    @GetMapping("/search")
+    public ResponseEntity<Map<String, List<apiResult>>> getApiList(@RequestParam String name) {
+
+        List<apiResult> apiResults = mainService.getApiList(name);
+        Map<String, List<apiResult>> response = new HashMap<>();
+        response.put("data", apiResults);
+        return ResponseEntity.ok(response);
     }
 
-//    public ResponseEntity<String> saveData(@RequestBody electronic requestData){
-//
-//    }
 }

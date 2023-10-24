@@ -2,13 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bnksys.esg.mapper.MainMapper">
-    <select id="getAllUser" resultType="Member">
-        SELECT * FROM User
-    </select>
 
     <select id="getUserWithBoards" resultType="userboard">
         SELECT u.id as user_id, u.name as user_name, b.id as board_id, b.name as board_name
           FROM User u
      LEFT JOIN Board b ON u.id = b.u_id
     </select>
+
+    <select id = "getApiList" resultType="apiResult">
+        SELECT * FROM Api_List WHERE API_NAME LIKE CONCAT('%', #{name}, '%')
+    </select>
+
 </mapper>

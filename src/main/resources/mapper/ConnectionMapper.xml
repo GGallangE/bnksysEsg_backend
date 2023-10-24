@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bnksys.esg.mapper.ConnectionMapper">
+
+    <select id = "getResultByapilistId" resultType="apiResult">
+        SELECT * FROM Api_List WHERE API_LIST_ID = #{apilistid}
+    </select>
+
+</mapper>
