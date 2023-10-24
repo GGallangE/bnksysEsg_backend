@@ -4,7 +4,7 @@
 <mapper namespace="com.bnksys.esg.mapper.ConnectionMapper">
 
     <select id = "getResultByapilistId" resultType="apiResult">
-        SELECT * FROM Api_List WHERE API_LIST_ID = #{apilistid}
+        SELECT * FROM API_LIST WHERE API_LIST_ID = #{apilistid}
     </select>
 
 </mapper>
