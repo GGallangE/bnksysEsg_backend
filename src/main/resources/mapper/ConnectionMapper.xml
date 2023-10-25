@@ -4,7 +4,15 @@
 <mapper namespace="com.bnksys.esg.mapper.ConnectionMapper">
 
     <select id = "getResultByapilistId" resultType="apiResult">
-        SELECT * FROM API_LIST WHERE API_LIST_ID = #{apilistid}
+        SELECT *
+          FROM API_LIST
+         WHERE API_LIST_ID = #{apilistid}
     </select>
+
+    <update id = "increseViewCount" parameterType="int">
+        UPDATE API_LIST
+           SET VIEW = VIEW + 1
+         WHERE API_LIST_ID = #{apilistid}
+    </update>
 
 </mapper>

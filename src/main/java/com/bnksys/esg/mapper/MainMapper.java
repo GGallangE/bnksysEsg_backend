@@ -15,6 +15,4 @@ public interface MainMapper {
     List<userboard> getUserWithBoards();
 
     List<apiResult> getApiList(@Param("name") String name);
-
-//    List<apiResult> getApiList();
 }
