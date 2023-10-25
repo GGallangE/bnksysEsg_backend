@@ -13,4 +13,6 @@ import java.util.List;
 public interface ConnectionMapper {
 
     List<apiResult> getResultByapilistId(@Param("apilistid") int apilistid);
+
+    void increseViewCount(@Param("apilistid") int apilistid);
 }

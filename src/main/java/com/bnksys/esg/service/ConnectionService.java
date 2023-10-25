@@ -22,5 +22,9 @@ public class ConnectionService {
         return connectionMapper.getResultByapilistId(apilistid);
     }
 
+    public void increseViewCount(int apilistid){
+        connectionMapper.increseViewCount(apilistid);
+    }
+
 
 }
