@@ -25,8 +25,8 @@ public class MainService {
         return mainMapper.getUserWithBoards();
     }
 
-    public List<apiResult> getApiList(String name) {
-        return mainMapper.getApiList(name);
+    public List<apiResult> getApiList(String name, String sortBy) {
+        return mainMapper.getApiList(name, sortBy);
     }
 
 

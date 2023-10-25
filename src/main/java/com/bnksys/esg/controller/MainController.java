@@ -29,9 +29,9 @@ public class MainController {
 
 
     @GetMapping("/search")
-    public ResponseEntity<Map<String, List<apiResult>>> getApiList(@RequestParam String name) {
+    public ResponseEntity<Map<String, List<apiResult>>> getApiList(@RequestParam String name, @RequestParam String sortBy) {
 
-        List<apiResult> apiResults = mainService.getApiList(name);
+        List<apiResult> apiResults = mainService.getApiList(name, sortBy);
         Map<String, List<apiResult>> response = new HashMap<>();
         response.put("data", apiResults);
         return ResponseEntity.ok(response);

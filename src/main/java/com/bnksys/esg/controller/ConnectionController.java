@@ -58,8 +58,8 @@ public class ConnectionController {
     }
 
     private void setViewedTodayCookie(HttpServletResponse response, int apilistid) {
+
         Cookie cookie = new Cookie("apiViewed_" + apilistid, "true");
-        // Set the cookie to expire in 24 hours (86400 seconds)
 //        cookie.setMaxAge(86400);
         cookie.setMaxAge(60);
         response.addCookie(cookie);
