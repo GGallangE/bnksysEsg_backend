@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bnksys.esg.mapper.UserMapper">
+
+    <insert id="saveUser" parameterType="userDto">
+        INSERT INTO USER(USER_NAME, NICK_NAME, EMAIL, PASSWORD)
+        VALUES (#{username}, #{nickname}, #{email}, #{password})
+    </insert>
+
+
+    <select id="countUsernameDuplicate" resultType="int" parameterType="java.lang.String">
+        SELECT COUNT(*)
+          FROM USER
+         WHERE USER_NAME = #{username}
+    </select>
+
+    <select id="countNicknameDuplicate" resultType="int" parameterType="java.lang.String">
+        SELECT COUNT(*)
+          FROM USER
+         WHERE NICK_NAME = #{nickname}
+    </select>
+
+    <select id="countEmailDuplicate" resultType="int" parameterType="java.lang.String">
+        SELECT COUNT(*)
+          FROM USER
+         WHERE EMAIL = #{email}
+    </select>
+
+    <select id="findByEmail" resultType="userDto">
+        SELECT *
+          FROM USER
+         WHERE email = #{email}
+    </select>
+
+</mapper>
