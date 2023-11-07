@@ -3,6 +3,7 @@ package com.bnksys.esg.jwt;
 import jakarta.servlet.ServletException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,7 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = jwtUtils.resolveToken(request);
         System.out.println(token);
         if (token != null && jwtUtils.validateJwtToken(token)) {
-            UsernamePasswordAuthenticationToken authentication = jwtUtils.getAuthentication(token);
+            Authentication authentication = jwtUtils.getAuthentication(token);
             System.out.println(authentication.isAuthenticated());
             if (authentication.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);

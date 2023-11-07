@@ -5,18 +5,26 @@ import lombok.Data;
 @Data
 public class apiResult {
     private int apilistid;
-    private String apiname;
+    private String apinm;
     private String prvorg;
-    private int view;
-    private int nbruses;
-    private String apiexpl;
+    private int apiview;
+    private char apirgdt;
+    private int apiapplyid;
 
-    public String getApiexpl() {
-        return apiexpl;
+    public int getApilistid() {
+        return apilistid;
     }
 
-    public void setApiexpl(String apiexpl) {
-        this.apiexpl = apiexpl;
+    public void setApilistid(int apilistid) {
+        this.apilistid = apilistid;
+    }
+
+    public String getApinm() {
+        return apinm;
+    }
+
+    public void setApinm(String apinm) {
+        this.apinm = apinm;
     }
 
     public String getPrvorg() {
@@ -27,35 +35,27 @@ public class apiResult {
         this.prvorg = prvorg;
     }
 
-    public int getView() {
-        return view;
+    public int getApiview() {
+        return apiview;
     }
 
-    public void setView(int view) {
-        this.view = view;
+    public void setApiview(int apiview) {
+        this.apiview = apiview;
     }
 
-    public int getNbruses() {
-        return nbruses;
+    public char getApirgdt() {
+        return apirgdt;
     }
 
-    public void setNbruses(int nbruses) {
-        this.nbruses = nbruses;
+    public void setApirgdt(char apirgdt) {
+        this.apirgdt = apirgdt;
     }
 
-    public int getApilistid() {
-        return apilistid;
+    public int getApiapplyid() {
+        return apiapplyid;
     }
 
-    public void setApilistid(int apilistid) {
-        this.apilistid = apilistid;
-    }
-
-    public String getApiname() {
-        return apiname;
-    }
-
-    public void setApiname(String apiname) {
-        this.apiname = apiname;
+    public void setApiapplyid(int apiapplyid) {
+        this.apiapplyid = apiapplyid;
     }
 }

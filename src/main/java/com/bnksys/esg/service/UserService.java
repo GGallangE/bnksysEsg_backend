@@ -1,5 +1,6 @@
 package com.bnksys.esg.service;
 
+import com.bnksys.esg.data.USERROLE;
 import com.bnksys.esg.data.userDto;
 import com.bnksys.esg.jwt.JwtUtils;
 import com.bnksys.esg.mapper.UserMapper;
@@ -22,6 +23,7 @@ public class UserService {
     public void saveUser(userDto userdto){
         String encodedPassword = passwordEncoder.encode(userdto.getPassword());
         userdto.setPassword(encodedPassword);
+        userdto.setRole(USERROLE.ROLE_USER.name());
         userMapper.saveUser(userdto);
     }
 
@@ -54,9 +56,6 @@ public class UserService {
         }
 
         return hasErrors;
-    }
-    public boolean isUsernameDuplicate(String username) {
-        return userMapper.countUsernameDuplicate(username) > 0;
     }
 
     public boolean isNicknameDuplicate(String nickname) {

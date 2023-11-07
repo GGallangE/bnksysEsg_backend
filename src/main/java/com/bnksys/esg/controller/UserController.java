@@ -6,7 +6,10 @@ import com.bnksys.esg.response.Response;
 import com.bnksys.esg.response.TokenResponse;
 import com.bnksys.esg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -29,11 +32,6 @@ public class UserController {
         try {
             if (userService.checkeduserDto(userdto, response)) {
                 response.setSuccess(false);
-                return ResponseEntity.badRequest().body(response);
-            }
-            if (userService.isUsernameDuplicate(userdto.getUsername())) {
-                response.setSuccess(false);
-                response.getMessages().add("username이 이미 존재합니다.");
                 return ResponseEntity.badRequest().body(response);
             }
             if (userService.isNicknameDuplicate(userdto.getNickname())) {
@@ -74,9 +72,21 @@ public class UserController {
         } else {
             response.setErrors(Arrays.asList("아이디와 패스워드가 일치하지 않습니다."));
         }
-
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/admin/page")
+    // 관리자 테스트
+    public ResponseEntity<String> adminPage() {
+        return ResponseEntity.ok("Welcome to the admin page!");
+    }
 
+    @GetMapping("/test")
+    // 토큰 정보 테스트
+    public ResponseEntity<String> getUserInfo(Authentication authentication){
+        if(authentication != null && authentication.isAuthenticated()){
+            String userEmail = ((UserDetails) authentication.getPrincipal()).getUsername();
+        }
+            return ResponseEntity.ok("ok");
+    }
 }

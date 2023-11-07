@@ -11,7 +11,7 @@
 
     <update id = "increseViewCount" parameterType="int">
         UPDATE API_LIST
-           SET VIEW = VIEW + 1
+           SET API_VIEW = API_VIEW + 1
          WHERE API_LIST_ID = #{apilistid}
     </update>
 

@@ -11,8 +11,6 @@ public interface UserMapper {
 
     void saveUser(userDto userdto);
 
-    int countUsernameDuplicate(String username);
-
     int countNicknameDuplicate(String nickname);
 
     int countEmailDuplicate(String email);
