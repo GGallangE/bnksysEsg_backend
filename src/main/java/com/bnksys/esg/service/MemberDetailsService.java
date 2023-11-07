@@ -4,9 +4,15 @@ import com.bnksys.esg.data.userDto;
 import com.bnksys.esg.mapper.UserMapper;
 import com.bnksys.esg.security.MemberDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class MemberDetailsService implements UserDetailsService {
@@ -21,6 +27,14 @@ public class MemberDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) {
         userDto user = userMapper.findByEmail(email);
-        return new MemberDetails(user.getEmail(), user.getPassword());
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+
+        if ("ROLE_ADMIN".equals(user.getRole())) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        return new MemberDetails(user.getEmail(), user.getPassword(), authorities);
     }
 }

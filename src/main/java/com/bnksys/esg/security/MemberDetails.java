@@ -9,15 +9,17 @@ import java.util.Collection;
 public class MemberDetails implements UserDetails {
     private final String email;
     private final String password;
+    private final Collection<? extends GrantedAuthority> authorities;
 
-    public MemberDetails(String email, String password) {
+    public MemberDetails(String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.email = email;
         this.password = password;
+        this.authorities = authorities;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList();
+        return authorities;
     }
 
     @Override
@@ -32,21 +34,21 @@ public class MemberDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

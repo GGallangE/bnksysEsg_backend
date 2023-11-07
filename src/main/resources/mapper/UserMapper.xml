@@ -4,16 +4,9 @@
 <mapper namespace="com.bnksys.esg.mapper.UserMapper">
 
     <insert id="saveUser" parameterType="userDto">
-        INSERT INTO USER(USER_NAME, NICK_NAME, EMAIL, PASSWORD)
-        VALUES (#{username}, #{nickname}, #{email}, #{password})
+        INSERT INTO USER(USER_NAME, NICK_NAME, EMAIL, PASSWORD, ROLE)
+        VALUES (#{username}, #{nickname}, #{email}, #{password}, #{role})
     </insert>
-
-
-    <select id="countUsernameDuplicate" resultType="int" parameterType="java.lang.String">
-        SELECT COUNT(*)
-          FROM USER
-         WHERE USER_NAME = #{username}
-    </select>
 
     <select id="countNicknameDuplicate" resultType="int" parameterType="java.lang.String">
         SELECT COUNT(*)

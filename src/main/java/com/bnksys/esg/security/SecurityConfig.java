@@ -22,12 +22,13 @@ public class SecurityConfig {
     }
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception{
-        http.csrf().disable();
-
-//        http.authorizeHttpRequests().requestMatchers("/spring/**").authenticated();
-        http.authorizeHttpRequests().anyRequest().permitAll();
-//        http.formLogin().loginPage("/login").loginProcessingUrl("/spring/user/loginProcess").usernameParameter("email").passwordParameter("password");
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.csrf().disable()
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/spring/user/admin/page").hasRole("ADMIN")
+                                .anyRequest().permitAll()
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

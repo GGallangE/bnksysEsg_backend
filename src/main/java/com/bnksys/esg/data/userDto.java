@@ -7,6 +7,15 @@ public class userDto {
     private String email;
     private String password;
     private String passwordCheck;
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public String getPasswordCheck() {
         return passwordCheck;

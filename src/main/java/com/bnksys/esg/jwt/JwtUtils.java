@@ -62,10 +62,7 @@ public class JwtUtils {
 
     public UsernamePasswordAuthenticationToken getAuthentication(String token) {
         UserDetails memberDetails = memberDetailsService.loadUserByUsername(getUserNameFromJwtToken(token));
-        UsernamePasswordAuthenticationToken res = new UsernamePasswordAuthenticationToken(memberDetails, "", memberDetails.getAuthorities());
-        if (!memberDetails.isEnabled()) {
-            res.setAuthenticated(false);
-        }
+        UsernamePasswordAuthenticationToken res = new UsernamePasswordAuthenticationToken(memberDetails, null, memberDetails.getAuthorities());
         return res;
     }
 
