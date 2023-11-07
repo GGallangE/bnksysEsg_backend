@@ -9,10 +9,9 @@ import com.bnksys.esg.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/spring/userapi")
@@ -45,6 +44,21 @@ public class UserApiController {
         }
         String email = authentication.getName();
         userApiService.saveIntrsApi(email,intrsApiDto);
+
+        response.setSuccess(true);
+        response.getMessages().add("등록 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/myinterestapi")
+    public ResponseEntity<Response> findIntrsApi(Authentication authentication){
+        Response response = new Response();
+
+        if (!AuthenticationUtils.checkAuthentication(authentication, response)) {
+            return ResponseEntity.badRequest().body(response);
+        }
+        String email = authentication.getName();
+        List<apiResult> apiResults = userApiService.findIntrsApi(email);
 
         response.setSuccess(true);
         response.getMessages().add("등록 완료");

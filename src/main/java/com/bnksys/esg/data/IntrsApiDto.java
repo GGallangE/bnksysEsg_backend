@@ -2,7 +2,7 @@ package com.bnksys.esg.data;
 
 public class IntrsApiDto {
     int apilistid;
-    char stcd;
+    String stcd;
 
     public int getApilistid() {
         return apilistid;
@@ -12,11 +12,11 @@ public class IntrsApiDto {
         this.apilistid = apilistid;
     }
 
-    public char getStcd() {
+    public String getStcd() {
         return stcd;
     }
 
-    public void setStcd(char stcd) {
+    public void setStcd(String stcd) {
         this.stcd = stcd;
     }
 }

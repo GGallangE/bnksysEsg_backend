@@ -8,7 +8,7 @@ public class apiResult {
     private String apinm;
     private String prvorg;
     private int apiview;
-    private char apirgdt;
+    private String apirgdt;
     private int apiapplyid;
     private int countapiuses;
 
@@ -52,11 +52,11 @@ public class apiResult {
         this.apiview = apiview;
     }
 
-    public char getApirgdt() {
+    public String getApirgdt() {
         return apirgdt;
     }
 
-    public void setApirgdt(char apirgdt) {
+    public void setApirgdt(String apirgdt) {
         this.apirgdt = apirgdt;
     }
 

@@ -9,6 +9,15 @@
         WHERE EMAIL = #{email}
     </select>
 
+    <select id = "findIntrsApi" resultType="apiResult">
+        SELECT *
+          FROM API_LIST apilist
+    INNER JOIN API_USER_INTRS aui
+            ON apilist.API_LIST_ID = aui.API_LIST_ID
+           AND aui.USER_ID = (select USER_ID from USER where Email = #{email})
+           AND aui.STCD = '01'
+    </select>
+
     <select id="countIntrsApi" resultType="int" parameterType="java.lang.Integer">
         SELECT COUNT(*)
           FROM API_USER_INTRS

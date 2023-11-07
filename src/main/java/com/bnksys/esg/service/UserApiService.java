@@ -2,10 +2,13 @@ package com.bnksys.esg.service;
 
 import com.bnksys.esg.data.IntrsApiDto;
 import com.bnksys.esg.data.USERROLE;
+import com.bnksys.esg.data.apiResult;
 import com.bnksys.esg.data.userDto;
 import com.bnksys.esg.mapper.UserApiMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserApiService {
@@ -28,5 +31,9 @@ public class UserApiService {
         }else{
             userapiMapper.updateIntrsApi(userId,intrsApiDto);
         }
+    }
+
+    public List<apiResult> findIntrsApi(String email) {
+        return userapiMapper.findIntrsApi(email);
     }
 }
