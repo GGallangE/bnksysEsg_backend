@@ -1,9 +1,11 @@
 package com.bnksys.esg.controller;
 
 
+import com.bnksys.esg.data.IntrsApiDto;
 import com.bnksys.esg.data.apiResult;
 import com.bnksys.esg.response.Response;
 import com.bnksys.esg.service.UserApiService;
+import com.bnksys.esg.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,9 +25,7 @@ public class UserApiController {
     public ResponseEntity<Response> saveApiUses(Authentication authentication, @RequestBody apiResult apiresult){
         Response response = new Response();
 
-        if (authentication == null) {
-            response.setSuccess(false);
-            response.getMessages().add("토큰이 만료되었거나 없습니다. 다시 로그인을 진행해 주세요.");
+        if (!AuthenticationUtils.checkAuthentication(authentication, response)) {
             return ResponseEntity.badRequest().body(response);
         }
         String email = authentication.getName();
@@ -33,6 +33,21 @@ public class UserApiController {
 
         response.setSuccess(true);
         response.getMessages().add("사용 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/interestapi")
+    public ResponseEntity<Response> saveIntrsApi(Authentication authentication, @RequestBody IntrsApiDto intrsApiDto){
+        Response response = new Response();
+
+        if (!AuthenticationUtils.checkAuthentication(authentication, response)) {
+            return ResponseEntity.badRequest().body(response);
+        }
+        String email = authentication.getName();
+        userApiService.saveIntrsApi(email,intrsApiDto);
+
+        response.setSuccess(true);
+        response.getMessages().add("등록 완료");
         return ResponseEntity.ok(response);
     }
 }

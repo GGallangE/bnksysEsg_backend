@@ -1,5 +1,6 @@
 package com.bnksys.esg.service;
 
+import com.bnksys.esg.data.IntrsApiDto;
 import com.bnksys.esg.data.USERROLE;
 import com.bnksys.esg.data.userDto;
 import com.bnksys.esg.mapper.UserApiMapper;
@@ -18,5 +19,14 @@ public class UserApiService {
     public void saveApiUses(String email,int apilistid){
         int userId = userapiMapper.findbyemail(email);
         userapiMapper.saveApiUses(userId,apilistid);
+    };
+
+    public void saveIntrsApi(String email, IntrsApiDto intrsApiDto){
+        int userId = userapiMapper.findbyemail(email);
+        if(userapiMapper.countIntrsApi(userId,intrsApiDto.getApilistid()) == 0){
+            userapiMapper.saveIntrsApi(userId,intrsApiDto);
+        }else{
+            userapiMapper.updateIntrsApi(userId,intrsApiDto);
+        }
     }
 }

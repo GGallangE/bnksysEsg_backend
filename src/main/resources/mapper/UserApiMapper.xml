@@ -9,9 +9,27 @@
         WHERE EMAIL = #{email}
     </select>
 
+    <select id="countIntrsApi" resultType="int" parameterType="java.lang.Integer">
+        SELECT COUNT(*)
+          FROM API_USER_INTRS
+         WHERE USER_ID = #{arg0} and API_LIST_ID = #{arg1}
+    </select>
+
     <insert id="saveApiUses" parameterType="java.lang.Integer">
         INSERT INTO API_USES (USER_ID, API_LIST_ID, API_VIEW_DATE)
         VALUES (#{arg0}, #{arg1}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'))
     </insert>
+
+    <insert id="saveIntrsApi">
+        INSERT INTO API_USER_INTRS (USER_ID, API_LIST_ID, STCD)
+        VALUES (#{arg0}, #{arg1.apilistid}, #{arg1.stcd})
+    </insert>
+
+    <update id="updateIntrsApi">
+        UPDATE API_USER_INTRS
+           SET STCD = #{arg1.stcd}
+         WHERE USER_ID = #{arg0} and API_LIST_ID = #{arg1.apilistid}
+    </update>
+
 
 </mapper>
