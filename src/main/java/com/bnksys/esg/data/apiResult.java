@@ -10,6 +10,15 @@ public class apiResult {
     private int apiview;
     private char apirgdt;
     private int apiapplyid;
+    private int countapiuses;
+
+    public int getCountapiuses() {
+        return countapiuses;
+    }
+
+    public void setCountapiuses(int countapiuses) {
+        this.countapiuses = countapiuses;
+    }
 
     public int getApilistid() {
         return apilistid;
