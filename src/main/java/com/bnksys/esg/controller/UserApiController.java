@@ -19,6 +19,7 @@ public class UserApiController {
     @Autowired
     UserApiService userApiService;
     @PostMapping("/useapi")
+    // api 사용 혹은 다운 시 사용 이력 ++
     public ResponseEntity<Response> saveApiUses(Authentication authentication, @RequestBody apiResult apiresult){
         Response response = new Response();
 
