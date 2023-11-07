@@ -1,7 +1,6 @@
 package com.bnksys.esg.controller;
 
 import com.bnksys.esg.data.apiResult;
-import com.bnksys.esg.data.userboard;
 import com.bnksys.esg.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

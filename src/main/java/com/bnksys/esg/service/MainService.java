@@ -1,10 +1,8 @@
 package com.bnksys.esg.service;
 
 import com.bnksys.esg.data.apiResult;
-import com.bnksys.esg.data.userboard;
 import com.bnksys.esg.mapper.MainMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
