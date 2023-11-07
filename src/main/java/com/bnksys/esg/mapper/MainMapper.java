@@ -12,7 +12,5 @@ import java.util.List;
 @Repository
 public interface MainMapper {
 
-    List<userboard> getUserWithBoards();
-
     List<apiResult> getApiList(@Param("name") String name, @Param("sortBy") String sortBy);
 }

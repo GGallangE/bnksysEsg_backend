@@ -17,17 +17,6 @@ public class MainController {
     @Autowired
     MainService mainService;
 
-    @GetMapping("/boardid")
-    public ResponseEntity<Map<String, List<userboard>>> getUserWithBoards() {
-        List<userboard> board = mainService.getUserWithBoards();
-
-        Map<String, List<userboard>> response = new HashMap<>();
-        response.put("data", board);
-
-        return ResponseEntity.ok(response);
-    }
-
-
     @GetMapping("/search")
     public ResponseEntity<Map<String, List<apiResult>>> getApiList(@RequestParam String name, @RequestParam String sortBy) {
 

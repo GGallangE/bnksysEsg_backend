@@ -20,11 +20,6 @@ public class MainService {
         this.mainMapper = mainMapper;
     }
 
-
-    public List<userboard> getUserWithBoards(){
-        return mainMapper.getUserWithBoards();
-    }
-
     public List<apiResult> getApiList(String name, String sortBy) {
         return mainMapper.getApiList(name, sortBy);
     }
