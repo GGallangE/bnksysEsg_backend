@@ -69,8 +69,10 @@ public class UserController {
         if (userService.login(userdto.getEmail(), userdto.getPassword())) {
             data.put("token", jwtUtils.generateJwtToken(userdto.getEmail()));
             response.setData(data);
+            response.setSuccess(true);
         } else {
             response.setErrors(Arrays.asList("아이디와 패스워드가 일치하지 않습니다."));
+            response.setSuccess(false);
         }
         return ResponseEntity.ok(response);
     }

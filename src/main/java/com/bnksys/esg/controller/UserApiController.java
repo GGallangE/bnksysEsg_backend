@@ -3,14 +3,18 @@ package com.bnksys.esg.controller;
 
 import com.bnksys.esg.data.IntrsApiDto;
 import com.bnksys.esg.data.apiResult;
+import com.bnksys.esg.response.ApiListResponse;
 import com.bnksys.esg.response.Response;
 import com.bnksys.esg.service.UserApiService;
 import com.bnksys.esg.utils.AuthenticationUtils;
+import com.bnksys.esg.utils.AuthenticationUtils_ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -51,16 +55,17 @@ public class UserApiController {
     }
 
     @GetMapping("/myinterestapi")
-    public ResponseEntity<Response> findIntrsApi(Authentication authentication){
-        Response response = new Response();
+    public ResponseEntity<ApiListResponse> findIntrsApi(Authentication authentication){
+        ApiListResponse response = new ApiListResponse(new HashMap<>(), false, new ArrayList<>());
 
-        if (!AuthenticationUtils.checkAuthentication(authentication, response)) {
+        if (!AuthenticationUtils_ApiResponse.checkAuthentication(authentication, response).isSuccess()) {
             return ResponseEntity.badRequest().body(response);
         }
         String email = authentication.getName();
         List<apiResult> apiResults = userApiService.findIntrsApi(email);
 
         response.setSuccess(true);
+        response.getData().put("data", apiResults);
         response.getMessages().add("등록 완료");
         return ResponseEntity.ok(response);
     }
