@@ -4,9 +4,21 @@
 <mapper namespace="com.bnksys.esg.mapper.MainMapper">
 
     <select id = "getApiList" resultType="apiResult">
-        SELECT *
-          FROM API_LIST
-         WHERE API_NM LIKE CONCAT('%', #{name}, '%')
+        SELECT apilist.API_LIST_ID API_LIST_ID
+             , API_NM
+             , PRV_ORG
+             , API_VIEW
+             , API_EXPL
+             , API_RGDT
+             , API_APPLY_ID
+             , COUNT_API_USES
+          FROM API_LIST apilist
+     LEFT JOIN (SELECT API_LIST_ID
+                     , count(*) COUNT_API_USES
+                  FROM API_USES
+              GROUP BY API_LIST_ID ) apiuses
+            ON apiuses.API_LIST_ID = apilist.API_LIST_ID
+        WHERE API_NM LIKE CONCAT('%', #{name}, '%')
     <if test="sortBy == 'register' ">
       ORDER BY API_LIST_ID DESC
     </if>

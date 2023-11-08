@@ -7,6 +7,16 @@ public class TokenResponse {
     private Map<String, String> data;
     private List<String> errors;
 
+    private boolean success;
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
     public TokenResponse() {
     }
 

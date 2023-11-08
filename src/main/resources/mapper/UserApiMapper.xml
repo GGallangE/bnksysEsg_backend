@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bnksys.esg.mapper.UserApiMapper">
+
+    <select id="findbyemail" resultType="int" parameterType="java.lang.String">
+        SELECT USER_ID
+        FROM USER
+        WHERE EMAIL = #{email}
+    </select>
+
+    <select id = "findIntrsApi" resultType="apiResult">
+        SELECT apilist.API_LIST_ID API_LIST_ID
+             , API_NM
+             , PRV_ORG
+             , API_VIEW
+             , API_RGDT
+             , COUNT_API_USES
+        FROM API_LIST apilist
+  INNER JOIN API_USER_INTRS aui
+          ON apilist.API_LIST_ID = aui.API_LIST_ID
+         AND aui.USER_ID = (select USER_ID from USER where Email = #{email})
+         AND aui.STCD = '01'
+ LEFT JOIN (SELECT API_LIST_ID
+                 , COUNT(*) COUNT_API_USES
+              FROM API_USES
+          GROUP BY API_LIST_ID) apiuses
+                ON apilist.API_LIST_ID = apiuses.API_LIST_ID
+    </select>
+
+    <select id="countIntrsApi" resultType="int" parameterType="java.lang.Integer">
+        SELECT COUNT(*)
+          FROM API_USER_INTRS
+         WHERE USER_ID = #{arg0} and API_LIST_ID = #{arg1}
+    </select>
+
+    <insert id="saveApiUses" parameterType="java.lang.Integer">
+        INSERT INTO API_USES (USER_ID, API_LIST_ID, API_VIEW_DATE)
+        VALUES (#{arg0}, #{arg1}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'))
+    </insert>
+
+    <insert id="saveIntrsApi">
+        INSERT INTO API_USER_INTRS (USER_ID, API_LIST_ID, STCD)
+        VALUES (#{arg0}, #{arg1.apilistid}, #{arg1.stcd})
+    </insert>
+
+    <update id="updateIntrsApi">
+        UPDATE API_USER_INTRS
+           SET STCD = #{arg1.stcd}
+         WHERE USER_ID = #{arg0} and API_LIST_ID = #{arg1.apilistid}
+    </update>
+
+
+</mapper>

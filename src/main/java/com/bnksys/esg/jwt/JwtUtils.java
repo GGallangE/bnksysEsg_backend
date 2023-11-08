@@ -16,7 +16,7 @@ import java.util.Date;
 @Component
 public class JwtUtils {
     private final MemberDetailsService memberDetailsService;
-    private final long jwtExpTime = 1000L * 60 * 3;
+    private final long jwtExpTime = 1000L * 60 * 30;
     private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     @Autowired
