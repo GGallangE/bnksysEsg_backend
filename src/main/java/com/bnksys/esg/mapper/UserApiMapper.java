@@ -2,10 +2,10 @@ package com.bnksys.esg.mapper;
 
 
 import com.bnksys.esg.data.IntrsApiDto;
-import com.bnksys.esg.data.apiResult;
+import com.bnksys.esg.data.apiResultDto;
+import com.bnksys.esg.data.useCaseDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,5 +24,11 @@ public interface UserApiMapper {
 
     void updateIntrsApi(int userId, IntrsApiDto intrsApiDto);
 
-    List<apiResult> findIntrsApi(String email);
+    List<apiResultDto> findIntrsApi(String email);
+
+    int maxUseCaseId();
+
+    void saveUseCase(@Param("userId")int userId, @Param("usecaseId")int usecaseId, useCaseDto usecaseDto);
+
+    void saveUseCaseApiList(@Param("usecaseId") int usecaseId, @Param("apilistid") int apilistid);
 }

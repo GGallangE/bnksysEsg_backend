@@ -1,7 +1,7 @@
 package com.bnksys.esg.mapper;
 
 
-import com.bnksys.esg.data.apiResult;
+import com.bnksys.esg.data.apiResultDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ConnectionMapper {
 
-    List<apiResult> getResultByapilistId(@Param("apilistid") int apilistid);
+    List<apiResultDto> getResultByapilistId(@Param("apilistid") int apilistid);
 
     void increseViewCount(@Param("apilistid") int apilistid);
 }

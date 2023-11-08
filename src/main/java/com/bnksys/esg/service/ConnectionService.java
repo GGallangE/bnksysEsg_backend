@@ -1,8 +1,7 @@
 package com.bnksys.esg.service;
 
-import com.bnksys.esg.data.apiResult;
+import com.bnksys.esg.data.apiResultDto;
 import com.bnksys.esg.mapper.ConnectionMapper;
-import com.bnksys.esg.mapper.MainMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class ConnectionService {
         this.connectionMapper = connectionMapper;
     }
 
-    public List<apiResult> getResultByapilistId(int apilistid) {
+    public List<apiResultDto> getResultByapilistId(int apilistid) {
         return connectionMapper.getResultByapilistId(apilistid);
     }
 

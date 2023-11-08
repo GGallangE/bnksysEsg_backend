@@ -1,6 +1,6 @@
 package com.bnksys.esg.controller;
 
-import com.bnksys.esg.data.apiResult;
+import com.bnksys.esg.data.apiResultDto;
 import com.bnksys.esg.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +17,10 @@ public class MainController {
     MainService mainService;
 
     @GetMapping("/search")
-    public ResponseEntity<Map<String, List<apiResult>>> getApiList(@RequestParam String name, @RequestParam String sortBy) {
+    public ResponseEntity<Map<String, List<apiResultDto>>> getApiList(@RequestParam String name, @RequestParam String sortBy) {
 
-        List<apiResult> apiResults = mainService.getApiList(name, sortBy);
-        Map<String, List<apiResult>> response = new HashMap<>();
+        List<apiResultDto> apiResults = mainService.getApiList(name, sortBy);
+        Map<String, List<apiResultDto>> response = new HashMap<>();
         response.put("data", apiResults);
         return ResponseEntity.ok(response);
     }

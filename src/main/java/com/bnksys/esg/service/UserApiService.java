@@ -1,9 +1,6 @@
 package com.bnksys.esg.service;
 
-import com.bnksys.esg.data.IntrsApiDto;
-import com.bnksys.esg.data.USERROLE;
-import com.bnksys.esg.data.apiResult;
-import com.bnksys.esg.data.userDto;
+import com.bnksys.esg.data.*;
 import com.bnksys.esg.mapper.UserApiMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +30,22 @@ public class UserApiService {
         }
     }
 
-    public List<apiResult> findIntrsApi(String email) {
+    public List<apiResultDto> findIntrsApi(String email) {
         return userapiMapper.findIntrsApi(email);
     }
+
+    public void saveUseCase(String email, useCaseDto usecaseDto){
+        int userId = userapiMapper.findbyemail(email);
+        int usecaseId = userapiMapper.maxUseCaseId();
+        userapiMapper.saveUseCase(userId,usecaseId,usecaseDto);
+
+        if(null != usecaseDto.getApilistid()){
+            int[] apilistIds = usecaseDto.getApilistid();
+
+            for(int apilistid : apilistIds) {
+                userapiMapper.saveUseCaseApiList(usecaseId, apilistid);
+            }
+        }
+    }
+
 }

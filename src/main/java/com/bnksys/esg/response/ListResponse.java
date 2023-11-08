@@ -1,26 +1,26 @@
 package com.bnksys.esg.response;
 
-import com.bnksys.esg.data.apiResult;
+import com.bnksys.esg.data.apiResultDto;
 
 import java.util.List;
 import java.util.Map;
 
-public class ApiListResponse {
-    private Map<String, List<apiResult>> data;
+public class ListResponse<T> {
+    private Map<String, List<T>> data;
     private boolean success;
     private List<String> messages;
 
-    public ApiListResponse(Map<String, List<apiResult>> data, boolean success, List<String> messages) {
+    public ListResponse(Map<String, List<T>> data, boolean success, List<String> messages) {
         this.data = data;
         this.success = success;
         this.messages = messages;
     }
 
-    public Map<String, List<apiResult>> getData() {
+    public Map<String, List<T>> getData() {
         return data;
     }
 
-    public void setData(Map<String, List<apiResult>> data) {
+    public void setData(Map<String, List<T>> data) {
         this.data = data;
     }
 

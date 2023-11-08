@@ -1,7 +1,7 @@
 package com.bnksys.esg.controller;
 
 
-import com.bnksys.esg.data.apiResult;
+import com.bnksys.esg.data.apiResultDto;
 import com.bnksys.esg.service.ConnectionService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class ConnectionController {
     private ConnectionService connectionService;
 
     @GetMapping("/result/{apilistid}")
-    public ResponseEntity<Map<String, List<apiResult>>> getResultByapilistId(
+    public ResponseEntity<Map<String, List<apiResultDto>>> getResultByapilistId(
             @PathVariable int apilistid, HttpServletRequest request, HttpServletResponse response){
 
         if (!hasViewedToday(request, apilistid)) {
@@ -34,9 +34,9 @@ public class ConnectionController {
         }
 
 
-        List<apiResult> result = connectionService.getResultByapilistId(apilistid);
+        List<apiResultDto> result = connectionService.getResultByapilistId(apilistid);
 
-        Map<String, List<apiResult>> response_api = new HashMap<>();
+        Map<String, List<apiResultDto>> response_api = new HashMap<>();
         response_api.put("data", result);
         return ResponseEntity.ok(response_api);
     }

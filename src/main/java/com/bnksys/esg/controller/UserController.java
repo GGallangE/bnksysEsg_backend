@@ -26,7 +26,7 @@ public class UserController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostMapping("/saveUser")
+    @PostMapping("/signup")
     public ResponseEntity<Response> registerUser(@RequestBody userDto userdto) {
         Response response = new Response();
         try {

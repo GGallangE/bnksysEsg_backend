@@ -3,7 +3,7 @@ package com.bnksys.esg.data;
 import lombok.Data;
 
 @Data
-public class apiResult {
+public class apiResultDto {
     private int apilistid;
     private String apinm;
     private String prvorg;

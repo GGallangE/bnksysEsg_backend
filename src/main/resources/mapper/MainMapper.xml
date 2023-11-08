@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bnksys.esg.mapper.MainMapper">
 
-    <select id = "getApiList" resultType="apiResult">
+    <select id = "getApiList" resultType="apiResultDto">
         SELECT apilist.API_LIST_ID API_LIST_ID
              , API_NM
              , PRV_ORG
