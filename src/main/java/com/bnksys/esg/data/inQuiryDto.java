@@ -1,0 +1,63 @@
+package com.bnksys.esg.data;
+
+public class inQuiryDto {
+    private int inquiryid;
+
+    private String inquirynm;
+
+    private String inquirycntn;
+
+    private String regdt;
+
+    private int parentid;
+
+    private int userid;
+
+    public int getInquiryid() {
+        return inquiryid;
+    }
+
+    public void setInquiryid(int inquiryid) {
+        this.inquiryid = inquiryid;
+    }
+
+    public String getInquirynm() {
+        return inquirynm;
+    }
+
+    public void setInquirynm(String inquirynm) {
+        this.inquirynm = inquirynm;
+    }
+
+    public String getInquirycntn() {
+        return inquirycntn;
+    }
+
+    public void setInquirycntn(String inquirycntn) {
+        this.inquirycntn = inquirycntn;
+    }
+
+    public String getRegdt() {
+        return regdt;
+    }
+
+    public void setRegdt(String regdt) {
+        this.regdt = regdt;
+    }
+
+    public int getParentid() {
+        return parentid;
+    }
+
+    public void setParentid(int parentid) {
+        this.parentid = parentid;
+    }
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+}

@@ -26,9 +26,4 @@ public interface UserApiMapper {
 
     List<apiResultDto> findIntrsApi(String email);
 
-    int maxUseCaseId();
-
-    void saveUseCase(@Param("userId")int userId, @Param("usecaseId")int usecaseId, useCaseDto usecaseDto);
-
-    void saveUseCaseApiList(@Param("usecaseId") int usecaseId, @Param("apilistid") int apilistid);
 }

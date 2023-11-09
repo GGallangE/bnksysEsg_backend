@@ -51,23 +51,28 @@ public class UserApiController {
     @PostMapping("/interestapi")
     public ResponseEntity<Response> saveIntrsApi(Authentication authentication, @RequestBody IntrsApiDto intrsApiDto){
         Response response = new Response();
+        try{
+            if (!AuthenticationUtils.checkAuthentication(authentication, response)) {
+                return ResponseEntity.badRequest().body(response);
+            }
 
-        if (!AuthenticationUtils.checkAuthentication(authentication, response)) {
-            return ResponseEntity.badRequest().body(response);
-        }
+            if (intrsApiDto.getApilistid() == 0 || intrsApiDto.getStcd() == null) {
+                response.setSuccess(false);
+                response.getMessages().add("apilistid와 stcd는 필수값 입니다.");
+                return ResponseEntity.badRequest().body(response);
+            }
 
-        if (intrsApiDto.getApilistid() == 0 || intrsApiDto.getStcd() == null) {
+            String email = authentication.getName();
+            userApiService.saveIntrsApi(email,intrsApiDto);
+
+            response.setSuccess(true);
+            response.getMessages().add("등록 완료");
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
             response.setSuccess(false);
-            response.getMessages().add("apilistid와 stcd는 필수값 입니다.");
+            response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
             return ResponseEntity.badRequest().body(response);
         }
-        
-        String email = authentication.getName();
-        userApiService.saveIntrsApi(email,intrsApiDto);
-
-        response.setSuccess(true);
-        response.getMessages().add("등록 완료");
-        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/myinterestapi")
@@ -86,24 +91,4 @@ public class UserApiController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/usecase")
-    public ResponseEntity<Response> saveUseCase(Authentication authentication, @RequestBody useCaseDto usecaseDto){
-        Response response = new Response();
-        try{
-            if (!AuthenticationUtils.checkAuthentication(authentication, response)) {
-                return ResponseEntity.badRequest().body(response);
-            }
-
-            String email = authentication.getName();
-            userApiService.saveUseCase(email,usecaseDto);
-
-            response.setSuccess(true);
-            response.getMessages().add("등록 완료");
-            return ResponseEntity.ok(response);
-        }catch (Exception e){
-            response.setSuccess(false);
-            response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
-    }
 }

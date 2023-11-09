@@ -12,4 +12,6 @@ import java.util.List;
 public interface MainMapper {
 
     List<apiResultDto> getApiList(@Param("name") String name, @Param("sortBy") String sortBy);
+
+    int findbyemail(String email);
 }

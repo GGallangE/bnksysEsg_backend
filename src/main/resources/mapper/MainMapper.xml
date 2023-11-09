@@ -30,4 +30,10 @@
     </if>
     </select>
 
+    <select id="findbyemail" resultType="int" parameterType="java.lang.String">
+        SELECT USER_ID
+          FROM USER
+         WHERE EMAIL = #{email}
+    </select>
+
 </mapper>

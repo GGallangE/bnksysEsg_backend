@@ -34,18 +34,4 @@ public class UserApiService {
         return userapiMapper.findIntrsApi(email);
     }
 
-    public void saveUseCase(String email, useCaseDto usecaseDto){
-        int userId = userapiMapper.findbyemail(email);
-        int usecaseId = userapiMapper.maxUseCaseId();
-        userapiMapper.saveUseCase(userId,usecaseId,usecaseDto);
-
-        if(null != usecaseDto.getApilistid()){
-            int[] apilistIds = usecaseDto.getApilistid();
-
-            for(int apilistid : apilistIds) {
-                userapiMapper.saveUseCaseApiList(usecaseId, apilistid);
-            }
-        }
-    }
-
 }
