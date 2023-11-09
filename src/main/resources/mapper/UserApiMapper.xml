@@ -9,7 +9,7 @@
         WHERE EMAIL = #{email}
     </select>
 
-    <select id = "findIntrsApi" resultType="apiResult">
+    <select id = "findIntrsApi" resultType="apiResultDto">
         SELECT apilist.API_LIST_ID API_LIST_ID
              , API_NM
              , PRV_ORG
@@ -34,6 +34,11 @@
          WHERE USER_ID = #{arg0} and API_LIST_ID = #{arg1}
     </select>
 
+    <select id = "maxUseCaseId">
+        SELECT COALESCE(MAX(USE_CASE_ID), 0) + 1
+          FROM USE_CASE
+    </select>
+
     <insert id="saveApiUses" parameterType="java.lang.Integer">
         INSERT INTO API_USES (USER_ID, API_LIST_ID, API_VIEW_DATE)
         VALUES (#{arg0}, #{arg1}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'))
@@ -42,6 +47,16 @@
     <insert id="saveIntrsApi">
         INSERT INTO API_USER_INTRS (USER_ID, API_LIST_ID, STCD)
         VALUES (#{arg0}, #{arg1.apilistid}, #{arg1.stcd})
+    </insert>
+
+    <insert id = "saveUseCase">
+        INSERT INTO USE_CASE (USE_CASE_ID, REG_DT, TITLE, CONTENT, USER_ID)
+        VALUES (#{usecaseId}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), #{arg2.title}, #{arg2.content}, #{userId})
+    </insert>
+
+    <insert id = "saveUseCaseApiList">
+        INSERT INTO USE_CASE_API_LIST(USE_CASE_ID, API_LIST_ID)
+        VALUES (#{usecaseId}, #{apilistid})
     </insert>
 
     <update id="updateIntrsApi">
