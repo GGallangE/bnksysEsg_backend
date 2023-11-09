@@ -18,6 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/spring/user")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     @Autowired

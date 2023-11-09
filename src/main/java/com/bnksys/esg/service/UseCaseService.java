@@ -21,4 +21,9 @@ public class UseCaseService {
     public List<getuseCaseDto> findUseCase_apiDetail(int apilistid){return useCaseMapper.findUseCase_apiDetail(apilistid); }
 
     public List<getuseCaseDto> findUseCase_usecaseDetail(int usecaseid){return useCaseMapper.findUseCase_usecaseDetail(usecaseid); }
+
+    public List<apiResultDto> findUseCase_usecaseDetail_apiList(int usecaseid){return useCaseMapper.findUseCase_usecaseDetail_apiList(usecaseid); }
+
+
+    public List<getuseCaseDto> findUseCase_usecaseMain(String searchname){return useCaseMapper.findUseCase_usecaseMain(searchname); }
 }

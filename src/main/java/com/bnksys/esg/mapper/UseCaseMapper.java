@@ -15,4 +15,8 @@ public interface UseCaseMapper {
     List<getuseCaseDto> findUseCase_apiDetail(@Param("apilistid") int apilistid);
 
     List<getuseCaseDto> findUseCase_usecaseDetail(@Param("usecaseid") int usecaseid);
+
+    List<apiResultDto> findUseCase_usecaseDetail_apiList(@Param("usecaseid") int usecaseid);
+
+    List<getuseCaseDto> findUseCase_usecaseMain(@Param("searchname") String searchname);
 }

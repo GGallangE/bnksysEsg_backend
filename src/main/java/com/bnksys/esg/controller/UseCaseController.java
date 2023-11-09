@@ -20,6 +20,7 @@ public class UseCaseController {
     UseCaseService useCaseService;
 
     @GetMapping("/apidetail")
+    // api_detail에서 활용사례 불러오기
     public ResponseEntity<ListResponse<getuseCaseDto>> findUseCase_apiDetail(@RequestParam int apilistid){
         ListResponse<getuseCaseDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
@@ -33,10 +34,35 @@ public class UseCaseController {
     }
 
     @GetMapping("/usecasedetail")
+    // 활용사례 상세 불러오기
     public ResponseEntity<ListResponse<getuseCaseDto>> findUseCase_usecaseDetail(@RequestParam int usecaseid){
         ListResponse<getuseCaseDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         List<getuseCaseDto> usecase = useCaseService.findUseCase_usecaseDetail(usecaseid);
+
+        response.setSuccess(true);
+        response.getData().put("data", usecase);
+        response.getMessages().add("조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/usecasedetail_apilist")
+    public ResponseEntity<ListResponse<apiResultDto>> findUseCase_usecaseDetail_apiList(@RequestParam int usecaseid){
+        ListResponse<apiResultDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<apiResultDto> apilist = useCaseService.findUseCase_usecaseDetail_apiList(usecaseid);
+
+        response.setSuccess(true);
+        response.getData().put("data", apilist);
+        response.getMessages().add("조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/mainusecase")
+    public ResponseEntity<ListResponse<getuseCaseDto>> findUseCase_usecaseMain(@RequestParam String searchname){
+        ListResponse<getuseCaseDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<getuseCaseDto> usecase = useCaseService.findUseCase_usecaseMain(searchname);
 
         response.setSuccess(true);
         response.getData().put("data", usecase);

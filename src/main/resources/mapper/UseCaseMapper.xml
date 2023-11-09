@@ -17,5 +17,55 @@
         ON user.USER_ID = USECASE.USER_ID
     </select>
 
+    <select id = "findUseCase_usecaseDetail">
+        SELECT USECASE.USE_CASE_ID USE_CASE_ID
+             , REG_DT
+             , TITLE
+             , CONTENT
+             , user.USER_NAME USER_NAME
+          FROM USE_CASE USECASE
+    INNER JOIN USER user
+            ON USECASE.USER_ID = user.USER_ID
+         WHERE USE_CASE_ID = #{usecaseid}
+    </select>
+
+    <select id = "findUseCase_usecaseDetail_apiList">
+        SELECT apilist.API_LIST_ID API_LIST_ID
+             , API_NM
+             , PRV_ORG
+             , API_VIEW
+             , API_RGDT
+             , APIUSES.COUNT_API_USES
+          FROM API_LIST apilist
+    INNER JOIN USE_CASE_API_LIST UCAL
+            ON apilist.API_LIST_ID = UCAL.API_LIST_ID
+     LEFT JOIN (SELECT API_LIST_ID
+                     , COUNT(*) COUNT_API_USES
+                  FROM API_USES
+              GROUP BY API_LIST_ID) APIUSES
+            ON APIUSES.API_LIST_ID = apilist.API_LIST_ID
+         WHERE UCAL.USE_CASE_ID = #{usecaseid}
+    </select>
+
+    <select id = "findUseCase_usecaseMain">
+        SELECT DISTINCT U.USE_CASE_ID
+                      , U.REG_DT
+                      , U.TITLE
+                      , U.CONTENT
+                      , user.USER_NAME
+          FROM USE_CASE U
+    INNER JOIN USER user
+            ON user.USER_ID = U.USER_ID
+     LEFT JOIN USE_CASE_API_LIST UA ON U.USE_CASE_ID = UA.USE_CASE_ID
+     LEFT JOIN API_LIST A ON UA.API_LIST_ID = A.API_LIST_ID
+         WHERE 1 = 1
+        <if test="searchname != null and searchname != ''">
+            AND (
+            U.TITLE LIKE CONCAT('%', #{searchname}, '%')
+            OR A.API_NM LIKE CONCAT('%', #{searchname}, '%')
+            )
+        </if>
+    </select>
+
 
 </mapper>

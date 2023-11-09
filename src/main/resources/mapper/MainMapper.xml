@@ -25,6 +25,9 @@
     <if test="sortBy == 'view' ">
       ORDER BY API_VIEW DESC
     </if>
+    <if test="sortBy == 'nbruses' ">
+        ORDER BY COUNT_API_USES DESC
+    </if>
     </select>
 
 </mapper>

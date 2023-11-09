@@ -9,8 +9,17 @@ public class apiResultDto {
     private String prvorg;
     private int apiview;
     private String apirgdt;
+    private String apiexpl;
     private int apiapplyid;
     private int countapiuses;
+
+    public String getApiexpl() {
+        return apiexpl;
+    }
+
+    public void setApiexpl(String apiexpl) {
+        this.apiexpl = apiexpl;
+    }
 
     public int getCountapiuses() {
         return countapiuses;
