@@ -22,6 +22,12 @@
         VALUES (#{inquiryDto.inquirynm}, #{inquiryDto.inquirycntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), #{inquiryDto.parentid}, #{userid})
     </insert>
 
+    <insert id = "saveNotice">
+        INSERT INTO NOTICE(NOTICE_NM, NOTICE_CNTN, REG_DT, ATCH_FILE_ID, HIT)
+        VALUES(#{noticenm}, #{noticecntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), CASE WHEN #{atchfileid} = 0 THEN NULL ELSE #{atchfileid} END, 0)
+    </insert>
+
+
     <update id="updateApi_ApplyStatus">
         UPDATE API_APPLY
            SET RPLY_DATE = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')

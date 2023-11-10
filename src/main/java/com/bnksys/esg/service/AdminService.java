@@ -30,4 +30,8 @@ public class AdminService {
         int userid = mainMapper.findbyemail(email);
         adminMapper.saveinquiry_Answer(userid, inquiryDto);
     }
+
+    public void saveNotice(String noticenm, String noticecntn, int atchfileid){
+        adminMapper.saveNotice(noticenm, noticecntn, atchfileid);
+    }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bnksys.esg.mapper.AtchFileMapper">
+
+    <select id = "maxAtchFileId">
+        SELECT COALESCE(MAX(ATCH_FILE_ID), 0) + 1
+        FROM ATCH_FILE
+    </select>
+
+    <select id = "findAtchDetailFile">
+        SELECT *
+          FROM ATCH_DETAIL_FILE
+         WHERE ATCH_DETAIL_FILE_ID = #{atchDetailFileId}
+    </select>
+
+    <insert id = "saveAtchFile">
+        INSERT INTO ATCH_FILE
+        VALUES(#{atchfileid}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'))
+    </insert>
+
+    <insert id = "saveAtchDetailFile">
+        INSERT INTO ATCH_DETAIL_FILE(ATCH_FILE_ID, ATCH_FILE_PATH, ATCH_FILE_NAME, ATCH_FILE_EXT, ATCH_FILE_SIZE, ORG_FILE_NAME)
+        VALUES (#{atchDetail.atchfileid}, #{atchDetail.atchfilepath}, #{atchDetail.atchfilename}, #{atchDetail.atchfileext}, #{atchDetail.atchfilesize}, #{atchDetail.orgfilename})
+    </insert>
+
+</mapper>

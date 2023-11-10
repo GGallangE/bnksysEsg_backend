@@ -1,15 +1,15 @@
 package com.bnksys.esg.controller;
 
-import com.bnksys.esg.data.apiApplyDto;
-import com.bnksys.esg.data.getuseCaseDto;
-import com.bnksys.esg.data.inQuiryDto;
+import com.bnksys.esg.data.*;
 import com.bnksys.esg.response.ListResponse;
 import com.bnksys.esg.response.Response;
 import com.bnksys.esg.service.AdminService;
+import com.bnksys.esg.service.AtchFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +21,9 @@ public class AdminController {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    AtchFileService atchFileService;
 
     @GetMapping("/apiapplylist")
     // api_detail에서 활용사례 불러오기
@@ -66,6 +69,28 @@ public class AdminController {
             response.getMessages().add("등록 완료");
             return ResponseEntity.ok(response);
         }catch (Exception e){
+            response.setSuccess(false);
+            response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @PostMapping("/notice/create")
+    public ResponseEntity<Response> savenotice(@RequestPart(value = "files", required = false) MultipartFile[] files,
+                                               @RequestPart noticeDto noticedto){
+        Response response = new Response();
+        int atchfileid = 0;
+        try{
+            if(files != null && files.length > 0){
+                atchfileid = atchFileService.saveAtchFile(files);
+            }
+
+            adminService.saveNotice(noticedto.getNoticenm(), noticedto.getNoticecntn(), atchfileid);
+
+            response.setSuccess(true);
+            response.getMessages().add("공지사항 등록 완료");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
             response.setSuccess(false);
             response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
             return ResponseEntity.badRequest().body(response);
