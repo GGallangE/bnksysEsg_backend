@@ -1,6 +1,8 @@
 package com.bnksys.esg.service;
 
 import com.bnksys.esg.data.apiResultDto;
+import com.bnksys.esg.data.atchDetailFileDto;
+import com.bnksys.esg.data.noticeDto;
 import com.bnksys.esg.mapper.MainMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,5 +24,14 @@ public class MainService {
         return mainMapper.getApiList(name, sortBy);
     }
 
+    public List<noticeDto> getNoticeList(){ return mainMapper.getNoticeList(); }
+
+    public List<noticeDto> getNoticeDetail(int noticeid){ return mainMapper.getNoticeDetail(noticeid); }
+
+    public List<atchDetailFileDto> getNoticeDetail_Atchfile(int atchfileid){ return mainMapper.getNoticeDetail_Atchfile(atchfileid); }
+
+    public List<apiResultDto> getapiList_Top5(String sort) {
+        return mainMapper.getapiList_Top5(sort);
+    }
 
 }

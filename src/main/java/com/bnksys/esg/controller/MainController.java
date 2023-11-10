@@ -1,6 +1,7 @@
 package com.bnksys.esg.controller;
 
 import com.bnksys.esg.data.apiResultDto;
+import com.bnksys.esg.data.atchDetailFileDto;
 import com.bnksys.esg.data.noticeDto;
 import com.bnksys.esg.response.ListResponse;
 import com.bnksys.esg.service.MainService;
@@ -32,10 +33,46 @@ public class MainController {
     public ResponseEntity<ListResponse<noticeDto>> getNoticeList(){
         ListResponse<noticeDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
-//        List<noticeDto> noticeList = mainService.getNoticeList();
+        List<noticeDto> noticeList = mainService.getNoticeList();
 
         response.setSuccess(true);
-//        response.getData().put("data", noticeList);
+        response.getData().put("data", noticeList);
+        response.getMessages().add("조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/notice/detail")
+    public ResponseEntity<ListResponse<noticeDto>> getNoticeDetail(@RequestParam int noticeid){
+        ListResponse<noticeDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<noticeDto> noticeList = mainService.getNoticeDetail(noticeid);
+
+        response.setSuccess(true);
+        response.getData().put("data", noticeList);
+        response.getMessages().add("조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/notice/detailatchfile")
+    public ResponseEntity<ListResponse<atchDetailFileDto>> getNoticeDetail_Atchfile(@RequestParam int atchfileid){
+        ListResponse<atchDetailFileDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<atchDetailFileDto> atchfileList = mainService.getNoticeDetail_Atchfile(atchfileid);
+
+        response.setSuccess(true);
+        response.getData().put("data", atchfileList);
+        response.getMessages().add("조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/view_recent/top5")
+    public ResponseEntity<ListResponse<apiResultDto>> getapiList_Top5(@RequestParam String sort){
+        ListResponse<apiResultDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<apiResultDto> apilist_top5 = mainService.getapiList_Top5(sort);
+
+        response.setSuccess(true);
+        response.getData().put("data", apilist_top5);
         response.getMessages().add("조회 완료");
         return ResponseEntity.ok(response);
     }

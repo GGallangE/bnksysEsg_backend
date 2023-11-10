@@ -36,4 +36,38 @@
          WHERE EMAIL = #{email}
     </select>
 
+    <select id = "getNoticeDetail" resultType="noticeDto">
+        SELECT NOTICE.NOTICE_ID NOTICE_ID
+             , NOTICE.NOTICE_NM AS NOTICE_NM
+             , NOTICE.NOTICE_CNTN AS NOTICE_CNTN
+             , NOTICE.REG_DT REG_DT
+             , NOTICE.ATCH_FILE_ID ATCH_FILE_ID
+             , NOTICE.HIT HIT
+        FROM NOTICE NOTICE
+       WHERE NOTICE.NOTICE_ID = #{noticeid}
+    </select>
+
+    <select id = "getNoticeList">
+        SELECT *
+          FROM NOTICE
+    </select>
+
+    <select id = "getNoticeDetail_Atchfile">
+        SELECT *
+          FROM ATCH_DETAIL_FILE
+         WHERE ATCH_FILE_ID = #{atchfileid}
+    </select>
+
+    <select id = "getapiList_Top5">
+        SELECT *
+          FROM API_LIST
+        <if test="sort == 'view' ">
+            ORDER BY API_VIEW DESC
+        </if>
+        <if test="sort == 'recent' ">
+            ORDER BY API_LIST_ID DESC
+        </if>
+         LIMIT 2
+    </select>
+
 </mapper>

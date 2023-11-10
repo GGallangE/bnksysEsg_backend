@@ -1,5 +1,7 @@
 package com.bnksys.esg.data;
 
+import java.util.List;
+
 public class noticeDto {
 
     private int noticeid;
