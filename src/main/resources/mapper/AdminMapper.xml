@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bnksys.esg.mapper.AdminMapper">
+
+    <select id = "findApi_ApplyLIST">
+        SELECT API_APPLY_ID
+             , APIAPPLY.USER_ID USER_ID
+             , APPLY_NM
+             , APPLY_CNTN
+             , APPLY_DATE
+             , RPLY_DATE
+             , APPLY_DVCD
+             , user.USER_NAME USER_NAME
+        FROM API_APPLY APIAPPLY
+                 INNER JOIN USER user
+        ON APIAPPLY.USER_ID = user.USER_ID
+    </select>
+
+    <insert id = "saveinquiry_Answer">
+        INSERT INTO INQUIRY(INQUIRY_NM, INQUIRY_CNTN, REG_DT, PARENT_ID, USER_ID)
+        VALUES (#{inquiryDto.inquirynm}, #{inquiryDto.inquirycntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), #{inquiryDto.parentid}, #{userid})
+    </insert>
+
+    <insert id = "saveNotice">
+        INSERT INTO NOTICE(NOTICE_NM, NOTICE_CNTN, REG_DT, ATCH_FILE_ID, HIT)
+        VALUES(#{noticenm}, #{noticecntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), CASE WHEN #{atchfileid} = 0 THEN NULL ELSE #{atchfileid} END, 0)
+    </insert>
+
+
+    <update id="updateApi_ApplyStatus">
+        UPDATE API_APPLY
+           SET RPLY_DATE = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+             , APPLY_DVCD = #{apiapplyDto.applydvcd}
+         WHERE API_APPLY_ID = #{apiapplyDto.apiapplyid}
+    </update>
+
+
+</mapper>

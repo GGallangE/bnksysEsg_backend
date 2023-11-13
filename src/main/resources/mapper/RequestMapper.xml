@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bnksys.esg.mapper.RequestMapper">
+
+    <insert id="saveApplyApi">
+        INSERT INTO API_APPLY(USER_ID, APPLY_NM, APPLY_CNTN, APPLY_DATE, RPLY_DATE, APPLY_DVCD)
+        VALUES (#{userid}, #{apiapplyDto.applynm}, #{apiapplyDto.applycntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, "01")
+    </insert>
+
+    <insert id ="saveInquiry">
+        INSERT INTO INQUIRY(INQUIRY_NM, INQUIRY_CNTN, REG_DT, PARENT_ID, USER_ID)
+        VALUES (#{inquiryDto.inquirynm}, #{inquiryDto.inquirycntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, #{userid})
+    </insert>
+
+</mapper>

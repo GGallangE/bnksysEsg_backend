@@ -67,5 +67,19 @@
         </if>
     </select>
 
+    <select id = "maxUseCaseId">
+        SELECT COALESCE(MAX(USE_CASE_ID), 0) + 1
+        FROM USE_CASE
+    </select>
+
+    <insert id = "saveUseCase">
+        INSERT INTO USE_CASE (USE_CASE_ID, REG_DT, TITLE, CONTENT, USER_ID)
+        VALUES (#{usecaseId}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), #{arg2.title}, #{arg2.content}, #{userId})
+    </insert>
+
+    <insert id = "saveUseCaseApiList">
+        INSERT INTO USE_CASE_API_LIST(USE_CASE_ID, API_LIST_ID)
+        VALUES (#{usecaseId}, #{apilistid})
+    </insert>
 
 </mapper>

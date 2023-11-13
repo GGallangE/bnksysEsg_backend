@@ -1,4 +1,4 @@
-package com.bnksys.esg.security;
+package com.bnksys.esg.config;
 
 import com.bnksys.esg.jwt.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/spring/user/admin/page").hasRole("ADMIN")
+                                .requestMatchers("/spring/admin/**").hasRole("ADMIN")
                                 .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
