@@ -19,7 +19,7 @@ public interface MainMapper {
 
     int findbyemail(String email);
 
-    List<noticeDto> getNoticeList();
+    List<noticeDto> getNoticeList(String mainsort);
 
     List<noticeDto> getNoticeDetail(@Param("noticeid") int noticeid);
 

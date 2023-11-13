@@ -50,6 +50,10 @@
     <select id = "getNoticeList">
         SELECT *
           FROM NOTICE
+      ORDER BY NOTICE_ID DESC
+        <if test="mainsort == 'yes' ">
+            LIMIT 1
+        </if>
     </select>
 
     <select id = "getNoticeDetail_Atchfile">

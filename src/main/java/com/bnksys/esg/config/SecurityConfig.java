@@ -1,4 +1,4 @@
-package com.bnksys.esg.security;
+package com.bnksys.esg.config;
 
 import com.bnksys.esg.jwt.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;

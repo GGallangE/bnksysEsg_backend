@@ -4,10 +4,13 @@ import com.bnksys.esg.data.apiResultDto;
 import com.bnksys.esg.data.atchDetailFileDto;
 import com.bnksys.esg.data.noticeDto;
 import com.bnksys.esg.response.ListResponse;
+import com.bnksys.esg.response.Response;
+import com.bnksys.esg.service.MailService;
 import com.bnksys.esg.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +22,8 @@ import java.util.Map;
 public class MainController {
     @Autowired
     MainService mainService;
+    @Autowired
+    MailService mailService;
 
     @GetMapping("/search")
     public ResponseEntity<Map<String, List<apiResultDto>>> getApiList(@RequestParam String name, @RequestParam String sortBy) {
@@ -30,10 +35,10 @@ public class MainController {
     }
 
     @GetMapping("/notice")
-    public ResponseEntity<ListResponse<noticeDto>> getNoticeList(){
+    public ResponseEntity<ListResponse<noticeDto>> getNoticeList(@RequestParam(value = "mainsort", required = false) String mainsort){
         ListResponse<noticeDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
-        List<noticeDto> noticeList = mainService.getNoticeList();
+        List<noticeDto> noticeList = mainService.getNoticeList(mainsort);
 
         response.setSuccess(true);
         response.getData().put("data", noticeList);
@@ -75,6 +80,24 @@ public class MainController {
         response.getData().put("data", apilist_top5);
         response.getMessages().add("조회 완료");
         return ResponseEntity.ok(response);
+    }
+
+    // Mail - SMTP Test
+    @PostMapping("/send-mail")
+    public ResponseEntity<Response> sendMail(){
+        Response response = new Response();
+
+        try{
+            mailService.sendMail("ehrbs2997@naver.com");
+            response.setSuccess(true);
+            response.getMessages().add("메일 전송 완료");
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.setSuccess(false);
+            response.getMessages().add("메일 전송 실패");
+            return ResponseEntity.badRequest().body(response);
+        }
+
     }
 
 }

@@ -24,7 +24,7 @@ public class MainService {
         return mainMapper.getApiList(name, sortBy);
     }
 
-    public List<noticeDto> getNoticeList(){ return mainMapper.getNoticeList(); }
+    public List<noticeDto> getNoticeList(String mainsort){ return mainMapper.getNoticeList(mainsort); }
 
     public List<noticeDto> getNoticeDetail(int noticeid){ return mainMapper.getNoticeDetail(noticeid); }
 
