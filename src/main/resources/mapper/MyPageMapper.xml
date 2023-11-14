@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bnksys.esg.mapper.MyPageMapper">
+
+    <select id = "findIntrsApi" resultType="apiResultDto">
+        SELECT apilist.API_LIST_ID API_LIST_ID
+             , API_NM
+             , PRV_ORG
+             , API_VIEW
+             , API_RGDT
+             , COUNT_API_USES
+        FROM API_LIST apilist
+  INNER JOIN API_USER_INTRS aui
+          ON apilist.API_LIST_ID = aui.API_LIST_ID
+         AND aui.USER_ID = (SELECT USER_ID FROM USER WHERE Email = #{email})
+         AND aui.STCD = '01'
+   LEFT JOIN (SELECT API_LIST_ID
+                   , COUNT(*) COUNT_API_USES
+                FROM API_USES
+            GROUP BY API_LIST_ID) apiuses
+          ON apilist.API_LIST_ID = apiuses.API_LIST_ID
+    </select>
+
+    <select id = "findRecentUseApi">
+     SELECT DISTINCT_API.API_LIST_ID API_LIST_ID
+          , API_NM
+          , PRV_ORG
+          , API_VIEW
+          , API_RGDT
+          , COUNT_API_USES
+       FROM (
+            SELECT DISTINCT apilist.API_LIST_ID API_LIST_ID
+                 , API_NM
+                 , PRV_ORG
+                 , API_VIEW
+                 , API_RGDT
+                 , COUNT(apiuses.API_LIST_ID) OVER (PARTITION BY apiuses.API_LIST_ID) AS COUNT_API_USES
+            FROM API_LIST apilist
+      INNER JOIN API_USES apiuses
+              ON apilist.API_LIST_ID = apiuses.API_LIST_ID
+             AND apiuses.USER_ID = (SELECT USER_ID FROM USER WHERE Email = #{email}) ) DISTINCT_API
+INNER JOIN (SELECT API_LIST_ID, MAX(API_VIEW_DATE) API_VIEW_DATE FROM API_USES GROUP BY API_LIST_ID) apiuses
+        ON apiuses.API_LIST_ID = DISTINCT_API.API_LIST_ID
+  ORDER BY apiuses.API_VIEW_DATE DESC
+    </select>
+
+    <select id="findInQuiry">
+        SELECT INQUIRY_ID
+             , INQUIRY_NM
+             , INQUIRY_CNTN
+             , REG_DT
+             , PARENT_ID
+             , inquiry.USER_ID USER_ID
+             , user.USER_NAME USER_NAME
+          FROM INQUIRY inquiry
+    INNER JOIN USER user
+            ON user.USER_ID = inquiry.USER_ID
+         WHERE EMAIL = #{email}
+     ORDER BY INQUIRY_ID DESC
+    </select>
+
+    <select id = "findAnswerInQuiry">
+        SELECT INQUIRY_ID
+             , INQUIRY_NM
+             , INQUIRY_CNTN
+             , REG_DT
+             , PARENT_ID
+             , inquiry.USER_ID USER_ID
+             , user.USER_NAME USER_NAME
+          FROM INQUIRY inquiry
+    INNER JOIN USER user
+            ON user.USER_ID = inquiry.USER_ID
+         WHERE PARENT_ID IN (SELECT INQUIRY_ID FROM INQUIRY WHERE USER_ID IN (
+                                    SELECT USER_ID FROM USER WHERE EMAIL = #{email}))
+           AND PARENT_ID = #{inquiryid}
+    </select>
+
+    <select id = "findApiApply">
+        SELECT apiapply.API_APPLY_ID API_APPLY_ID
+             , apiapply.USER_ID
+             , APPLY_NM
+             , APPLY_CNTN
+             , APPLY_DATE
+             , RPLY_DATE
+             , APPLY_DVCD
+             , user.USER_NAME USER_NAME
+          FROM API_APPLY apiapply
+    INNER JOIN USER user
+            ON user.USER_ID = apiapply.USER_ID
+           AND user.EMAIL = #{email}
+    </select>
+
+    <select id="findDetailApiApply">
+        SELECT apiapply.API_APPLY_ID API_APPLY_ID
+             , apiapply.USER_ID
+             , APPLY_NM
+             , APPLY_CNTN
+             , APPLY_DATE
+             , RPLY_DATE
+             , APPLY_DVCD
+             , user.USER_NAME USER_NAME
+          FROM API_APPLY apiapply
+    INNER JOIN USER user
+            ON user.USER_ID = apiapply.USER_ID
+           AND user.EMAIL = #{email}
+         WHERE apiapply.API_APPLY_ID = #{apiapplyid}
+    </select>
+
+</mapper>

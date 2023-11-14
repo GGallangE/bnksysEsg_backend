@@ -35,7 +35,7 @@ public class AdminController {
 
         response.setSuccess(true);
         response.getData().put("data", apiapplyresult);
-        response.getMessages().add("조회 완료");
+        response.getMessages().add("API 신청 현황 조회 완료");
         return ResponseEntity.ok(response);
     }
 
