@@ -11,7 +11,17 @@ public class apiResultDto {
     private String apirgdt;
     private String apiexpl;
     private int apiapplyid;
+    private String apiapplynm;
     private int countapiuses;
+
+
+    public String getApiapplynm() {
+        return apiapplynm;
+    }
+
+    public void setApiapplynm(String apiapplynm) {
+        this.apiapplynm = apiapplynm;
+    }
 
     public String getApiexpl() {
         return apiexpl;

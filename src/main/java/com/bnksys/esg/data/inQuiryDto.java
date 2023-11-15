@@ -13,6 +13,26 @@ public class inQuiryDto {
 
     private int userid;
 
+    private String username;
+
+    private int replycount;
+
+    public int getReplycount() {
+        return replycount;
+    }
+
+    public void setReplycount(int replycount) {
+        this.replycount = replycount;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public int getInquiryid() {
         return inquiryid;
     }

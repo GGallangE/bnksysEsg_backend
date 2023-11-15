@@ -68,7 +68,12 @@ public class UserController {
         Map<String, String> data = new HashMap<>();
 
         if (userService.login(userdto.getEmail(), userdto.getPassword())) {
-            data.put("token", jwtUtils.generateJwtToken(userdto.getEmail()));
+            String accessToken = jwtUtils.generateJwtToken(userdto.getEmail());
+            String refreshToken = jwtUtils.generateRefreshToken(userdto.getEmail());
+
+            data.put("accessToken", accessToken);
+            data.put("refreshToken", refreshToken);
+
             response.setData(data);
             response.setSuccess(true);
         } else {

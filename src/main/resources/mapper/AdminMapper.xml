@@ -3,6 +3,35 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bnksys.esg.mapper.AdminMapper">
 
+    <select id = "findAnswerCount">
+        SELECT COUNT(*) cnt
+          FROM INQUIRY
+         WHERE PARENT_ID = #{parentid}
+    </select>
+
+    <select id = "maxApiListId">
+        SELECT COALESCE(MAX(API_LIST_ID), 0) + 1
+        FROM API_LIST
+    </select>
+
+    <select id = "findApiList">
+        SELECT API_LIST_ID
+             , API_NM
+             , PRV_ORG
+             , API_EXPL
+             , API_RGDT
+             , apilist.API_APPLY_ID
+             , apiapply.APPLY_NM API_APPLY_NM
+          FROM API_LIST apilist
+     LEFT JOIN API_APPLY apiapply
+            ON apilist.API_APPLY_ID = apiapply.API_APPLY_ID
+         WHERE 1 = 1
+        <if test="apilistid != null">
+           AND API_LIST_ID = #{apilistid}
+        </if>
+      ORDER BY API_LIST_ID DESC
+    </select>
+
     <select id = "findApi_ApplyLIST">
         SELECT API_APPLY_ID
              , APIAPPLY.USER_ID USER_ID
@@ -12,9 +41,55 @@
              , RPLY_DATE
              , APPLY_DVCD
              , user.USER_NAME USER_NAME
-        FROM API_APPLY APIAPPLY
-                 INNER JOIN USER user
-        ON APIAPPLY.USER_ID = user.USER_ID
+          FROM API_APPLY APIAPPLY
+    INNER JOIN USER user
+            ON APIAPPLY.USER_ID = user.USER_ID
+         WHERE 1 = 1
+        <if test="apiapplyid != null">
+           AND API_APPLY_ID = #{apiapplyid}
+        </if>
+      ORDER BY API_APPLY_ID DESC
+    </select>
+
+    <select id = "findinQuiry">
+        SELECT inquiry.INQUIRY_ID
+             , INQUIRY_NM
+             , INQUIRY_CNTN
+             , REG_DT
+             , PARENT_ID
+             , inquiry.USER_ID USER_ID
+             , user.USER_NAME USER_NAME
+             , reply.REPLY_COUNT
+          FROM INQUIRY inquiry
+    INNER JOIN USER user
+            ON user.USER_ID = inquiry.USER_ID
+     LEFT JOIN (SELECT inquiry1.INQUIRY_ID INQUIRY_ID
+                     , COUNT(*) REPLY_COUNT
+                  FROM INQUIRY inquiry1
+                     , INQUIRY inquiry2
+                 WHERE inquiry1.INQUIRY_ID = inquiry2.PARENT_ID
+              GROUP BY inquiry1.INQUIRY_ID) reply
+                    ON inquiry.INQUIRY_ID = reply.INQUIRY_ID
+         WHERE PARENT_ID IS NULL
+        <if test="inquiryid != null">
+          AND inquiry.INQUIRY_ID = #{inquiryid}
+        </if>
+      ORDER BY INQUIRY_ID DESC
+    </select>
+
+    <select id = "findinQuiryAnswer">
+        SELECT inquiry.INQUIRY_ID
+             , INQUIRY_NM
+             , INQUIRY_CNTN
+             , REG_DT
+             , PARENT_ID
+             , inquiry.USER_ID USER_ID
+             , user.USER_NAME USER_NAME
+          FROM INQUIRY inquiry
+    INNER JOIN USER user
+            ON user.USER_ID = inquiry.USER_ID
+         WHERE PARENT_ID IS NOT NULL
+           AND PARENT_ID = #{inquiryid}
     </select>
 
     <insert id = "saveinquiry_Answer">
@@ -27,12 +102,37 @@
         VALUES(#{noticenm}, #{noticecntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), CASE WHEN #{atchfileid} = 0 THEN NULL ELSE #{atchfileid} END, 0)
     </insert>
 
+    <insert id="saveApiList">
+        INSERT INTO API_LIST(API_LIST_ID, API_NM, PRV_ORG, API_VIEW, API_EXPL, API_RGDT, API_APPLY_ID)
+        VALUES (#{apiresultDto.apilistid}, #{apiresultDto.apinm}, #{apiresultDto.prvorg}, 0, #{apiresultDto.apiexpl}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),
+                CASE WHEN #{apiresultDto.apiapplyid} = 0 THEN NULL ELSE #{apiresultDto.apiapplyid} END)
+    </insert>
+
+    <update id = "updateApiList">
+        UPDATE API_LIST
+           SET API_NM = #{apiresultDto.apinm}
+             , PRV_ORG = #{apiresultDto.prvorg}
+             , API_EXPL = #{apiresultDto.apiexpl}
+             , API_RGDT = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+             , API_APPLY_ID = CASE WHEN #{apiresultDto.apiapplyid} = 0 THEN NULL ELSE #{apiresultDto.apiapplyid} END
+         WHERE API_LIST_ID = #{apiresultDto.apilistid}
+    </update>
+
 
     <update id="updateApi_ApplyStatus">
         UPDATE API_APPLY
            SET RPLY_DATE = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
              , APPLY_DVCD = #{apiapplyDto.applydvcd}
          WHERE API_APPLY_ID = #{apiapplyDto.apiapplyid}
+    </update>
+
+    <update id = "updateinquiry_Answer">
+        UPDATE INQUIRY
+           SET INQUIRY_NM = #{inquiryDto.inquirynm}
+             , INQUIRY_CNTN = #{inquiryDto.inquirycntn}
+             , REG_DT = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+             , USER_ID = #{userid}
+         WHERE PARENT_ID = #{inquiryDto.parentid}
     </update>
 
 

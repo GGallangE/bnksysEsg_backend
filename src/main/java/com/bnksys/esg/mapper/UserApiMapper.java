@@ -24,6 +24,4 @@ public interface UserApiMapper {
 
     void updateIntrsApi(int userId, IntrsApiDto intrsApiDto);
 
-    List<apiResultDto> findIntrsApi(String email);
-
 }

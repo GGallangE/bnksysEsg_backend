@@ -75,20 +75,4 @@ public class UserApiController {
         }
     }
 
-    @GetMapping("/myinterestapi")
-    public ResponseEntity<ListResponse<apiResultDto>> findIntrsApi(Authentication authentication){
-        ListResponse<apiResultDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
-
-        if (!AuthenticationUtils_ApiResponse.checkAuthentication(authentication, response).isSuccess()) {
-            return ResponseEntity.badRequest().body(response);
-        }
-        String email = authentication.getName();
-        List<apiResultDto> apiResults = userApiService.findIntrsApi(email);
-
-        response.setSuccess(true);
-        response.getData().put("data", apiResults);
-        response.getMessages().add("조회 완료");
-        return ResponseEntity.ok(response);
-    }
-
 }

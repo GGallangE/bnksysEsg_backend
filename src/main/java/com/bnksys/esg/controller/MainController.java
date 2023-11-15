@@ -42,7 +42,7 @@ public class MainController {
 
         response.setSuccess(true);
         response.getData().put("data", noticeList);
-        response.getMessages().add("조회 완료");
+        response.getMessages().add("공지사항 LIST 조회 완료");
         return ResponseEntity.ok(response);
     }
 
@@ -54,7 +54,7 @@ public class MainController {
 
         response.setSuccess(true);
         response.getData().put("data", noticeList);
-        response.getMessages().add("조회 완료");
+        response.getMessages().add("공지사항 상세 조회 완료");
         return ResponseEntity.ok(response);
     }
 
@@ -66,7 +66,7 @@ public class MainController {
 
         response.setSuccess(true);
         response.getData().put("data", atchfileList);
-        response.getMessages().add("조회 완료");
+        response.getMessages().add("공지사항 첨부파일 조회 완료");
         return ResponseEntity.ok(response);
     }
 
@@ -78,7 +78,7 @@ public class MainController {
 
         response.setSuccess(true);
         response.getData().put("data", apilist_top5);
-        response.getMessages().add("조회 완료");
+        response.getMessages().add("Top 5 조회 완료");
         return ResponseEntity.ok(response);
     }
 
