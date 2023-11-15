@@ -46,16 +46,24 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_VIEW_DATE) API_VIEW_DATE FROM API_USES G
     </select>
 
     <select id="findInQuiry">
-        SELECT INQUIRY_ID
+        SELECT inquiry.INQUIRY_ID INQUIRY_ID
              , INQUIRY_NM
              , INQUIRY_CNTN
              , REG_DT
              , PARENT_ID
              , inquiry.USER_ID USER_ID
              , user.USER_NAME USER_NAME
+             , reply.REPLY_COUNT REPLY_COUNT
           FROM INQUIRY inquiry
     INNER JOIN USER user
             ON user.USER_ID = inquiry.USER_ID
+     LEFT JOIN (SELECT inquiry1.INQUIRY_ID INQUIRY_ID
+                     , COUNT(*) REPLY_COUNT
+                  FROM INQUIRY inquiry1
+                     , INQUIRY inquiry2
+                 WHERE inquiry1.INQUIRY_ID = inquiry2.PARENT_ID
+              GROUP BY inquiry1.INQUIRY_ID) reply
+            ON inquiry.INQUIRY_ID = reply.INQUIRY_ID
          WHERE EMAIL = #{email}
      ORDER BY INQUIRY_ID DESC
     </select>

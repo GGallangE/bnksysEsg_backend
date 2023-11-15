@@ -1,6 +1,7 @@
 package com.bnksys.esg.mapper;
 
 import com.bnksys.esg.data.apiApplyDto;
+import com.bnksys.esg.data.apiResultDto;
 import com.bnksys.esg.data.inQuiryDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,12 +13,27 @@ import java.util.List;
 @Repository
 public interface AdminMapper {
 
-    List<apiApplyDto> findApi_ApplyLIST();
+    int findAnswerCount(@Param("parentid") int parentid);
+
+    int maxApiListId();
+
+    List<apiApplyDto> findApi_ApplyLIST(@Param("apiapplyid") Integer apiapplyid);
+
+    List<apiResultDto> findApiList(@Param("apilistid") Integer apilistid);
+
+    List<inQuiryDto> findinQuiry(@Param("inquiryid") Integer inquiryid);
+
+    List<inQuiryDto> findinQuiryAnswer(@Param("inquiryid") int inquiryid);
 
     void updateApi_ApplyStatus(@Param("apiapplyDto") apiApplyDto apiapplyDto);
 
-    void saveinquiry_Answer(@Param("userid") int userid, @Param("inquiryDto")inQuiryDto inquiryDto);
+    void updateinquiry_Answer(@Param("userid") int userid, @Param("inquiryDto")inQuiryDto inquiryDto);
 
     void saveNotice(@Param("noticenm") String noticenm, @Param("noticecntn") String noticecntn, @Param("atchfileid") int atchfileid);
 
+    void saveApiList(@Param("apiresultDto") apiResultDto apiresultDto);
+
+    void updateApiList(@Param("apiresultDto") apiResultDto apiresultDto);
+
+    void saveinquiry_Answer(@Param("userid") int userid, @Param("inquiryDto")inQuiryDto inquiryDto);
 }

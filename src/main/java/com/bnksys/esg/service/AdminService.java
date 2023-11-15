@@ -1,6 +1,7 @@
 package com.bnksys.esg.service;
 
 import com.bnksys.esg.data.apiApplyDto;
+import com.bnksys.esg.data.apiResultDto;
 import com.bnksys.esg.data.inQuiryDto;
 import com.bnksys.esg.mapper.AdminMapper;
 import com.bnksys.esg.mapper.MainMapper;
@@ -18,8 +19,26 @@ public class AdminService {
         this.mainMapper = mainMapper;
     }
 
-    public List<apiApplyDto> findApi_ApplyLIST() {
-        return adminMapper.findApi_ApplyLIST();
+    public int findAnswerCount(int parentid){
+        return adminMapper.findAnswerCount(parentid);
+    }
+
+    public int maxApiListId(){
+        return adminMapper.maxApiListId();
+    }
+
+    public List<apiApplyDto> findApi_ApplyLIST(Integer apiapplyid) {
+        return adminMapper.findApi_ApplyLIST(apiapplyid);
+    }
+    public List<inQuiryDto> findinQuiry(Integer inquiryid) {
+        return adminMapper.findinQuiry(inquiryid);
+    }
+
+    public List<inQuiryDto> findinQuiryAnswer(int inquiryid) {
+        return adminMapper.findinQuiryAnswer(inquiryid);
+
+    }public List<apiResultDto> findApiList(Integer apilistid) {
+        return adminMapper.findApiList(apilistid);
     }
 
     public void updateApi_ApplyStatus(apiApplyDto apiapplyDto){
@@ -29,6 +48,19 @@ public class AdminService {
     public void saveinquiry_Answer(String email, inQuiryDto inquiryDto){
         int userid = mainMapper.findbyemail(email);
         adminMapper.saveinquiry_Answer(userid, inquiryDto);
+    }
+
+    public void saveApiList(apiResultDto apiresultDto){
+        adminMapper.saveApiList(apiresultDto);
+    }
+
+    public void updateApiList(apiResultDto apiresultDto){
+        adminMapper.updateApiList(apiresultDto);
+    }
+
+    public void updateinquiry_Answer(String email, inQuiryDto inquiryDto){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.updateinquiry_Answer(userid, inquiryDto);
     }
 
     public void saveNotice(String noticenm, String noticecntn, int atchfileid){

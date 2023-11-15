@@ -15,6 +15,16 @@ public class inQuiryDto {
 
     private String username;
 
+    private int replycount;
+
+    public int getReplycount() {
+        return replycount;
+    }
+
+    public void setReplycount(int replycount) {
+        this.replycount = replycount;
+    }
+
     public String getUsername() {
         return username;
     }

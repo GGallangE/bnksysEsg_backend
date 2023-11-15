@@ -5,6 +5,7 @@ import com.bnksys.esg.response.ListResponse;
 import com.bnksys.esg.response.Response;
 import com.bnksys.esg.service.AdminService;
 import com.bnksys.esg.service.AtchFileService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,12 +27,11 @@ public class AdminController {
     AtchFileService atchFileService;
 
     @GetMapping("/apiapplylist")
-    // api_detail에서 활용사례 불러오기
-    public ResponseEntity<ListResponse<apiApplyDto>> findApi_ApplyLIST(){
+    public ResponseEntity<ListResponse<apiApplyDto>> findApi_ApplyLIST(@RequestParam(value = "apiapplyid", required = false) Integer apiapplyid){
 
         ListResponse<apiApplyDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
-        List<apiApplyDto> apiapplyresult = adminService.findApi_ApplyLIST();
+        List<apiApplyDto> apiapplyresult = adminService.findApi_ApplyLIST(apiapplyid);
 
         response.setSuccess(true);
         response.getData().put("data", apiapplyresult);
@@ -48,7 +48,7 @@ public class AdminController {
             adminService.updateApi_ApplyStatus(apiapplyDto);
 
             response.setSuccess(true);
-            response.getMessages().add("변경 완료");
+            response.getMessages().add("등록 완료");
             return ResponseEntity.ok(response);
         }catch (Exception e){
             response.setSuccess(false);
@@ -57,16 +57,81 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/apilist")
+    public ResponseEntity<ListResponse<apiResultDto>> findApiList(@RequestParam(value = "apilistid", required = false) Integer apilistid){
+        ListResponse<apiResultDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<apiResultDto> apiresult = adminService.findApiList(apilistid);
+
+        response.setSuccess(true);
+        response.getData().put("data", apiresult);
+        response.getMessages().add("API LIST 조회 완료");
+        return ResponseEntity.ok(response);
+    }
+    
+    @PostMapping("/apilist/save")
+    public ResponseEntity<Response> saveApiList(@RequestBody apiResultDto apiresultDto){
+        Response response = new Response();
+
+        try{
+            if(0 == apiresultDto.getApilistid()){
+                int apilistid = adminService.maxApiListId();
+                apiresultDto.setApilistid(apilistid);
+                adminService.saveApiList(apiresultDto);
+                response.getMessages().add("등록 완료");
+            }else{
+                adminService.updateApiList(apiresultDto);
+                response.getMessages().add("수정 완료");
+            }
+
+            response.setSuccess(true);
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.setSuccess(false);
+            response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @GetMapping("/inquiry/list")
+    public ResponseEntity<ListResponse<inQuiryDto>> findinQuiry(@RequestParam(value = "inquiryid", required = false) Integer inquiryid){
+        ListResponse<inQuiryDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<inQuiryDto> inquiryList = adminService.findinQuiry(inquiryid);
+
+        response.setSuccess(true);
+        response.getData().put("data", inquiryList);
+        response.getMessages().add("문의 사항 조회 완료");
+        return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/inquiry/list/answer")
+    public ResponseEntity<ListResponse<inQuiryDto>> findinQuiryAnswer(@Param("inquiryid") int inquiryid){
+        ListResponse<inQuiryDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<inQuiryDto> inquiryAnswer = adminService.findinQuiryAnswer(inquiryid);
+
+        response.setSuccess(true);
+        response.getData().put("data", inquiryAnswer);
+        response.getMessages().add("문의 사항 답변 조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/inquiry/answer")
     public ResponseEntity<Response> saveinquiry_Answer(@RequestBody inQuiryDto inquiryDto){
         Response response = new Response();
 
         try{
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
-            adminService.saveinquiry_Answer(email, inquiryDto);
+            if(adminService.findAnswerCount(inquiryDto.getParentid()) == 0){
+                adminService.saveinquiry_Answer(email, inquiryDto);
+                response.getMessages().add("등록 완료");
+            }else{
+                adminService.updateinquiry_Answer(email, inquiryDto);
+                response.getMessages().add("수정 완료");
+            }
 
             response.setSuccess(true);
-            response.getMessages().add("등록 완료");
             return ResponseEntity.ok(response);
         }catch (Exception e){
             response.setSuccess(false);

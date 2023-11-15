@@ -29,9 +29,16 @@ public class JwtFilter extends OncePerRequestFilter {
         System.out.println(token);
         if (token != null && jwtUtils.validateJwtToken(token)) {
             Authentication authentication = jwtUtils.getAuthentication(token);
-            System.out.println(authentication.isAuthenticated());
             if (authentication.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            }else{
+                String refreshToken = jwtUtils.resolveRefreshToken(request);
+                if (refreshToken != null && jwtUtils.validateRefreshToken(refreshToken)) {
+                    String username = jwtUtils.getUserNameFromRefreshToken(refreshToken);
+                    String newAccessToken = jwtUtils.generateJwtToken(username);
+                    // 클라이언트에게 새로운 access 토큰 전달
+                    response.setHeader("New-Access-Token", newAccessToken);
+                }
             }
         }
         try {
@@ -40,4 +47,6 @@ public class JwtFilter extends OncePerRequestFilter {
             e.printStackTrace();
         }
     }
+
+
 }

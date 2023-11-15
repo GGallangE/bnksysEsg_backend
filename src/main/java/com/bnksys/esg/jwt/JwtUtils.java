@@ -16,7 +16,9 @@ import java.util.Date;
 @Component
 public class JwtUtils {
     private final MemberDetailsService memberDetailsService;
-    private final long jwtExpTime = 1000L * 60 * 30;
+    private final long jwtExpTime = 1000L * 60 * 30 ;
+
+    private final long refreshTokenExpTime = 1000L * 60 * 60 * 24;
     private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     @Autowired
@@ -31,6 +33,28 @@ public class JwtUtils {
                 .setExpiration(new Date(new Date().getTime() + jwtExpTime))
                 .signWith(key,SignatureAlgorithm.HS512)
                 .compact();
+    }
+
+    public String generateRefreshToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + refreshTokenExpTime))
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+    public String getUserNameFromRefreshToken(String refreshToken) {
+        return Jwts.parser().setSigningKey(key).parseClaimsJws(refreshToken).getBody().getSubject();
+    }
+
+    public boolean validateRefreshToken(String refreshToken) {
+        try {
+            Jwts.parser().setSigningKey(key).parseClaimsJws(refreshToken);
+            return true;
+        } catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
     public String getUserNameFromJwtToken(String token) {
@@ -70,6 +94,14 @@ public class JwtUtils {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    public String resolveRefreshToken(HttpServletRequest request) {
+        String refreshToken = request.getHeader("Refresh-Token");
+        if (refreshToken != null) {
+            return refreshToken;
         }
         return null;
     }
