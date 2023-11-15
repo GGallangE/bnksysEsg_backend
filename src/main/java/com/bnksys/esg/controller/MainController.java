@@ -9,6 +9,7 @@ import com.bnksys.esg.service.MailService;
 import com.bnksys.esg.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,8 +28,13 @@ public class MainController {
 
     @GetMapping("/search")
     public ResponseEntity<Map<String, List<apiResultDto>>> getApiList(@RequestParam String name, @RequestParam String sortBy) {
-
-        List<apiResultDto> apiResults = mainService.getApiList(name, sortBy);
+        List<apiResultDto> apiResults;
+        if("anonymousUser" != SecurityContextHolder.getContext().getAuthentication().getName()){
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            apiResults = mainService.getApiList_auth(name, sortBy, email);
+        }else{
+            apiResults = mainService.getApiList(name, sortBy);
+        }
         Map<String, List<apiResultDto>> response = new HashMap<>();
         response.put("data", apiResults);
         return ResponseEntity.ok(response);
@@ -81,23 +87,4 @@ public class MainController {
         response.getMessages().add("Top 5 조회 완료");
         return ResponseEntity.ok(response);
     }
-
-    // Mail - SMTP Test
-    @PostMapping("/send-mail")
-    public ResponseEntity<Response> sendMail(){
-        Response response = new Response();
-
-        try{
-            mailService.sendMail("ehrbs2997@naver.com");
-            response.setSuccess(true);
-            response.getMessages().add("메일 전송 완료");
-            return ResponseEntity.ok(response);
-        }catch (Exception e){
-            response.setSuccess(false);
-            response.getMessages().add("메일 전송 실패");
-            return ResponseEntity.badRequest().body(response);
-        }
-
-    }
-
 }

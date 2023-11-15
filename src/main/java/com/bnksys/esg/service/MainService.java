@@ -24,6 +24,11 @@ public class MainService {
         return mainMapper.getApiList(name, sortBy);
     }
 
+    public List<apiResultDto> getApiList_auth(String name, String sortBy, String email) {
+        int userid = mainMapper.findbyemail(email);
+        return mainMapper.getApiList_auth(name, sortBy, userid);
+    }
+
     public List<noticeDto> getNoticeList(String mainsort){ return mainMapper.getNoticeList(mainsort); }
 
     public List<noticeDto> getNoticeDetail(int noticeid){ return mainMapper.getNoticeDetail(noticeid); }

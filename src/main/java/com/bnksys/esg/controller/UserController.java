@@ -83,18 +83,4 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/admin/page")
-    // 관리자 테스트
-    public ResponseEntity<String> adminPage() {
-        return ResponseEntity.ok("Welcome to the admin page!");
-    }
-
-    @GetMapping("/test")
-    // 토큰 정보 테스트
-    public ResponseEntity<String> getUserInfo(Authentication authentication){
-        if(authentication != null && authentication.isAuthenticated()){
-            String userEmail = ((UserDetails) authentication.getPrincipal()).getUsername();
-        }
-            return ResponseEntity.ok("ok");
-    }
 }
