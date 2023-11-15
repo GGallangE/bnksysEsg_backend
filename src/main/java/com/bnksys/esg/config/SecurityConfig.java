@@ -27,6 +27,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/spring/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/spring/atchfile/upload").hasRole("ADMIN")
+                                .requestMatchers("/spring/test/admin/**").hasRole("ADMIN")
                                 .requestMatchers("spring/mypage/**").authenticated()
                                 .requestMatchers("spring/request/**").authenticated()
                                 .requestMatchers("spring/usecase/usecase").authenticated()

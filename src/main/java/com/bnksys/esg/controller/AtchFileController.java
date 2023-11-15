@@ -52,13 +52,13 @@ public class AtchFileController {
                 Resource resource = atchFileService.loadFileAsResource(filePath);
 
                 if (resource != null) {
+                    /*
+                    springboot에서 바로 C/download로 경로 설정 -> 저장                   
                     String downloadFolderPath = System.getProperty("user.home") + File.separator + "Downloads" + File.separator;
-
                     String downloadFilePath = downloadFolderPath + getUniqueFilename(downloadFolderPath, atchDetailFiledto.getOrgfilename(), atchDetailFiledto.getAtchfileext());
-
                     File downloadFile = new File(downloadFilePath);
-
                     Files.copy(resource.getInputStream(), downloadFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                     */
 
                     String sanitizedFilename = atchDetailFiledto.getOrgfilename().replaceAll("[^a-zA-Z0-9.-]", "_");
 

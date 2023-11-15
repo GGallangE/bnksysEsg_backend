@@ -81,23 +81,4 @@ public class MainController {
         response.getMessages().add("Top 5 조회 완료");
         return ResponseEntity.ok(response);
     }
-
-    // Mail - SMTP Test
-    @PostMapping("/send-mail")
-    public ResponseEntity<Response> sendMail(){
-        Response response = new Response();
-
-        try{
-            mailService.sendMail("ehrbs2997@naver.com");
-            response.setSuccess(true);
-            response.getMessages().add("메일 전송 완료");
-            return ResponseEntity.ok(response);
-        }catch (Exception e){
-            response.setSuccess(false);
-            response.getMessages().add("메일 전송 실패");
-            return ResponseEntity.badRequest().body(response);
-        }
-
-    }
-
 }
