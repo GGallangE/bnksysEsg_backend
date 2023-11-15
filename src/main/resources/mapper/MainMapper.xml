@@ -52,7 +52,7 @@
           FROM NOTICE
       ORDER BY NOTICE_ID DESC
         <if test="mainsort == 'yes' ">
-            LIMIT 1
+            LIMIT 5
         </if>
     </select>
 
