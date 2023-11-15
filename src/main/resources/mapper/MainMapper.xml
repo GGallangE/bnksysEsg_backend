@@ -30,6 +30,42 @@
     </if>
     </select>
 
+    <select id = "getApiList_auth">
+        SELECT apilist.API_LIST_ID API_LIST_ID
+             , API_NM
+             , PRV_ORG
+             , API_VIEW
+             , API_EXPL
+             , API_RGDT
+             , API_APPLY_ID
+             , COUNT_API_USES
+             , AUI.FAVORIT FAVORIT
+          FROM API_LIST apilist
+     LEFT JOIN (
+                SELECT API_LIST_ID
+                     , USER_ID
+                     , COUNT(*) FAVORIT
+                  FROM API_USER_INTRS
+                 WHERE USER_ID = #{userid}
+              GROUP BY API_LIST_ID, USER_ID) AUI
+            ON AUI.API_LIST_ID = apilist.API_LIST_ID
+     LEFT JOIN (SELECT API_LIST_ID
+                     , count(*) COUNT_API_USES
+                  FROM API_USES
+              GROUP BY API_LIST_ID ) apiuses
+            ON apiuses.API_LIST_ID = apilist.API_LIST_ID
+         WHERE API_NM LIKE CONCAT('%', #{name}, '%')
+    <if test="sortBy == 'register' ">
+      ORDER BY API_LIST_ID DESC
+    </if>
+    <if test="sortBy == 'view' ">
+      ORDER BY API_VIEW DESC
+    </if>
+    <if test="sortBy == 'nbruses' ">
+      ORDER BY COUNT_API_USES DESC
+    </if>
+    </select>
+
     <select id="findbyemail" resultType="int" parameterType="java.lang.String">
         SELECT USER_ID
           FROM USER

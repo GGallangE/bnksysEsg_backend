@@ -15,6 +15,8 @@ public interface MainMapper {
 
     List<apiResultDto> getApiList(@Param("name") String name, @Param("sortBy") String sortBy);
 
+    List<apiResultDto> getApiList_auth(@Param("name") String name, @Param("sortBy") String sortBy, @Param("userid") int userid);
+
     List<apiResultDto> getapiList_Top5(@Param("sort") String sort);
 
     int findbyemail(String email);
