@@ -39,14 +39,15 @@
              , API_RGDT
              , API_APPLY_ID
              , COUNT_API_USES
-             , AUI.FAVORIT FAVORIT
+             , AUI.FAVORITE FAVORITE
           FROM API_LIST apilist
      LEFT JOIN (
                 SELECT API_LIST_ID
                      , USER_ID
-                     , COUNT(*) FAVORIT
+                     , COUNT(*) FAVORITE
                   FROM API_USER_INTRS
                  WHERE USER_ID = #{userid}
+                   AND STCD = "01"
               GROUP BY API_LIST_ID, USER_ID) AUI
             ON AUI.API_LIST_ID = apilist.API_LIST_ID
      LEFT JOIN (SELECT API_LIST_ID

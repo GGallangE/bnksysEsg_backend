@@ -115,4 +115,22 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_VIEW_DATE) API_VIEW_DATE FROM API_USES G
          WHERE apiapply.API_APPLY_ID = #{apiapplyid}
     </select>
 
+    <select id = "findApiSchedule">
+        SELECT BATCH_LIST_ID
+             , batchlist.USER_ID USER_ID
+             , batchlist.API_LIST_ID
+             , FREQUENCY
+             , TIME
+             , DAY_OF_WEEK
+             , DAY_OF_MONTH
+             , STCD
+             , apilist.API_NM apinm
+          FROM BATCH_LIST batchlist
+    INNER JOIN API_LIST apilist
+            ON apilist.API_LIST_ID = batchlist.API_LIST_ID
+         WHERE batchlist.USER_ID = #{userid}
+           AND batchlist.STCD = "01"
+      ORDER BY BATCH_LIST_ID DESC
+    </select>
+
 </mapper>

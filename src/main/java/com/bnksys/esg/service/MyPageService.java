@@ -2,6 +2,7 @@ package com.bnksys.esg.service;
 
 import com.bnksys.esg.data.apiApplyDto;
 import com.bnksys.esg.data.apiResultDto;
+import com.bnksys.esg.data.batchListDto;
 import com.bnksys.esg.data.inQuiryDto;
 import com.bnksys.esg.mapper.MainMapper;
 import com.bnksys.esg.mapper.MyPageMapper;
@@ -42,5 +43,10 @@ public class MyPageService {
 
     public List<apiApplyDto> findDetailApiApply(String email, int apiapplyid) {
         return myPageMapper.findDetailApiApply(email,apiapplyid);
+    }
+
+    public List<batchListDto> findApiSchedule(String email){
+        int userid = mainMapper.findbyemail(email);
+        return myPageMapper.findApiSchedule(userid);
     }
 }
