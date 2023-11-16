@@ -10,6 +10,15 @@ public class batchListDto {
     private String dayofweek;
     private String dayofmonth;
     private String stcd;
+    private String apinm;
+
+    public String getApinm() {
+        return apinm;
+    }
+
+    public void setApinm(String apinm) {
+        this.apinm = apinm;
+    }
 
     public int getBatchlistid() {
         return batchlistid;

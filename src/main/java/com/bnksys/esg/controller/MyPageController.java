@@ -2,6 +2,7 @@ package com.bnksys.esg.controller;
 
 import com.bnksys.esg.data.apiApplyDto;
 import com.bnksys.esg.data.apiResultDto;
+import com.bnksys.esg.data.batchListDto;
 import com.bnksys.esg.data.inQuiryDto;
 import com.bnksys.esg.response.ListResponse;
 import com.bnksys.esg.service.MyPageService;
@@ -107,6 +108,23 @@ public class MyPageController {
         response.setSuccess(true);
         response.getData().put("data", apiApply);
         response.getMessages().add("API 신청 현황 조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/myapischedule")
+    public ResponseEntity<ListResponse<batchListDto>> findApiSchedule(Authentication authentication){
+        ListResponse<batchListDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        if (!AuthenticationUtils_ApiResponse.checkAuthentication(authentication, response).isSuccess()) {
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        String email = authentication.getName();
+        List<batchListDto> batchList = myPageService.findApiSchedule(email);
+
+        response.setSuccess(true);
+        response.getData().put("data", batchList);
+        response.getMessages().add("API 예약 현황 조회 완료");
         return ResponseEntity.ok(response);
     }
 

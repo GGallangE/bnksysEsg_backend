@@ -13,14 +13,14 @@ public class apiResultDto {
     private int apiapplyid;
     private String apiapplynm;
     private int countapiuses;
-    private int favorit;
+    private int favorite;
 
-    public int getFavorit() {
-        return favorit;
+    public int getFavorite() {
+        return favorite;
     }
 
-    public void setFavorit(int favorit) {
-        this.favorit = favorit;
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
     }
 
     public String getApiapplynm() {
