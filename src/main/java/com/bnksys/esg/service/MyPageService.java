@@ -1,9 +1,6 @@
 package com.bnksys.esg.service;
 
-import com.bnksys.esg.data.apiApplyDto;
-import com.bnksys.esg.data.apiResultDto;
-import com.bnksys.esg.data.batchListDto;
-import com.bnksys.esg.data.inQuiryDto;
+import com.bnksys.esg.data.*;
 import com.bnksys.esg.mapper.MainMapper;
 import com.bnksys.esg.mapper.MyPageMapper;
 import org.springframework.stereotype.Service;
@@ -45,8 +42,33 @@ public class MyPageService {
         return myPageMapper.findDetailApiApply(email,apiapplyid);
     }
 
-    public List<batchListDto> findApiSchedule(String email){
+    public List<batchListDto> findApiSchedule(String email, Integer batchlistid){
         int userid = mainMapper.findbyemail(email);
-        return myPageMapper.findApiSchedule(userid);
+        return myPageMapper.findApiSchedule(userid, batchlistid);
+    }
+
+    public List<alarmDto> findAlarm(String email, Integer alarmid){
+        int userid = mainMapper.findbyemail(email);
+        return myPageMapper.findAlarm(userid, alarmid);
+    }
+
+    public int getNotReadAlarmCount(String email){
+        int userid = mainMapper.findbyemail(email);
+        return myPageMapper.getNotReadAlarmCount(userid);
+    }
+
+    public void deleteApiSchedule(String email, int batchlistid){
+        int userid = mainMapper.findbyemail(email);
+        myPageMapper.deleteApiSchedule(userid, batchlistid);
+    }
+
+    public void updateApiScheduleTime(String email, batchListDto batchlistDto){
+        int userid = mainMapper.findbyemail(email);
+        myPageMapper.updateApiScheduleTime(userid, batchlistDto);
+    }
+
+    public void update_readAlarm(String email, int alarmid){
+        int userid = mainMapper.findbyemail(email);
+        myPageMapper.update_readAlarm(userid, alarmid);
     }
 }
