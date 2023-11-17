@@ -38,9 +38,10 @@ public class ApiResponseService {
         String[] bNosArray = {"6028154897", "6028154897"};
         List<String> bNoList = Arrays.asList(bNosArray);
 
-        // Create request body
-        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add("b_no", bNoList);
+        // Convert the list to a list of quoted strings
+        List<String> quotedBNoList = bNoList.stream()
+                .map(bNo -> "\"" + bNo + "\"")
+                .collect(Collectors.toList());
 
         // Create headers
         HttpHeaders headers = new HttpHeaders();
@@ -49,12 +50,12 @@ public class ApiResponseService {
         // Add the serviceKey to the URL
         String urlWithServiceKey = apilist_BusinessUrl + "?serviceKey=" + UriUtils.encode(serviceKey, "UTF-8");
 
-        // Create the HTTP entity with headers and body
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+        // Create the request body as a JSON array
+        String requestBody = "{\"b_no\": [" + String.join(",", quotedBNoList) + "]}";
 
         try {
             // Send the POST request
-            ResponseEntity<String> responseEntity = restTemplate.postForEntity(new URI(urlWithServiceKey), requestEntity, String.class);
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(new URI(urlWithServiceKey), new HttpEntity<>(requestBody, headers), String.class);
             String response = responseEntity.getBody();
 
             // Handle the response as needed

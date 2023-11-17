@@ -18,7 +18,7 @@ public interface MyPageMapper {
 
     List<inQuiryDto> findInQuiry(@Param("email")String email);
 
-    List<inQuiryDto> findAnswerInQuiry(@Param("email") String email);
+    List<inQuiryDto> findAnswerInQuiry(@Param("email") String email, @Param("inquiryid") int inquiryid);
 
     List<apiApplyDto> findApiApply(@Param("email") String email);
 

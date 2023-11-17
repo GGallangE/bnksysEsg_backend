@@ -30,8 +30,8 @@ public class MyPageService {
         return myPageMapper.findInQuiry(email);
     }
 
-    public List<inQuiryDto> findAnswerInQuiry(String email) {
-        return myPageMapper.findAnswerInQuiry(email);
+    public List<inQuiryDto> findAnswerInQuiry(String email, int inquiryid) {
+        return myPageMapper.findAnswerInQuiry(email,inquiryid);
     }
 
     public List<apiApplyDto> findApiApply(String email) {
