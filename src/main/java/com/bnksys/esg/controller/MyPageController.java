@@ -75,15 +75,13 @@ public class MyPageController {
     }
 
     @GetMapping("/myinquiry_answer")
-    public ResponseEntity<ListResponse<inQuiryDto>> findAnswerInQuiry(Authentication authentication){
+    public ResponseEntity<ListResponse<inQuiryDto>> findAnswerInQuiry(Authentication authentication, @RequestParam int inquiryid){
         ListResponse<inQuiryDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
-
         if (!AuthenticationUtils_ApiResponse.checkAuthentication(authentication, response).isSuccess()) {
             return ResponseEntity.badRequest().body(response);
         }
         String email = authentication.getName();
-        List<inQuiryDto> inquiryResults = myPageService.findAnswerInQuiry(email);
-
+        List<inQuiryDto> inquiryResults = myPageService.findAnswerInQuiry(email, inquiryid);
         response.setSuccess(true);
         response.getData().put("data", inquiryResults);
         response.getMessages().add("나의 문의 사항 답변 조회 완료");
