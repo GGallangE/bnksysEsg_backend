@@ -31,7 +31,7 @@ public class SchNtfController {
                         , batchlistDto.getDayofweek(), batchlistDto.getDayofmonth(), batchlistDto.getTime());
             }catch(IllegalArgumentException e){
                 response.setSuccess(false);
-                response.getMessages().add("Error: " + e.getMessage());
+                response.getMessages().add("오류 발생 : " + e.getMessage());
                 return ResponseEntity.badRequest().body(response);
             }
             batchlistDto.setBatchtime(cronExpression);

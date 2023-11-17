@@ -81,7 +81,6 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_VIEW_DATE) API_VIEW_DATE FROM API_USES G
             ON user.USER_ID = inquiry.USER_ID
          WHERE PARENT_ID IN (SELECT INQUIRY_ID FROM INQUIRY WHERE USER_ID IN (
                                     SELECT USER_ID FROM USER WHERE EMAIL = #{email}))
-           AND PARENT_ID = #{inquiryid}
     </select>
 
     <select id = "findApiApply">
@@ -130,7 +129,65 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_VIEW_DATE) API_VIEW_DATE FROM API_USES G
             ON apilist.API_LIST_ID = batchlist.API_LIST_ID
          WHERE batchlist.USER_ID = #{userid}
            AND batchlist.STCD = "01"
+        <if test="batchlistid != null">
+           AND BATCH_LIST_ID = #{batchlistid}
+        </if>
       ORDER BY BATCH_LIST_ID DESC
     </select>
+
+    <select id = "findAlarm">
+        SELECT ALARM_ID
+             , TITLE
+             , CONTENT
+             , REG_DT
+             , READ_CHECK
+             , send_user.USER_ID SEND_USER
+             , rcv_user.USER_ID RCV_USER
+             , send_user.USER_NAME SEND_USERNAME
+             , rcv_user.USER_NAME RCV_USERNAME
+          FROM ALARM alarm
+    INNER JOIN USER send_user
+            ON send_user.USER_ID = alarm.SEND_USER
+    INNER JOIN USER rcv_user
+            ON rcv_user.USER_ID = alarm.RCV_USER
+           AND alarm.RCV_USER = #{userid}
+         WHERE 1 = 1
+        <if test="alarmid != null">
+           AND ALARM_ID = #{alarmid}
+        </if>
+      ORDER BY ALARM_ID DESC
+    </select>
+
+    <select id = "getNotReadAlarmCount">
+        SELECT COUNT(*) COUNT
+          FROM ALARM
+         WHERE RCV_USER = #{userid}
+           AND READ_CHECK = FALSE
+    </select>
+
+    <update id = "deleteApiSchedule">
+        UPDATE BATCH_LIST
+           SET STCD = "99"
+         WHERE USER_ID = #{userid}
+           AND BATCH_LIST_ID = #{batchlistid}
+    </update>
+
+    <update id = "updateApiScheduleTime">
+        UPDATE BATCH_LIST
+           SET BATCH_TIME = #{batchlistDto.batchtime}
+             , FREQUENCY = #{batchlistDto.frequency}
+             , TIME = #{batchlistDto.time}
+             , DAY_OF_WEEK = #{batchlistDto.dayofweek}
+             , DAY_OF_MONTH = #{batchlistDto.dayofmonth}
+         WHERE USER_ID = #{userid}
+           AND BATCH_LIST_ID = #{batchlistDto.batchlistid}
+    </update>
+
+    <update id = "update_readAlarm">
+        UPDATE ALARM
+           SET READ_CHECK = TRUE
+         WHERE ALARM_ID = #{alarmid}
+           AND RCV_USER = #{userid}
+    </update>
 
 </mapper>

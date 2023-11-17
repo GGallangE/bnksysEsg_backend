@@ -21,8 +21,8 @@
     </insert>
 
     <insert id = "save_Alarm">
-        INSERT INTO ALARM(TITLE, CONTENT, REG_DT, READ_DT, SEND_USER, RCV_USER)
-        VALUES (#{title}, #{content}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, #{senduser}, #{rcvuser})
+        INSERT INTO ALARM(TITLE, CONTENT, REG_DT, READ_CHECK, SEND_USER, RCV_USER)
+        VALUES (#{title}, #{content}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), FALSE, #{senduser}, #{rcvuser})
     </insert>
 
 

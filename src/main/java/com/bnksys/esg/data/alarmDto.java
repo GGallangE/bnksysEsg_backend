@@ -5,9 +5,27 @@ public class alarmDto {
     private String title;
     private String content;
     private String regdt;
-    private String readdt;
+    private boolean readCheck;
     private int senduser;
     private int rcvuser;
+    private String sendusername;
+    private String rcvusername;
+
+    public String getSendusername() {
+        return sendusername;
+    }
+
+    public void setSendusername(String sendusername) {
+        this.sendusername = sendusername;
+    }
+
+    public String getRcvusername() {
+        return rcvusername;
+    }
+
+    public void setRcvusername(String rcvusername) {
+        this.rcvusername = rcvusername;
+    }
 
     public int getAlarmid() {
         return alarmid;
@@ -41,14 +59,13 @@ public class alarmDto {
         this.regdt = regdt;
     }
 
-    public String getReaddt() {
-        return readdt;
+    public boolean isReadCheck() {
+        return readCheck;
     }
 
-    public void setReaddt(String readdt) {
-        this.readdt = readdt;
+    public void setReadCheck(boolean readCheck) {
+        this.readCheck = readCheck;
     }
-
     public int getSenduser() {
         return senduser;
     }
