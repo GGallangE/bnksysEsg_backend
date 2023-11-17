@@ -81,7 +81,6 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_VIEW_DATE) API_VIEW_DATE FROM API_USES G
             ON user.USER_ID = inquiry.USER_ID
          WHERE PARENT_ID IN (SELECT INQUIRY_ID FROM INQUIRY WHERE USER_ID IN (
                                     SELECT USER_ID FROM USER WHERE EMAIL = #{email}))
-           AND PARENT_ID = #{inquiryid}
     </select>
 
     <select id = "findApiApply">

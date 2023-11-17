@@ -3,7 +3,7 @@ package com.bnksys.esg.Enum;
 public enum ApiList {
     BUSINESS(1, "apilist_Business"),
     ELECTRONIC(2, "apilist_Electronic"),
-    BuSINESS2(3,"apilist+Business2"),
+    BuSINESS2(3,"apilist_Business2"),
     TEST(4, "apilist_Test");
 
     private final int schedulingId;

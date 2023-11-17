@@ -21,6 +21,8 @@ public interface MainMapper {
 
     int findbyemail(String email);
 
+    String findbyuserid(int userid);
+
     List<noticeDto> getNoticeList(String mainsort);
 
     List<noticeDto> getNoticeDetail(@Param("noticeid") int noticeid);
