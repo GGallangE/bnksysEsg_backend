@@ -9,4 +9,10 @@
          WHERE STCD = "01"
     </select>
 
+    <select id = "findAll_ApiArgs">
+        SELECT *
+          FROM BATCH_DETAIL_LIST
+         WHERE BATCH_LIST_ID = #{batchlistid}
+    </select>
+
 </mapper>

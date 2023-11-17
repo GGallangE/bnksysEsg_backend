@@ -20,6 +20,26 @@
                 #{batchlistDto.time}, #{batchlistDto.dayofweek}, #{batchlistDto.dayofmonth}, "01")
     </insert>
 
+    <insert id="save_BatchDetailArgs">
+        INSERT INTO BATCH_DETAIL_LIST (BATCH_LIST_ID, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6, ARG7, ARG8, ARG9, ARG10)
+        VALUES
+        <foreach collection="batchDetailargsDto" item="batchDetail" separator=",">
+            (
+            #{batchlistid},
+            #{batchDetail.arg1},
+            #{batchDetail.arg2},
+            #{batchDetail.arg3},
+            #{batchDetail.arg4},
+            #{batchDetail.arg5},
+            #{batchDetail.arg6},
+            #{batchDetail.arg7},
+            #{batchDetail.arg8},
+            #{batchDetail.arg9},
+            #{batchDetail.arg10}
+            )
+        </foreach>
+    </insert>
+
     <insert id = "save_Alarm">
         INSERT INTO ALARM(TITLE, CONTENT, REG_DT, READ_CHECK, SEND_USER, RCV_USER)
         VALUES (#{title}, #{content}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), FALSE, #{senduser}, #{rcvuser})

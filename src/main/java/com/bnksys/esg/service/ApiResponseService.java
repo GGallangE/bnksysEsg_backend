@@ -1,5 +1,7 @@
 package com.bnksys.esg.service;
 
+import com.bnksys.esg.data.batchDetailArgsDto;
+import com.bnksys.esg.mapper.BatchListMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -15,10 +17,7 @@ import org.springframework.web.util.UriUtils;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,25 +32,27 @@ public class ApiResponseService {
     @Value("${apilist_Business.url}")
     private String apilist_BusinessUrl;
 
+    BatchListMapper batchListMapper;
+
+    public ApiResponseService(BatchListMapper batchListMapper){
+        this.batchListMapper = batchListMapper;
+    }
+
 
     public void apilist_Business(String email) {
-        String[] bNosArray = {"6028154897", "6028154897"};
-        List<String> bNoList = Arrays.asList(bNosArray);
-
-        // Convert the list to a list of quoted strings
-        List<String> quotedBNoList = bNoList.stream()
+        List<batchDetailArgsDto> apiArgs = batchListMapper.findAll_ApiArgs(6);
+        List<String> extractedArg1List = apiArgs.stream()
+                .map(batchDetailArgsDto::getArg1)
                 .map(bNo -> "\"" + bNo + "\"")
                 .collect(Collectors.toList());
 
-        // Create headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         // Add the serviceKey to the URL
         String urlWithServiceKey = apilist_BusinessUrl + "?serviceKey=" + UriUtils.encode(serviceKey, "UTF-8");
 
-        // Create the request body as a JSON array
-        String requestBody = "{\"b_no\": [" + String.join(",", quotedBNoList) + "]}";
+        String requestBody = "{\"b_no\": [" + String.join(",", extractedArg1List) + "]}";
 
         try {
             // Send the POST request

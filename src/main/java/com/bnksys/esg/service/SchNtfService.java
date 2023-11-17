@@ -21,6 +21,7 @@ public class SchNtfService {
         int batchlistid = schNtfMapper.MaxbatchlistId();
         batchlistDto.setBatchlistid(batchlistid);
         schNtfMapper.save_BatchSchedule(userid, batchlistDto);
+        schNtfMapper.save_BatchDetailArgs(batchlistid,batchlistDto.getBatchDetailargsDto());
     }
 
     public void save_Alarm_Complete_Schedule(String email, String title, batchListDto batchlistDto){

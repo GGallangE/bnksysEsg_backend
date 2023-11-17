@@ -1,5 +1,7 @@
 package com.bnksys.esg.data;
 
+import java.util.List;
+
 public class batchListDto {
     private int batchlistid;
     private int userid;
@@ -11,6 +13,16 @@ public class batchListDto {
     private String dayofmonth;
     private String stcd;
     private String apinm;
+
+    private List<batchDetailArgsDto> batchDetailargsDto;
+
+    public List<batchDetailArgsDto> getBatchDetailargsDto() {
+        return batchDetailargsDto;
+    }
+
+    public void setBatchDetailargsDto(List<batchDetailArgsDto> batchDetailargsDto) {
+        this.batchDetailargsDto = batchDetailargsDto;
+    }
 
     public String getApinm() {
         return apinm;
