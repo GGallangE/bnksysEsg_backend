@@ -27,12 +27,17 @@ public class MainController {
     MailService mailService;
 
     @GetMapping("/search")
+    /* 메인화면에 API LIST 검색을 통한 API 목록을 나타내기 위한 메서드 */
     public ResponseEntity<Map<String, List<apiResultDto>>> getApiList(@RequestParam String name, @RequestParam String sortBy) {
         List<apiResultDto> apiResults;
+
+        // 로그인이 되어있다면 나의 관심 API도 함께 출력, 로그인이 되어있지 않으면 annoymousUser라고 뜸.
         if("anonymousUser" != SecurityContextHolder.getContext().getAuthentication().getName()){
-            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();    // 로그인된 정보로 이메일 추출
             apiResults = mainService.getApiList_auth(name, sortBy, email);
-        }else{
+        }
+        // 로그인이 되어잇지 않은 상태라면 그냥 API 목록만 출력
+        else{
             apiResults = mainService.getApiList(name, sortBy);
         }
         Map<String, List<apiResultDto>> response = new HashMap<>();
@@ -41,6 +46,7 @@ public class MainController {
     }
 
     @GetMapping("/notice")
+    /* 공지사항 Top 5를 뽑아주는 메서드 */
     public ResponseEntity<ListResponse<noticeDto>> getNoticeList(@RequestParam(value = "mainsort", required = false) String mainsort){
         ListResponse<noticeDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 

@@ -21,16 +21,19 @@ import java.util.List;
 public class AdminController {
 
     @Autowired
-    AdminService adminService;
+    AdminService adminService;  // adminService 의존성 주입(필드 주입)
 
     @Autowired
-    AtchFileService atchFileService;
+    AtchFileService atchFileService;  // atchfileService 의존성 주입(필드 주입)
 
     @GetMapping("/apiapplylist")
+    /* Api 신청현황 조희를 위한 메서드 */
     public ResponseEntity<ListResponse<apiApplyDto>> findApi_ApplyLIST(@RequestParam(value = "apiapplyid", required = false) Integer apiapplyid){
 
+        // ListResponse 객체를 생성하여 초기화
         ListResponse<apiApplyDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
+        // adminService로 API 신청 현황을 조회하고 결과를 리스트로 받아옴
         List<apiApplyDto> apiapplyresult = adminService.findApi_ApplyLIST(apiapplyid);
 
         response.setSuccess(true);
@@ -40,15 +43,15 @@ public class AdminController {
     }
 
     @PostMapping("/apiapply/confirm")
+    /* 사용자들이 신청한 API 지원에 대한 승인 여부를 지정하기 위한 메서드 */
     public ResponseEntity<Response> updateApi_ApplyStatus(@RequestBody apiApplyDto apiapplyDto){
         Response response = new Response();
 
         try{
-//            String email = SecurityContextHolder.getContext().getAuthentication().getName();
-            adminService.updateApi_ApplyStatus(apiapplyDto);
+            adminService.updateApi_ApplyStatus(apiapplyDto);  // API 지원에 대한 상태값 변경
 
             response.setSuccess(true);
-            response.getMessages().add("등록 완료");
+            response.getMessages().add("API 지원현황 상태 변경 완료");
             return ResponseEntity.ok(response);
         }catch (Exception e){
             response.setSuccess(false);
@@ -58,9 +61,14 @@ public class AdminController {
     }
 
     @GetMapping("/apilist")
+    /* 현재 관리중인 API 목록들을 조회 할 수있는 메서드 */
     public ResponseEntity<ListResponse<apiResultDto>> findApiList(@RequestParam(value = "apilistid", required = false) Integer apilistid){
+        // apilistid를 넘겨 주지않으면 전체 List를, 넘겨주면 각각 상세 List에 대한 정보를 넘겨준다.
+
+        // ListResponse 객체를 생성하여 초기화
         ListResponse<apiResultDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
+        // adminService에서 List를 찾아서 반환
         List<apiResultDto> apiresult = adminService.findApiList(apilistid);
 
         response.setSuccess(true);
@@ -70,16 +78,20 @@ public class AdminController {
     }
     
     @PostMapping("/apilist/save")
+    /* 관리자가 새로운 APILIST 생성하기 위한 메서드 */
     public ResponseEntity<Response> saveApiList(@RequestBody apiResultDto apiresultDto){
         Response response = new Response();
 
         try{
+            // 신규등록시
             if(0 == apiresultDto.getApilistid()){
-                int apilistid = adminService.maxApiListId();
+                int apilistid = adminService.maxApiListId(); // 현재 API_LIST TABLE의 PK값 + 1 받아옴.
                 apiresultDto.setApilistid(apilistid);
                 adminService.saveApiList(apiresultDto);
                 response.getMessages().add("등록 완료");
-            }else{
+            }
+            // 수정시
+            else{
                 adminService.updateApiList(apiresultDto);
                 response.getMessages().add("수정 완료");
             }
@@ -87,6 +99,7 @@ public class AdminController {
             response.setSuccess(true);
             return ResponseEntity.ok(response);
         }catch (Exception e){
+            // 비정상적인 에러
             response.setSuccess(false);
             response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
             return ResponseEntity.badRequest().body(response);
@@ -94,21 +107,25 @@ public class AdminController {
     }
 
     @GetMapping("/inquiry/list")
+    /* 전체 문의 List를 조회하기 위한 메서드, inquiryid를 전달해 주면 상세 문의 내용을 볼 수 있다. */
     public ResponseEntity<ListResponse<inQuiryDto>> findinQuiry(@RequestParam(value = "inquiryid", required = false) Integer inquiryid){
         ListResponse<inQuiryDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
+        // 문의사항 List를 adminService를 통해 받아옴.
         List<inQuiryDto> inquiryList = adminService.findinQuiry(inquiryid);
 
         response.setSuccess(true);
-        response.getData().put("data", inquiryList);
+        response.getData().put("data", inquiryList); // inquiryList 넣어줌
         response.getMessages().add("문의 사항 조회 완료");
         return ResponseEntity.ok(response);
     }
     
     @GetMapping("/inquiry/list/answer")
+    /* 각 문의사항 마다 답변을 조회하기 위한 메서드 */
     public ResponseEntity<ListResponse<inQuiryDto>> findinQuiryAnswer(@Param("inquiryid") int inquiryid){
         ListResponse<inQuiryDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
+        // adminService를 통해 문의사항 답변 List를 조회
         List<inQuiryDto> inquiryAnswer = adminService.findinQuiryAnswer(inquiryid);
 
         response.setSuccess(true);
@@ -118,15 +135,21 @@ public class AdminController {
     }
 
     @PostMapping("/inquiry/answer")
+    /* 관리자가 문의사항에 대한 답변을 달 수 있게 해주는 메서드 */
     public ResponseEntity<Response> saveinquiry_Answer(@RequestBody inQuiryDto inquiryDto){
         Response response = new Response();
 
         try{
+            // 로그인 된 유저의 email을 찾음
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+            // 문의 답변 신규등록 시
             if(adminService.findAnswerCount(inquiryDto.getParentid()) == 0){
                 adminService.saveinquiry_Answer(email, inquiryDto);
                 response.getMessages().add("등록 완료");
-            }else{
+            }
+            // 문의 답변 수정 시
+            else{
                 adminService.updateinquiry_Answer(email, inquiryDto);
                 response.getMessages().add("수정 완료");
             }
@@ -141,15 +164,19 @@ public class AdminController {
     }
 
     @PostMapping("/notice/create")
+    /* 관리자가 공지사항 작성하는 메서드 */
     public ResponseEntity<Response> savenotice(@RequestPart(value = "files", required = false) MultipartFile[] files,
                                                @RequestPart noticeDto noticedto){
+        // 첨부파일은 선택, 공지사항 관련 변수들은 필수
+
         Response response = new Response();
         int atchfileid = 0;
         try{
             if(files != null && files.length > 0){
+                // 첨부파일이 있으면 atchFileService에서 첨부파일 등록
                 atchfileid = atchFileService.saveAtchFile(files);
             }
-
+            // adminService엥서 공지사항 저장, 첨부파일 있을시 첨부파일도 함께 저장
             adminService.saveNotice(noticedto.getNoticenm(), noticedto.getNoticecntn(), atchfileid);
 
             response.setSuccess(true);

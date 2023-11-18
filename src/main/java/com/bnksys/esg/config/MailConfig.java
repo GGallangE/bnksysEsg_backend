@@ -31,6 +31,7 @@ public class MailConfig {
 
     @Bean
     public JavaMailSender javaMailSender() {
+        // SMTP를 사용하기 위해 JavaMailSender를 사용하였다.
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(host);
         mailSender.setPort(port);

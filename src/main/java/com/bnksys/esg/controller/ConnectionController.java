@@ -22,7 +22,7 @@ import java.util.Map;
 public class ConnectionController {
 
     @Autowired
-    private ConnectionService connectionService;
+    private ConnectionService connectionService;    //의존성 주입
 
     @GetMapping("/result/{apilistid}")
     public ResponseEntity<Map<String, List<apiResultDto>>> getResultByapilistId(

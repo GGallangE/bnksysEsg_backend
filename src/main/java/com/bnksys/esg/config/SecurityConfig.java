@@ -18,17 +18,17 @@ public class SecurityConfig {
     @Autowired private JwtFilter jwtFilter;
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();  //비밀번호 암호화.
     }
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception{
         http.csrf().disable()
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/spring/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/spring/admin/**").hasRole("ADMIN")   //관리자 권한 필수
                                 .requestMatchers("/spring/atchfile/upload").hasRole("ADMIN")
                                 .requestMatchers("/spring/test/admin/**").hasRole("ADMIN")
-                                .requestMatchers("spring/mypage/**").authenticated()
+                                .requestMatchers("spring/mypage/**").authenticated()  // 로그인 필수
                                 .requestMatchers("spring/request/**").authenticated()
                                 .requestMatchers("spring/usecase/usecase").authenticated()
                                 .requestMatchers("spring/userapi/**").authenticated()

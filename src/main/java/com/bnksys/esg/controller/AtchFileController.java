@@ -20,16 +20,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/spring/atchfile")
+/* 첨부파일을 위한 Controller */
 public class AtchFileController {
 
     @Autowired
-    AtchFileService atchFileService;
+    AtchFileService atchFileService;   // 의존성 주입(필드 주입)
 
     @PostMapping("/upload")
+    /* 첨부파일 업로드를 위한 메소드 */
     public ResponseEntity<Response> saveAtchFile(@RequestParam("files")MultipartFile[] files){
         Response response = new Response();
 
         try {
+            // atchFileService를 통해 첨부파일 저장
             atchFileService.saveAtchFile(files);
             response.setSuccess(true);
             response.getMessages().add("변경 완료");
@@ -42,6 +45,7 @@ public class AtchFileController {
     }
 
     @GetMapping("/download/{atchDetailFileId}")
+    /* 첨부파일 다운로드 하는 메서드 */
     public ResponseEntity<Resource> findAtchDetailFile(@PathVariable int atchDetailFileId){
         atchDetailFileDto atchDetailFiledto = atchFileService.findAtchDetailFile(atchDetailFileId);
 
