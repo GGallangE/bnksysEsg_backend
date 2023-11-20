@@ -22,6 +22,28 @@ public class MailService {
     @Autowired
     JavaMailSender javaMailSender;
 
+    public void sendMailwithExcel(String to, byte[] excelData, String filePath) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            String subject = "BNKSYS_API 중계 시스템 예약 전송";
+            String message = to + "님께 API 전송 결과를 전송하였습니다.";
+
+            mimeMessageHelper.setTo(to);
+            mimeMessageHelper.setSubject(subject);
+            mimeMessageHelper.setText(message, true);
+
+            ByteArrayResource file = new ByteArrayResource(excelData);
+            mimeMessageHelper.addAttachment(filePath + ".xlsx", file);
+
+            javaMailSender.send(mimeMessage);
+            System.out.println("Success - 메일 전송 성공(엑셀)");
+        } catch (MessagingException e) {
+            System.out.println("Fail - 메일 전송 실패(엑셀)");
+            throw new RuntimeException(e);
+        }
+    }
+
     public void sendMail(String to) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
@@ -33,34 +55,11 @@ public class MailService {
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(message, true);
 
-            byte[] excelData = createExcelFile();
-
-            ByteArrayResource file = new ByteArrayResource(excelData);
-            mimeMessageHelper.addAttachment("example.xlsx", file);
-
             javaMailSender.send(mimeMessage);
-            System.out.println("Success - Email with Excel attachment");
+            System.out.println("Success - 메일 전송 성공");
         } catch (MessagingException e) {
-            System.out.println("Fail - Email with Excel attachment");
+            System.out.println("Fail - 메일 전송 실패");
             throw new RuntimeException(e);
-        }
-    }
-
-    private byte[] createExcelFile() {
-        try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Sheet1");
-            Row row = sheet.createRow(0);
-            Cell cell = row.createCell(0);
-            cell.setCellValue("Hello, this is an example Excel file!");
-
-            try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-                workbook.write(outputStream);
-                return outputStream.toByteArray();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Error creating Excel file", e);
         }
     }
 }

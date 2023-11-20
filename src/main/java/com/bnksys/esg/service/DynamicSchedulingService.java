@@ -63,7 +63,7 @@ public class DynamicSchedulingService implements SchedulingConfigurer {
                 Method method = ApiBatchService.class.getMethod(methodName, int.class, int.class, int.class);
                 method.invoke(apiBatchService, batchlistid, apilistid, userid);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace(); // Handle the exception as needed
+                e.printStackTrace();
             }
         }, new CronTrigger(cronExpression, TimeZone.getTimeZone("Asia/Seoul")));
     }

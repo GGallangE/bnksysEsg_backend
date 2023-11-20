@@ -25,7 +25,7 @@ public class TestController {
         return ResponseEntity.ok("Welcome to the admin page!");
     }
 
-    // Mail - SMTP Test
+//     Mail - SMTP Test
     @PostMapping("/send-mail")
     public ResponseEntity<Response> sendMail(){
         Response response = new Response();
@@ -47,7 +47,7 @@ public class TestController {
     public ResponseEntity<Response> checkapi(){
         Response response = new Response();
         try{
-            apiResponseService.apilist_Business("ehrbs2997@naver.com");
+            apiResponseService.apilist_Business("ehrbs2997@naver.com",6,1);
             response.setSuccess(true);
             response.getMessages().add("수정 완료");
             return ResponseEntity.ok(response);

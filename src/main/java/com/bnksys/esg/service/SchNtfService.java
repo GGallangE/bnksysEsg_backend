@@ -24,11 +24,11 @@ public class SchNtfService {
         schNtfMapper.save_BatchDetailArgs(batchlistid,batchlistDto.getBatchDetailargsDto());
     }
 
-    public void save_Alarm_Complete_Schedule(String email, String title, batchListDto batchlistDto){
+    public void save_Alarm_Complete_Schedule(String email, String title, String p_content, int apilistid){
         int senduser = mainMapper.findbyemail("admin");
         int rcvuser = mainMapper.findbyemail(email);
-        String apiname = schNtfMapper.getApiName(batchlistDto.getApilistid());
-        String content = apiname + "에 대한 결과 메일 발송이 예약 되었습니다.";
+        String apiname = schNtfMapper.getApiName(apilistid);
+        String content = apiname + p_content;
         schNtfMapper.save_Alarm(title,content,senduser,rcvuser);
     }
 

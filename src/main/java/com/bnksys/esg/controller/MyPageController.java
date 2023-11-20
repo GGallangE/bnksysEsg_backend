@@ -160,7 +160,8 @@ public class MyPageController {
             batchlistDto.setBatchtime(cronExpression);
             myPageService.updateApiScheduleTime(email,batchlistDto);
             String title = "API 전송 예약 시간 변경";
-            schNtfService.save_Alarm_Complete_Schedule(email, title, batchlistDto);
+            String p_content = "에 대한 결과 메일 발송 예약 시간이 변경 되었습니다.";
+            schNtfService.save_Alarm_Complete_Schedule(email, title, p_content, batchlistDto.getApilistid());
 
             response.setSuccess(true);
             response.getMessages().add("수정 완료");

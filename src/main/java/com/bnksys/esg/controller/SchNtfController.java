@@ -38,7 +38,8 @@ public class SchNtfController {
             String email = authentication.getName();
             schNtfService.save_BatchSchedule(email,batchlistDto);
             String title = "API 전송 예약 완료";
-            schNtfService.save_Alarm_Complete_Schedule(email, title, batchlistDto);
+            String p_content = "에 대한 결과 메일 발송이 예약 되었습니다.";
+            schNtfService.save_Alarm_Complete_Schedule(email, title, p_content, batchlistDto.getApilistid());
             response.setSuccess(true);
             response.getMessages().add("등록 완료");
             return ResponseEntity.ok(response);
