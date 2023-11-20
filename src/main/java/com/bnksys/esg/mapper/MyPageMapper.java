@@ -28,6 +28,8 @@ public interface MyPageMapper {
 
     List<alarmDto> findAlarm(@Param("userid") int userid, @Param("alarmid") Integer alarmid);
 
+    int isSameApiScheduleUser(@Param("email") String email,@Param("batchlistid") int batchlistid);
+
     int getNotReadAlarmCount(@Param("userid") int userid);
 
     void deleteApiSchedule(@Param("userid") int userid, @Param("batchlistid") int batchlistid);

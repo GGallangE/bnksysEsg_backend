@@ -4,6 +4,7 @@ import com.bnksys.esg.data.*;
 import com.bnksys.esg.response.CountResponse;
 import com.bnksys.esg.response.ListResponse;
 import com.bnksys.esg.response.Response;
+import com.bnksys.esg.service.MainService;
 import com.bnksys.esg.service.MyPageService;
 import com.bnksys.esg.service.SchNtfService;
 import com.bnksys.esg.utils.AuthenticationUtils_ApiResponse;
@@ -22,6 +23,9 @@ public class MyPageController {
 
     @Autowired
     MyPageService myPageService;
+
+    @Autowired
+    MainService mainService;
 
     @Autowired
     SchNtfService schNtfService;
@@ -131,6 +135,11 @@ public class MyPageController {
         Response response = new Response();
         try{
             String email = authentication.getName();
+            if(!myPageService.isSameApiScheduleUser(email, batchlistDto.getBatchlistid())){
+                response.setSuccess(false);
+                response.getMessages().add("권한 부족: " + "사용자가 다릅니다.");
+                return ResponseEntity.badRequest().body(response);
+            }
             myPageService.deleteApiSchedule(email,batchlistDto.getBatchlistid());
 
             response.setSuccess(true);
@@ -148,6 +157,11 @@ public class MyPageController {
         Response response = new Response();
         try{
             String email = authentication.getName();
+            if(!myPageService.isSameApiScheduleUser(email, batchlistDto.getBatchlistid())){
+                response.setSuccess(false);
+                response.getMessages().add("권한 부족: " + "사용자가 다릅니다.");
+                return ResponseEntity.badRequest().body(response);
+            }
             String cronExpression;
             try{
                 cronExpression = schNtfService.convertToCron(batchlistDto.getFrequency()
@@ -217,6 +231,11 @@ public class MyPageController {
         Response response = new Response();
         try{
             String email = authentication.getName();
+            if(!mainService.isSameUser(email)){
+                response.setSuccess(false);
+                response.getMessages().add("권한 부족: " + "사용자가 다릅니다.");
+                return ResponseEntity.badRequest().body(response);
+            }
             myPageService.update_readAlarm(email, alarmdto.getAlarmid());
 
             response.setSuccess(true);

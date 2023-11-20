@@ -79,6 +79,12 @@
          WHERE USER_ID = #{userid}
     </select>
 
+    <select id = "isSameUser">
+        SELECT COUNT(*)
+          FROM USER
+         WHERE EMAIL = #{email}
+    </select>
+
     <select id = "getNoticeDetail" resultType="noticeDto">
         SELECT NOTICE.NOTICE_ID NOTICE_ID
              , NOTICE.NOTICE_NM AS NOTICE_NM

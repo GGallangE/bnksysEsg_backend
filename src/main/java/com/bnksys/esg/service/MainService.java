@@ -39,4 +39,8 @@ public class MainService {
         return mainMapper.getapiList_Top5(sort);
     }
 
+    public boolean isSameUser(String email) {
+        return mainMapper.isSameUser(email) > 0;
+    }
+
 }

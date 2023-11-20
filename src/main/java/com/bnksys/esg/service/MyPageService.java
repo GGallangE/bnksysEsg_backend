@@ -71,4 +71,8 @@ public class MyPageService {
         int userid = mainMapper.findbyemail(email);
         myPageMapper.update_readAlarm(userid, alarmid);
     }
+
+    public boolean isSameApiScheduleUser(String email, int batchlistid){
+        return myPageMapper.isSameApiScheduleUser(email,batchlistid) > 0;
+    }
 }

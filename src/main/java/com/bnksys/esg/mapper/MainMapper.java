@@ -21,6 +21,8 @@ public interface MainMapper {
 
     int findbyemail(String email);
 
+    int isSameUser(String email);
+
     String findbyuserid(int userid);
 
     List<noticeDto> getNoticeList(String mainsort);
