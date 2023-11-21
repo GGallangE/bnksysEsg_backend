@@ -86,7 +86,6 @@ public class ApiResponseService {
             String title = "API 결과 메일 전송 완료";
             String p_content = "에 대한 API 결과 메일이 전송 완료 되었습니다";
             schNtfService.save_Alarm_Complete_Schedule(email, title, p_content, apilistid);
-            System.out.println("도착 완료");
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

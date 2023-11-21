@@ -4,6 +4,7 @@ import com.bnksys.esg.data.*;
 import com.bnksys.esg.response.CountResponse;
 import com.bnksys.esg.response.ListResponse;
 import com.bnksys.esg.response.Response;
+import com.bnksys.esg.service.DynamicSchedulingService;
 import com.bnksys.esg.service.MainService;
 import com.bnksys.esg.service.MyPageService;
 import com.bnksys.esg.service.SchNtfService;
@@ -29,6 +30,9 @@ public class MyPageController {
 
     @Autowired
     SchNtfService schNtfService;
+
+    @Autowired
+    DynamicSchedulingService dynamicSchedulingService;
 
     @GetMapping("/myinterestapi")
     public ResponseEntity<ListResponse<apiResultDto>> findIntrsApi(Authentication authentication){
@@ -142,6 +146,8 @@ public class MyPageController {
             }
             myPageService.deleteApiSchedule(email,batchlistDto.getBatchlistid());
 
+            dynamicSchedulingService.removeScheduledTask(batchlistDto.getBatchlistid());
+
             response.setSuccess(true);
             response.getMessages().add("삭제 완료");
             return ResponseEntity.ok(response);
@@ -176,6 +182,9 @@ public class MyPageController {
             String title = "API 전송 예약 시간 변경";
             String p_content = "에 대한 결과 메일 발송 예약 시간이 변경 되었습니다.";
             schNtfService.save_Alarm_Complete_Schedule(email, title, p_content, batchlistDto.getApilistid());
+
+            int userid = mainService.findUseridByEmail(email);
+            dynamicSchedulingService.updateSchedule(batchlistDto.getBatchlistid(), batchlistDto.getApilistid(), userid, batchlistDto.getBatchtime());
 
             response.setSuccess(true);
             response.getMessages().add("수정 완료");

@@ -9,12 +9,12 @@
              , TITLE
              , CONTENT
              , user.USER_NAME USER_NAME
-        FROM USE_CASE USECASE
- INNER JOIN USE_CASE_API_LIST UCAL
+          FROM USE_CASE USECASE
+    INNER JOIN USE_CASE_API_LIST UCAL
             ON USECASE.USE_CASE_ID = UCAL.USE_CASE_ID
-                AND UCAL.API_LIST_ID = #{apilistid}
- INNER JOIN USER user
-        ON user.USER_ID = USECASE.USER_ID
+           AND UCAL.API_LIST_ID = #{apilistid}
+    INNER JOIN USER user
+            ON user.USER_ID = USECASE.USER_ID
     </select>
 
     <select id = "findUseCase_usecaseDetail">
@@ -60,11 +60,12 @@
      LEFT JOIN API_LIST A ON UA.API_LIST_ID = A.API_LIST_ID
          WHERE 1 = 1
         <if test="searchname != null and searchname != ''">
-            AND (
+           AND (
             U.TITLE LIKE CONCAT('%', #{searchname}, '%')
             OR A.API_NM LIKE CONCAT('%', #{searchname}, '%')
             )
         </if>
+      ORDER BY U.USE_CASE_ID DESC
     </select>
 
     <select id = "maxUseCaseId">

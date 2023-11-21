@@ -2,6 +2,7 @@ package com.bnksys.esg.service;
 
 import com.bnksys.esg.Enum.ApiList;
 import com.bnksys.esg.data.batchListDto;
+import org.apache.poi.ss.formula.functions.Now;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.concurrent.ScheduledFuture;
 
 @Configuration
 @EnableScheduling
@@ -28,28 +29,33 @@ public class DynamicSchedulingService implements SchedulingConfigurer {
     @Autowired
     private ApiBatchService apiBatchService;
 
+    private Map<Integer, ScheduledFuture<?>> scheduledTasks = new HashMap<>();
+    private List<batchListDto> currentBatchList;
+
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
         taskScheduler.setPoolSize(20);
         taskScheduler.initialize();
         taskRegistrar.setTaskScheduler(taskScheduler);
+
+        // 최초 한 번만 모든 스케줄을 가져옴
+        currentBatchList = batchListService.getAllBatchList();
+        scheduleAllTasks();
     }
 
-    @Scheduled(fixedRate = 60000)
-    public void refreshSchedules() {
-        List<batchListDto> batchList = batchListService.getAllBatchList();
-        for (batchListDto scheduling : batchList) {
-            String cronExpression = scheduling.getBatchtime();
+    private void scheduleAllTasks() {
+        for (batchListDto scheduling : currentBatchList) {
             int batchlistid = scheduling.getBatchlistid();
             int apilistid = scheduling.getApilistid();
             int userid = scheduling.getUserid();
+            String cronExpression = scheduling.getBatchtime();
 
             scheduleTask(batchlistid, apilistid, userid, cronExpression);
         }
     }
 
-    private void scheduleTask(int batchlistid, int apilistid, int userid, String cronExpression) {
+    public void scheduleTask(int batchlistid, int apilistid, int userid, String cronExpression) {
         ApiList apilist = ApiList.fromSchedulingId(apilistid);
         String methodName = apilist.getFunctionName();
 
@@ -57,7 +63,7 @@ public class DynamicSchedulingService implements SchedulingConfigurer {
         ((ThreadPoolTaskScheduler) taskScheduler).setPoolSize(20);
         ((ThreadPoolTaskScheduler) taskScheduler).initialize();
 
-        taskScheduler.schedule(() -> {
+        ScheduledFuture<?> scheduledTask = ((ThreadPoolTaskScheduler) taskScheduler).schedule(() -> {
             System.out.println("Executing task for SchedulingId: " + apilist);
             try {
                 Method method = ApiBatchService.class.getMethod(methodName, int.class, int.class, int.class);
@@ -66,5 +72,26 @@ public class DynamicSchedulingService implements SchedulingConfigurer {
                 e.printStackTrace();
             }
         }, new CronTrigger(cronExpression, TimeZone.getTimeZone("Asia/Seoul")));
+
+        scheduledTasks.put(batchlistid, scheduledTask);
+    }
+
+    public void updateSchedule(int batchlistid, int apilistid, int userid, String cronExpression) {
+        if (scheduledTasks.containsKey(batchlistid)) {
+            ScheduledFuture<?> existingTask = scheduledTasks.get(batchlistid);
+            existingTask.cancel(true);
+            scheduleTask(batchlistid, apilistid, userid, cronExpression);
+        } else {
+            scheduleTask(batchlistid, apilistid, userid, cronExpression);
+        }
+    }
+
+    public void removeScheduledTask(int batchlistid) {
+        if (scheduledTasks.containsKey(batchlistid)) {
+            ScheduledFuture<?> removedTask = scheduledTasks.remove(batchlistid);
+            if (removedTask != null) {
+                removedTask.cancel(true);
+            }
+        }
     }
 }

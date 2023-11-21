@@ -5,6 +5,7 @@ import com.bnksys.esg.jwt.JwtUtils;
 import com.bnksys.esg.response.Response;
 import com.bnksys.esg.response.TokenResponse;
 import com.bnksys.esg.service.UserService;
+import com.bnksys.esg.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,4 +83,16 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/check_auth")
+    public ResponseEntity<Response> check_auth(Authentication authentication){
+        Response response = new Response();
+        
+        if (!AuthenticationUtils.checkAuthentication(authentication, response)) {
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        response.setSuccess(true);
+        response.getMessages().add("이상 없음");
+        return ResponseEntity.ok(response);
+    }
 }

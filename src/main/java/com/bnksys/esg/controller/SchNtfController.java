@@ -2,6 +2,8 @@ package com.bnksys.esg.controller;
 
 import com.bnksys.esg.data.batchListDto;
 import com.bnksys.esg.response.Response;
+import com.bnksys.esg.service.DynamicSchedulingService;
+import com.bnksys.esg.service.MainService;
 import com.bnksys.esg.service.SchNtfService;
 import com.bnksys.esg.utils.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class SchNtfController {
     @Autowired
     SchNtfService schNtfService;
+    @Autowired
+    DynamicSchedulingService dynamicSchedulingService;
+    @Autowired
+    MainService mainService;
 
     @PostMapping("/schedule")
     public ResponseEntity<Response> save_BatchSchedule(Authentication authentication, @RequestBody batchListDto batchlistDto){
@@ -36,10 +42,12 @@ public class SchNtfController {
             }
             batchlistDto.setBatchtime(cronExpression);
             String email = authentication.getName();
-            schNtfService.save_BatchSchedule(email,batchlistDto);
+            int batchlistid = schNtfService.save_BatchSchedule(email,batchlistDto);
             String title = "API 전송 예약 완료";
             String p_content = "에 대한 결과 메일 발송이 예약 되었습니다.";
             schNtfService.save_Alarm_Complete_Schedule(email, title, p_content, batchlistDto.getApilistid());
+            int userid = mainService.findUseridByEmail(email);
+            dynamicSchedulingService.scheduleTask(batchlistid, batchlistDto.getApilistid(), userid, cronExpression);
             response.setSuccess(true);
             response.getMessages().add("등록 완료");
             return ResponseEntity.ok(response);

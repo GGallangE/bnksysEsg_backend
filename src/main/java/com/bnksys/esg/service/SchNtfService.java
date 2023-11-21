@@ -16,12 +16,13 @@ public class SchNtfService {
         this.mainMapper = mainMapper;
     }
 
-    public void save_BatchSchedule(String email,batchListDto batchlistDto){
+    public int save_BatchSchedule(String email,batchListDto batchlistDto){
         int userid = mainMapper.findbyemail(email);
         int batchlistid = schNtfMapper.MaxbatchlistId();
         batchlistDto.setBatchlistid(batchlistid);
         schNtfMapper.save_BatchSchedule(userid, batchlistDto);
         schNtfMapper.save_BatchDetailArgs(batchlistid,batchlistDto.getBatchDetailargsDto());
+        return batchlistid;
     }
 
     public void save_Alarm_Complete_Schedule(String email, String title, String p_content, int apilistid){

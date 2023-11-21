@@ -43,4 +43,6 @@ public class MainService {
         return mainMapper.isSameUser(email) > 0;
     }
 
+    public int findUseridByEmail(String email){return mainMapper.findbyemail(email);}
+
 }
