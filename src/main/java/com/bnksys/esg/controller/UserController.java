@@ -63,6 +63,7 @@ public class UserController {
 
 
     @PostMapping("/login")
+    @CrossOrigin(origins = "http://localhost:3000", exposedHeaders = "Authorization")
     public ResponseEntity<TokenResponse> login(@RequestBody userDto userdto) {
         TokenResponse response = new TokenResponse();
         Map<String, String> data = new HashMap<>();
