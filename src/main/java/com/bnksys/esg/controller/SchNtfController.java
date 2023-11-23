@@ -31,6 +31,12 @@ public class SchNtfController {
             if (!AuthenticationUtils.checkAuthentication(authentication, response)) {
                 return ResponseEntity.badRequest().body(response);
             }
+            if (null == batchlistDto.getBatchDetailargsDto() || batchlistDto.getBatchDetailargsDto().isEmpty()){
+                response.setSuccess(false);
+                response.getMessages().add("오류 발생 : " + "API에 전송할 항목이 없습니다.");
+                return ResponseEntity.badRequest().body(response);
+            }
+
             String cronExpression;
             try{
                 cronExpression = schNtfService.convertToCron(batchlistDto.getFrequency()
