@@ -34,6 +34,13 @@ public class SchNtfService {
     }
 
     public String convertToCron(String frequency, String dayOfWeek, String dayOfMonth, String time){
+        if(frequency == null || frequency.isEmpty()){
+            throw new IllegalArgumentException("배치 주기를 선택하세요.");
+        }
+        if(time == null || time.isEmpty()){
+            throw new IllegalArgumentException("시간을 선택하세요.");
+        }
+
         String[] timeParts = time.split(":");
         int hour = Integer.parseInt(timeParts[0]);
         int minute = 0;
