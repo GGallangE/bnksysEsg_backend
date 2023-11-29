@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,5 +95,12 @@ public class UseCaseController {
         response.getMessages().add("조회 완료");
         return ResponseEntity.ok(response);
     }
-    // usecasddetail mapper.xml 작성 후 , 조회시 id없어지거나 하면 return 먹여주고 list pathvariable되있는거 param로 바꾸기
+
+    @PostMapping("/url")
+    public ResponseEntity<Response> change(@RequestParam MultipartFile[] img){
+        Response response = new Response();
+
+        return ResponseEntity.ok(response);
+    }
+
 }
