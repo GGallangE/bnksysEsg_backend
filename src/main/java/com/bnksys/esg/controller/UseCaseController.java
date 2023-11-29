@@ -13,9 +13,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/spring/usecase")
@@ -23,6 +27,8 @@ public class UseCaseController {
 
     @Autowired
     UseCaseService useCaseService;
+
+    private static final String UPLOAD_DIR = "C:/dev/img";
 
     @PostMapping("/usecase")
     public ResponseEntity<Response> saveUseCase(Authentication authentication, @RequestBody useCaseDto usecaseDto){
@@ -97,10 +103,65 @@ public class UseCaseController {
     }
 
     @PostMapping("/url")
-    public ResponseEntity<Response> change(@RequestParam MultipartFile[] img){
+    public ResponseEntity<Response> change(@RequestParam MultipartFile[] img) {
         Response response = new Response();
 
+        if (img != null && img.length > 0) {
+            try {
+                // 이미지를 저장할 디렉토리 생성
+                createUploadDir();
+
+                // 현재 날짜를 기반으로 연도/월/일 폴더 생성
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                String subDirectoryDate = dateFormat.format(new Date());
+                String subDirectoryPath = UPLOAD_DIR + "/" + subDirectoryDate;
+                createSubDirectory(subDirectoryPath);
+
+                // UUID 랜덤값을 사용하여 서브 폴더 생성
+                String subDirectoryUuid = UUID.randomUUID().toString();
+                String subDirectoryUuidPath = subDirectoryPath + "/" + subDirectoryUuid;
+                createSubDirectory(subDirectoryUuidPath);
+
+                // 각 파일에 대한 처리
+                for (MultipartFile file : img) {
+                    String fileName = file.getOriginalFilename();
+                    Path filePath = Path.of(subDirectoryUuidPath, fileName);
+
+                    // 파일 저장
+                    Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                    // 파일 URL 생성 및 응답에 추가
+                    String fileUrl = "/" + subDirectoryDate + "/" + subDirectoryUuid + "/" + fileName;
+                    response.getMessages().add(fileUrl);
+                }
+
+                response.setSuccess(true);
+            } catch (IOException e) {
+                response.setSuccess(false);
+                response.getMessages().add("이미지 업로드 에러: " + e.getMessage());
+                return ResponseEntity.badRequest().body(response);
+            }
+        } else {
+            response.setSuccess(false);
+            response.getMessages().add("변수로 제공된 이미지가 없습니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
         return ResponseEntity.ok(response);
+    }
+
+    private void createUploadDir() {
+        File uploadDir = new File(UPLOAD_DIR);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+    }
+
+    private void createSubDirectory(String subDirectoryPath) {
+        File subDir = new File(subDirectoryPath);
+        if (!subDir.exists()) {
+            subDir.mkdirs();
+        }
     }
 
 }
