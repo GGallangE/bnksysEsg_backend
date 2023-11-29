@@ -49,11 +49,14 @@ public class SchNtfController {
             batchlistDto.setBatchtime(cronExpression);
             String email = authentication.getName();
             int batchlistid = schNtfService.save_BatchSchedule(email,batchlistDto);
+            System.out.println(batchlistid);
             String title = "API 전송 예약 완료";
             String p_content = "에 대한 결과 메일 발송이 예약 되었습니다.";
             schNtfService.save_Alarm_Complete_Schedule(email, title, p_content, batchlistDto.getApilistid());
+            System.out.println(2+"asdasd");
             int userid = mainService.findUseridByEmail(email);
             dynamicSchedulingService.scheduleTask(batchlistid, batchlistDto.getApilistid(), userid, cronExpression);
+            System.out.println(3);
             response.setSuccess(true);
             response.getMessages().add("등록 완료");
             return ResponseEntity.ok(response);
