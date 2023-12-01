@@ -102,7 +102,7 @@ public class UseCaseController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/url")
+    @PostMapping("/imgurl")
     public ResponseEntity<Response> change(@RequestParam MultipartFile[] img) {
         Response response = new Response();
 
