@@ -81,6 +81,7 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_VIEW_DATE) API_VIEW_DATE FROM API_USES G
               GROUP BY inquiry1.INQUIRY_ID) reply
             ON inquiry.INQUIRY_ID = reply.INQUIRY_ID
          WHERE EMAIL = #{email}
+           AND inquiry.PARENT_ID IS NULL
      ORDER BY INQUIRY_ID DESC
     </select>
 

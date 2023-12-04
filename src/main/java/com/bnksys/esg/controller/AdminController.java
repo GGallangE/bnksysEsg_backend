@@ -165,19 +165,13 @@ public class AdminController {
 
     @PostMapping("/notice/create")
     /* 관리자가 공지사항 작성하는 메서드 */
-    public ResponseEntity<Response> savenotice(@RequestPart(value = "files", required = false) MultipartFile[] files,
-                                               @RequestPart noticeDto noticedto){
+    public ResponseEntity<Response> savenotice(@RequestBody noticeDto noticedto){
         // 첨부파일은 선택, 공지사항 관련 변수들은 필수
 
         Response response = new Response();
-        int atchfileid = 0;
         try{
-            if(files != null && files.length > 0){
-                // 첨부파일이 있으면 atchFileService에서 첨부파일 등록
-                atchfileid = atchFileService.saveAtchFile(files);
-            }
             // adminService엥서 공지사항 저장, 첨부파일 있을시 첨부파일도 함께 저장
-            adminService.saveNotice(noticedto.getNoticenm(), noticedto.getNoticecntn(), atchfileid);
+            adminService.saveNotice(noticedto.getNoticenm(), noticedto.getNoticecntn(), noticedto.getAtchfileid());
 
             response.setSuccess(true);
             response.getMessages().add("공지사항 등록 완료");
