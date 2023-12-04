@@ -51,6 +51,14 @@
       ORDER BY API_APPLY_ID DESC
     </select>
 
+    <select id = "findApi_ApplyList_ByName">
+        SELECT API_APPLY_ID
+             , APPLY_NM
+          FROM API_APPLY
+         WHERE APPLY_NM LIKE CONCAT('%', #{applynm}, '%')
+           AND APPLY_DVCD = "03"
+    </select>
+
     <select id = "findinQuiry">
         SELECT inquiry.INQUIRY_ID
              , INQUIRY_NM

@@ -42,6 +42,22 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/apiapplylist_byname")
+    public ResponseEntity<ListResponse<apiApplyDto>> findApi_ApplyList_ByName(@RequestParam String applynm){
+
+        // ListResponse 객체를 생성하여 초기화
+        ListResponse<apiApplyDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        // adminService로 API 신청 현황을 조회하고 결과를 리스트로 받아옴
+        List<apiApplyDto> apiapplyresult = adminService.findApi_ApplyList_ByName(applynm);
+
+        response.setSuccess(true);
+        response.getData().put("data", apiapplyresult);
+        response.getMessages().add("API 신청 현황 조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+
     @PostMapping("/apiapply/confirm")
     /* 사용자들이 신청한 API 지원에 대한 승인 여부를 지정하기 위한 메서드 */
     public ResponseEntity<Response> updateApi_ApplyStatus(@RequestBody apiApplyDto apiapplyDto){
