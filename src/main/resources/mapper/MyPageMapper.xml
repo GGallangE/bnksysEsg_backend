@@ -114,10 +114,12 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
              , RPLY_DATE
              , APPLY_DVCD
              , user.USER_NAME USER_NAME
+             , COUNT(*) OVER() TOTAL add
           FROM API_APPLY apiapply
     INNER JOIN USER user
             ON user.USER_ID = apiapply.USER_ID
            AND user.EMAIL = #{email}
+         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id="findDetailApiApply">
