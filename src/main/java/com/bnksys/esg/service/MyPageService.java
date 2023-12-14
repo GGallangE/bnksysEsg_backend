@@ -39,7 +39,7 @@ public class MyPageService {
 
     public List<apiApplyDto> findApiApply(String email, int page, int pageSize) {
         int offset = page * pageSize;
-        return myPageMapper.findApiApply(email, offset, pageSize);
+//        return myPageMapper.findApiApply(email, offset, pageSize);
     }
 
     public List<apiApplyDto> findDetailApiApply(String email, int apiapplyid) {
