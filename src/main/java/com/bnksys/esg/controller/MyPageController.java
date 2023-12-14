@@ -101,7 +101,7 @@ public class MyPageController {
 
     @GetMapping("/myapiapply")
     public ResponseEntity<ListResponse<apiApplyDto>> findApiApply(Authentication authentication, @RequestParam(value = "apiapplyid", required = false) Integer apiapplyid
-            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int pageSize){
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
         ListResponse<apiApplyDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         if (!AuthenticationUtils_ApiResponse.checkAuthentication(authentication, response).isSuccess()) {
@@ -122,7 +122,8 @@ public class MyPageController {
     }
 
     @GetMapping("/myapischedule")
-    public ResponseEntity<ListResponse<batchListDto>> findApiSchedule(Authentication authentication, @RequestParam(value = "batchlistid", required = false) Integer batchlistid){
+    public ResponseEntity<ListResponse<batchListDto>> findApiSchedule(Authentication authentication, @RequestParam(value = "batchlistid", required = false) Integer batchlistid
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
         ListResponse<batchListDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         if (!AuthenticationUtils_ApiResponse.checkAuthentication(authentication, response).isSuccess()) {
@@ -130,7 +131,7 @@ public class MyPageController {
         }
 
         String email = authentication.getName();
-        List<batchListDto> batchList = myPageService.findApiSchedule(email, batchlistid);
+        List<batchListDto> batchList = myPageService.findApiSchedule(email, batchlistid, page, pageSize);
 
         response.setSuccess(true);
         response.getData().put("data", batchList);
@@ -201,7 +202,8 @@ public class MyPageController {
     }
 
     @GetMapping("/myalarm")
-    public ResponseEntity<ListResponse<alarmDto>> findAlarm(Authentication authentication, @RequestParam(value = "alarmid", required = false) Integer alarmid){
+    public ResponseEntity<ListResponse<alarmDto>> findAlarm(Authentication authentication, @RequestParam(value = "alarmid", required = false) Integer alarmid
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
         ListResponse<alarmDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         if (!AuthenticationUtils_ApiResponse.checkAuthentication(authentication, response).isSuccess()) {
@@ -209,7 +211,7 @@ public class MyPageController {
         }
 
         String email = authentication.getName();
-        List<alarmDto> alamrList = myPageService.findAlarm(email, alarmid);
+        List<alarmDto> alamrList = myPageService.findAlarm(email, alarmid, page, pageSize);
 
         response.setSuccess(true);
         response.getData().put("data", alamrList);
