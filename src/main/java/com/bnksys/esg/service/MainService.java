@@ -31,7 +31,10 @@ public class MainService {
         return mainMapper.getApiList_auth(name, sortBy, userid, offset, pageSize);
     }
 
-    public List<noticeDto> getNoticeList(String mainsort){ return mainMapper.getNoticeList(mainsort); }
+    public List<noticeDto> getNoticeList(String mainsort, int page, int pageSize){
+        int offset = page * pageSize;
+        return mainMapper.getNoticeList(mainsort, offset, pageSize);
+    }
 
     public List<noticeDto> getNoticeDetail(int noticeid){ return mainMapper.getNoticeDetail(noticeid); }
 

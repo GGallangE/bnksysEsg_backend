@@ -66,6 +66,7 @@
             )
         </if>
       ORDER BY U.USE_CASE_ID DESC
+         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "maxUseCaseId">

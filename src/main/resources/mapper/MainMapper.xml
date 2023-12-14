@@ -12,6 +12,7 @@
              , API_RGDT
              , API_APPLY_ID
              , COUNT_API_USES
+             , COUNT(*) OVER() TOTAL
           FROM API_LIST apilist
      LEFT JOIN (SELECT API_LIST_ID
                      , count(*) COUNT_API_USES
@@ -104,6 +105,9 @@
       ORDER BY NOTICE_ID DESC
         <if test="mainsort == 'yes' ">
             LIMIT 5
+        </if>
+        <if test="mainsort == 'no' ">
+            LIMIT #{pageSize} OFFSET #{offset}
         </if>
     </select>
 

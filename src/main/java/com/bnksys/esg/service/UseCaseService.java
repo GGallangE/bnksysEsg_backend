@@ -30,7 +30,10 @@ public class UseCaseService {
     public List<apiResultDto> findUseCase_usecaseDetail_apiList(int usecaseid){return useCaseMapper.findUseCase_usecaseDetail_apiList(usecaseid); }
 
 
-    public List<getuseCaseDto> findUseCase_usecaseMain(String searchname){return useCaseMapper.findUseCase_usecaseMain(searchname); }
+    public List<getuseCaseDto> findUseCase_usecaseMain(String searchname, int page, int pageSize){
+        int offset = page * pageSize;
+        return useCaseMapper.findUseCase_usecaseMain(searchname, offset, pageSize);
+    }
 
     public void saveUseCase(String email, useCaseDto usecaseDto){
         int userId = mainMapper.findbyemail(email);

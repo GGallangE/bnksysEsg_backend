@@ -25,7 +25,7 @@ public interface MainMapper {
 
     String findbyuserid(int userid);
 
-    List<noticeDto> getNoticeList(String mainsort);
+    List<noticeDto> getNoticeList(@Param("mainsort") String mainsort, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     List<noticeDto> getNoticeDetail(@Param("noticeid") int noticeid);
 
