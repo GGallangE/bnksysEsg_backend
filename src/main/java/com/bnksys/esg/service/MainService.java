@@ -20,13 +20,15 @@ public class MainService {
         this.mainMapper = mainMapper;
     }
 
-    public List<apiResultDto> getApiList(String name, String sortBy) {
-        return mainMapper.getApiList(name, sortBy);
+    public List<apiResultDto> getApiList(String name, String sortBy, int page, int pageSize) {
+        int offset = page * pageSize;
+        return mainMapper.getApiList(name, sortBy, offset, pageSize);
     }
 
-    public List<apiResultDto> getApiList_auth(String name, String sortBy, String email) {
+    public List<apiResultDto> getApiList_auth(String name, String sortBy, String email, int page, int pageSize) {
+        int offset = page * pageSize;
         int userid = mainMapper.findbyemail(email);
-        return mainMapper.getApiList_auth(name, sortBy, userid);
+        return mainMapper.getApiList_auth(name, sortBy, userid, offset, pageSize);
     }
 
     public List<noticeDto> getNoticeList(String mainsort){ return mainMapper.getNoticeList(mainsort); }
