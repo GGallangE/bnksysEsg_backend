@@ -100,8 +100,17 @@
     </select>
 
     <select id = "getNoticeList">
-        SELECT *
-          FROM NOTICE
+        SELECT notice.NOTICE_ID
+             , notice.NOTICE_NM
+             , notice.NOTICE_CNTN
+             , notice.REG_DT
+             , notice.ATCH_FILE_ID
+             , notice.HIT
+             , user.USER_NAME
+             , COUNT(*) OVER() TOTAL
+          FROM NOTICE notice
+    INNER JOIN USER user
+            ON user.USER_ID = notice.USER_ID
       ORDER BY NOTICE_ID DESC
         <if test="mainsort == 'yes' ">
             LIMIT 5

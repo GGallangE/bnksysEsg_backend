@@ -4,6 +4,7 @@ package com.bnksys.esg.mapper;
 import com.bnksys.esg.data.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,11 +13,11 @@ import java.util.List;
 @Repository
 public interface MyPageMapper {
 
-    List<apiResultDto> findIntrsApi(@Param("email")String email);
+    List<apiResultDto> findIntrsApi(@Param("email")String email, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
-    List<apiResultDto> findRecentUseApi(@Param("email")String email);
+    List<apiResultDto> findRecentUseApi(@Param("email")String email, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
-    List<inQuiryDto> findInQuiry(@Param("email")String email);
+    List<inQuiryDto> findInQuiry(@Param("email")String email, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     List<inQuiryDto> findAnswerInQuiry(@Param("email") String email, @Param("inquiryid") int inquiryid);
 

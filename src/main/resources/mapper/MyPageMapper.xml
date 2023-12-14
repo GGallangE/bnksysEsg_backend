@@ -26,6 +26,7 @@
                 FROM API_USES
             GROUP BY API_LIST_ID) apiuses
           ON apilist.API_LIST_ID = apiuses.API_LIST_ID
+       LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "findRecentUseApi">
@@ -36,6 +37,7 @@
           , API_RGDT
           , COUNT_API_USES
           , AUI.FAVORITE FAVORITE
+          , COUNT(*) OVER() TOTAL
        FROM (
             SELECT DISTINCT apilist.API_LIST_ID API_LIST_ID
                  , API_NM
@@ -58,7 +60,7 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
                AND STCD = "01") AUI
         ON AUI.API_LIST_ID = DISTINCT_API.API_LIST_ID
   ORDER BY apiuses.API_USE_DATE DESC
-     LIMIT 2
+     LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id="findInQuiry">
@@ -70,6 +72,7 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
              , inquiry.USER_ID USER_ID
              , user.USER_NAME USER_NAME
              , reply.REPLY_COUNT REPLY_COUNT
+             , COUNT(*) OVER() TOTAL
           FROM INQUIRY inquiry
     INNER JOIN USER user
             ON user.USER_ID = inquiry.USER_ID
@@ -83,6 +86,7 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
          WHERE EMAIL = #{email}
            AND inquiry.PARENT_ID IS NULL
      ORDER BY INQUIRY_ID DESC
+        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "findAnswerInQuiry">

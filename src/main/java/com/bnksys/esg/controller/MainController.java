@@ -49,7 +49,7 @@ public class MainController {
     @GetMapping("/notice")
     /* 공지사항 Top 5를 뽑아주는 메서드 */
     public ResponseEntity<ListResponse<noticeDto>> getNoticeList(@RequestParam String mainsort
-                                        , @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int pageSize){
+                                        , @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
         ListResponse<noticeDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         List<noticeDto> noticeList = mainService.getNoticeList(mainsort, page, pageSize);
