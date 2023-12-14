@@ -11,6 +11,16 @@ public class alarmDto {
     private String sendusername;
     private String rcvusername;
 
+    private int total;
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
     public String getSendusername() {
         return sendusername;
     }

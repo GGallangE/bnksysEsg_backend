@@ -19,7 +19,7 @@ public interface UseCaseMapper {
 
     List<apiResultDto> findUseCase_usecaseDetail_apiList(@Param("usecaseid") int usecaseid);
 
-   List<getuseCaseDto> findUseCase_usecaseMain(@Param("searchname") String searchname);
+   List<getuseCaseDto> findUseCase_usecaseMain(@Param("searchname") String searchname, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     int maxUseCaseId();
 

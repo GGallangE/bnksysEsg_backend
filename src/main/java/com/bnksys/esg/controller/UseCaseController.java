@@ -91,10 +91,11 @@ public class UseCaseController {
     }
 
     @GetMapping("/mainusecase")
-    public ResponseEntity<ListResponse<getuseCaseDto>> findUseCase_usecaseMain(@RequestParam String searchname){
+    public ResponseEntity<ListResponse<getuseCaseDto>> findUseCase_usecaseMain(@RequestParam String searchname
+                            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
         ListResponse<getuseCaseDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
-        List<getuseCaseDto> usecase = useCaseService.findUseCase_usecaseMain(searchname);
+        List<getuseCaseDto> usecase = useCaseService.findUseCase_usecaseMain(searchname, page, pageSize);
 
         response.setSuccess(true);
         response.getData().put("data", usecase);

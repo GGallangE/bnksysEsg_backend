@@ -12,6 +12,7 @@
              , API_RGDT
              , API_APPLY_ID
              , COUNT_API_USES
+             , COUNT(*) OVER() TOTAL
           FROM API_LIST apilist
      LEFT JOIN (SELECT API_LIST_ID
                      , count(*) COUNT_API_USES
@@ -28,6 +29,7 @@
     <if test="sortBy == 'nbruses' ">
         ORDER BY COUNT_API_USES DESC
     </if>
+        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "getApiList_auth">
@@ -65,6 +67,7 @@
     <if test="sortBy == 'nbruses' ">
       ORDER BY COUNT_API_USES DESC
     </if>
+        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id="findbyemail" resultType="int" parameterType="java.lang.String">
@@ -97,11 +100,23 @@
     </select>
 
     <select id = "getNoticeList">
-        SELECT *
-          FROM NOTICE
+        SELECT notice.NOTICE_ID
+             , notice.NOTICE_NM
+             , notice.NOTICE_CNTN
+             , notice.REG_DT
+             , notice.ATCH_FILE_ID
+             , notice.HIT
+             , user.USER_NAME
+             , COUNT(*) OVER() TOTAL
+          FROM NOTICE notice
+    INNER JOIN USER user
+            ON user.USER_ID = notice.USER_ID
       ORDER BY NOTICE_ID DESC
         <if test="mainsort == 'yes' ">
             LIMIT 5
+        </if>
+        <if test="mainsort == 'no' ">
+            LIMIT #{pageSize} OFFSET #{offset}
         </if>
     </select>
 

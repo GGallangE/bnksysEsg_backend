@@ -16,6 +16,15 @@ public class apiApplyDto {
     private String applydvcd;
 
     private String username;
+    private int total;
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
 
     public String getUsername() {
         return username;

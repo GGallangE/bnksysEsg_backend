@@ -53,6 +53,7 @@
                       , U.TITLE
                       , U.CONTENT
                       , user.USER_NAME
+                      , COUNT(*) OVER() TOTAL
           FROM USE_CASE U
     INNER JOIN USER user
             ON user.USER_ID = U.USER_ID
@@ -66,6 +67,7 @@
             )
         </if>
       ORDER BY U.USE_CASE_ID DESC
+         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "maxUseCaseId">

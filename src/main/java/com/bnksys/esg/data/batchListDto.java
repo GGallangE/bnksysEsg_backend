@@ -14,6 +14,16 @@ public class batchListDto {
     private String stcd;
     private String apinm;
 
+    private int total;
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
     private List<batchDetailArgsDto> batchDetailargsDto;
 
     public List<batchDetailArgsDto> getBatchDetailargsDto() {

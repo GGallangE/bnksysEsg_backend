@@ -18,24 +18,28 @@ public class MyPageService {
         this.mainMapper = mainMapper;
     }
 
-    public List<apiResultDto> findIntrsApi(String email) {
-        return myPageMapper.findIntrsApi(email);
+    public List<apiResultDto> findIntrsApi(String email, int page, int pageSize) {
+        int offset = page * pageSize;
+        return myPageMapper.findIntrsApi(email, offset, pageSize);
     }
 
-    public List<apiResultDto> findRecentUseApi(String email) {
-        return myPageMapper.findRecentUseApi(email);
+    public List<apiResultDto> findRecentUseApi(String email, int page, int pageSize) {
+        int offset = page * pageSize;
+        return myPageMapper.findRecentUseApi(email, offset, pageSize);
     }
 
-    public List<inQuiryDto> findInQuiry(String email) {
-        return myPageMapper.findInQuiry(email);
+    public List<inQuiryDto> findInQuiry(String email, int page, int pageSize) {
+        int offset = page * pageSize;
+        return myPageMapper.findInQuiry(email, offset, pageSize);
     }
 
     public List<inQuiryDto> findAnswerInQuiry(String email, int inquiryid) {
         return myPageMapper.findAnswerInQuiry(email,inquiryid);
     }
 
-    public List<apiApplyDto> findApiApply(String email) {
-        return myPageMapper.findApiApply(email);
+    public List<apiApplyDto> findApiApply(String email, int page, int pageSize) {
+        int offset = page * pageSize;
+        return myPageMapper.findApiApply(email, offset, pageSize);
     }
 
     public List<apiApplyDto> findDetailApiApply(String email, int apiapplyid) {

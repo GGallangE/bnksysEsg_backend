@@ -35,14 +35,15 @@ public class MyPageController {
     DynamicSchedulingService dynamicSchedulingService;
 
     @GetMapping("/myinterestapi")
-    public ResponseEntity<ListResponse<apiResultDto>> findIntrsApi(Authentication authentication){
+    public ResponseEntity<ListResponse<apiResultDto>> findIntrsApi(Authentication authentication
+                ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int pageSize){
         ListResponse<apiResultDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         if (!AuthenticationUtils_ApiResponse.checkAuthentication(authentication, response).isSuccess()) {
             return ResponseEntity.badRequest().body(response);
         }
         String email = authentication.getName();
-        List<apiResultDto> apiResults = myPageService.findIntrsApi(email);
+        List<apiResultDto> apiResults = myPageService.findIntrsApi(email, page, pageSize);
 
         response.setSuccess(true);
         response.getData().put("data", apiResults);
@@ -51,14 +52,15 @@ public class MyPageController {
     }
 
     @GetMapping("/myrecentuseapi")
-    public ResponseEntity<ListResponse<apiResultDto>> findRecentUseApi(Authentication authentication){
+    public ResponseEntity<ListResponse<apiResultDto>> findRecentUseApi(Authentication authentication
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int pageSize){
         ListResponse<apiResultDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         if (!AuthenticationUtils_ApiResponse.checkAuthentication(authentication, response).isSuccess()) {
             return ResponseEntity.badRequest().body(response);
         }
         String email = authentication.getName();
-        List<apiResultDto> apiResults = myPageService.findRecentUseApi(email);
+        List<apiResultDto> apiResults = myPageService.findRecentUseApi(email, page, pageSize);
 
         response.setSuccess(true);
         response.getData().put("data", apiResults);
@@ -67,14 +69,15 @@ public class MyPageController {
     }
 
     @GetMapping("/myinquiry")
-    public ResponseEntity<ListResponse<inQuiryDto>> findInQuiry(Authentication authentication){
+    public ResponseEntity<ListResponse<inQuiryDto>> findInQuiry(Authentication authentication
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int pageSize){
         ListResponse<inQuiryDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         if (!AuthenticationUtils_ApiResponse.checkAuthentication(authentication, response).isSuccess()) {
             return ResponseEntity.badRequest().body(response);
         }
         String email = authentication.getName();
-        List<inQuiryDto> inquiryResults = myPageService.findInQuiry(email);
+        List<inQuiryDto> inquiryResults = myPageService.findInQuiry(email, page, pageSize);
 
         response.setSuccess(true);
         response.getData().put("data", inquiryResults);
@@ -97,7 +100,8 @@ public class MyPageController {
     }
 
     @GetMapping("/myapiapply")
-    public ResponseEntity<ListResponse<apiApplyDto>> findApiApply(Authentication authentication, @RequestParam(value = "apiapplyid", required = false) Integer apiapplyid){
+    public ResponseEntity<ListResponse<apiApplyDto>> findApiApply(Authentication authentication, @RequestParam(value = "apiapplyid", required = false) Integer apiapplyid
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int pageSize){
         ListResponse<apiApplyDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         if (!AuthenticationUtils_ApiResponse.checkAuthentication(authentication, response).isSuccess()) {
@@ -106,7 +110,7 @@ public class MyPageController {
         String email = authentication.getName();
         List<apiApplyDto> apiApply;
         if(null == apiapplyid){
-            apiApply = myPageService.findApiApply(email);
+            apiApply = myPageService.findApiApply(email, page, pageSize);
         }else{
             apiApply = myPageService.findDetailApiApply(email, apiapplyid);
         }

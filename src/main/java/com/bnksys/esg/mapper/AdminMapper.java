@@ -19,6 +19,8 @@ public interface AdminMapper {
 
     List<apiApplyDto> findApi_ApplyLIST(@Param("apiapplyid") Integer apiapplyid);
 
+    List<apiApplyDto> findApi_ApplyList_ByName(@Param("applynm") String applynm);
+
     List<apiResultDto> findApiList(@Param("apilistid") Integer apilistid);
 
     List<inQuiryDto> findinQuiry(@Param("inquiryid") Integer inquiryid);

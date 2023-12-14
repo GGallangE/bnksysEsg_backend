@@ -33,9 +33,9 @@ public class AtchFileController {
 
         try {
             // atchFileService를 통해 첨부파일 저장
-            atchFileService.saveAtchFile(files);
+            int atchfileid = atchFileService.saveAtchFile(files);
             response.setSuccess(true);
-            response.getMessages().add("변경 완료");
+            response.getMessages().add(String.valueOf(atchfileid));
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.setSuccess(false);

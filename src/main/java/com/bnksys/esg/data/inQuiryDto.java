@@ -17,6 +17,16 @@ public class inQuiryDto {
 
     private int replycount;
 
+    private int total;
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
     public int getReplycount() {
         return replycount;
     }

@@ -13,9 +13,9 @@ import java.util.List;
 @Repository
 public interface MainMapper {
 
-    List<apiResultDto> getApiList(@Param("name") String name, @Param("sortBy") String sortBy);
+    List<apiResultDto> getApiList(@Param("name") String name, @Param("sortBy") String sortBy, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
-    List<apiResultDto> getApiList_auth(@Param("name") String name, @Param("sortBy") String sortBy, @Param("userid") int userid);
+    List<apiResultDto> getApiList_auth(@Param("name") String name, @Param("sortBy") String sortBy, @Param("userid") int userid, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     List<apiResultDto> getapiList_Top5(@Param("sort") String sort);
 
@@ -25,7 +25,7 @@ public interface MainMapper {
 
     String findbyuserid(int userid);
 
-    List<noticeDto> getNoticeList(String mainsort);
+    List<noticeDto> getNoticeList(@Param("mainsort") String mainsort, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     List<noticeDto> getNoticeDetail(@Param("noticeid") int noticeid);
 
