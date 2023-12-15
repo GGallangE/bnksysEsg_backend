@@ -16,7 +16,27 @@ public class apiApplyDto {
     private String applydvcd;
 
     private String username;
+
+    private int apilistid;
+
+    private String apinm;
     private int total;
+
+    public int getApilistid() {
+        return apilistid;
+    }
+
+    public void setApilistid(int apilistid) {
+        this.apilistid = apilistid;
+    }
+
+    public String getApinm() {
+        return apinm;
+    }
+
+    public void setApinm(String apinm) {
+        this.apinm = apinm;
+    }
 
     public int getTotal() {
         return total;

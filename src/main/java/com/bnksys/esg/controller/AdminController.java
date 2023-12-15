@@ -29,7 +29,7 @@ public class AdminController {
     @GetMapping("/apiapplylist")
     /* Api 신청현황 조희를 위한 메서드 */
     public ResponseEntity<ListResponse<apiApplyDto>> findApi_ApplyLIST(@RequestParam(value = "apiapplyid", required = false) Integer apiapplyid
-            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int pageSize){
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "") int pageSize){
 
         // ListResponse 객체를 생성하여 초기화
         ListResponse<apiApplyDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());

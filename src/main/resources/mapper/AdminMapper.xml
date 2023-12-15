@@ -43,10 +43,14 @@
              , RPLY_DATE
              , APPLY_DVCD
              , user.USER_NAME USER_NAME
+             , apilist.API_LIST_ID API_LIST_ID
+             , apilist.API_NM apinm
              , COUNT(*) OVER() TOTAL
           FROM API_APPLY APIAPPLY
     INNER JOIN USER user
             ON APIAPPLY.USER_ID = user.USER_ID
+     LEFT JOIN API_LIST apilist
+            ON apilist.API_LIST_ID = APIAPPLY.API_LIST_ID
          WHERE 1 = 1
         <if test="apiapplyid != null">
            AND API_APPLY_ID = #{apiapplyid}
