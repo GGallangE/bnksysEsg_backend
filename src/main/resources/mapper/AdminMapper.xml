@@ -15,21 +15,23 @@
     </select>
 
     <select id = "findApiList">
-        SELECT API_LIST_ID
+        SELECT apilist.API_LIST_ID
              , API_NM
              , PRV_ORG
              , API_EXPL
              , API_RGDT
              , apilist.API_APPLY_ID
              , apiapply.APPLY_NM API_APPLY_NM
+             , COUNT(*) OVER() TOTAL
           FROM API_LIST apilist
      LEFT JOIN API_APPLY apiapply
             ON apilist.API_APPLY_ID = apiapply.API_APPLY_ID
          WHERE 1 = 1
         <if test="apilistid != null">
-           AND API_LIST_ID = #{apilistid}
+           AND apilist.API_LIST_ID = #{apilistid}
         </if>
       ORDER BY API_LIST_ID DESC
+         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "findApi_ApplyLIST">
@@ -41,14 +43,20 @@
              , RPLY_DATE
              , APPLY_DVCD
              , user.USER_NAME USER_NAME
+             , apilist.API_LIST_ID API_LIST_ID
+             , apilist.API_NM apinm
+             , COUNT(*) OVER() TOTAL
           FROM API_APPLY APIAPPLY
     INNER JOIN USER user
             ON APIAPPLY.USER_ID = user.USER_ID
+     LEFT JOIN API_LIST apilist
+            ON apilist.API_LIST_ID = APIAPPLY.API_LIST_ID
          WHERE 1 = 1
         <if test="apiapplyid != null">
            AND API_APPLY_ID = #{apiapplyid}
         </if>
       ORDER BY API_APPLY_ID DESC
+         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "findApi_ApplyList_ByName">
@@ -68,6 +76,7 @@
              , inquiry.USER_ID USER_ID
              , user.USER_NAME USER_NAME
              , reply.REPLY_COUNT
+             , COUNT(*) OVER() TOTAL
           FROM INQUIRY inquiry
     INNER JOIN USER user
             ON user.USER_ID = inquiry.USER_ID
@@ -83,6 +92,7 @@
           AND inquiry.INQUIRY_ID = #{inquiryid}
         </if>
       ORDER BY INQUIRY_ID DESC
+         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "findinQuiryAnswer">

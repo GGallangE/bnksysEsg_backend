@@ -114,7 +114,7 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
              , RPLY_DATE
              , APPLY_DVCD
              , user.USER_NAME USER_NAME
-             , COUNT(*) OVER() TOTAL add
+             , COUNT(*) OVER() TOTAL
           FROM API_APPLY apiapply
     INNER JOIN USER user
             ON user.USER_ID = apiapply.USER_ID
@@ -148,6 +148,7 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
              , DAY_OF_MONTH
              , STCD
              , apilist.API_NM apinm
+             , COUNT(*) OVER() TOTAL
           FROM BATCH_LIST batchlist
     INNER JOIN API_LIST apilist
             ON apilist.API_LIST_ID = batchlist.API_LIST_ID
@@ -157,6 +158,7 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
            AND BATCH_LIST_ID = #{batchlistid}
         </if>
       ORDER BY BATCH_LIST_ID DESC
+         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "findAlarm">
@@ -169,6 +171,7 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
              , rcv_user.USER_ID RCV_USER
              , send_user.USER_NAME SEND_USERNAME
              , rcv_user.USER_NAME RCV_USERNAME
+             , COUNT(*) OVER() TOTAL
           FROM ALARM alarm
     INNER JOIN USER send_user
             ON send_user.USER_ID = alarm.SEND_USER
@@ -180,6 +183,7 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
            AND ALARM_ID = #{alarmid}
         </if>
       ORDER BY ALARM_ID DESC
+         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "getNotReadAlarmCount">

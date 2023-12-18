@@ -25,9 +25,9 @@ public interface MyPageMapper {
 
     List<apiApplyDto> findDetailApiApply(@Param("email") String email, @Param("apiapplyid") int apiapplyid);
 
-    List<batchListDto> findApiSchedule(@Param("userid") int userid, @Param("batchlistid") Integer batchlistid);
+    List<batchListDto> findApiSchedule(@Param("userid") int userid, @Param("batchlistid") Integer batchlistid, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
-    List<alarmDto> findAlarm(@Param("userid") int userid, @Param("alarmid") Integer alarmid);
+    List<alarmDto> findAlarm(@Param("userid") int userid, @Param("alarmid") Integer alarmid, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     int isSameApiScheduleUser(@Param("email") String email,@Param("batchlistid") int batchlistid);
 

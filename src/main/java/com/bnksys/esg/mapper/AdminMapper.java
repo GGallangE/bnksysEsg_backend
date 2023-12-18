@@ -17,13 +17,13 @@ public interface AdminMapper {
 
     int maxApiListId();
 
-    List<apiApplyDto> findApi_ApplyLIST(@Param("apiapplyid") Integer apiapplyid);
+    List<apiApplyDto> findApi_ApplyLIST(@Param("apiapplyid") Integer apiapplyid , @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     List<apiApplyDto> findApi_ApplyList_ByName(@Param("applynm") String applynm);
 
-    List<apiResultDto> findApiList(@Param("apilistid") Integer apilistid);
+    List<apiResultDto> findApiList(@Param("apilistid") Integer apilistid, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
-    List<inQuiryDto> findinQuiry(@Param("inquiryid") Integer inquiryid);
+    List<inQuiryDto> findinQuiry(@Param("inquiryid") Integer inquiryid, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     List<inQuiryDto> findinQuiryAnswer(@Param("inquiryid") int inquiryid);
 

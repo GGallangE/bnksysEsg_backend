@@ -46,14 +46,16 @@ public class MyPageService {
         return myPageMapper.findDetailApiApply(email,apiapplyid);
     }
 
-    public List<batchListDto> findApiSchedule(String email, Integer batchlistid){
+    public List<batchListDto> findApiSchedule(String email, Integer batchlistid, int page, int pageSize){
         int userid = mainMapper.findbyemail(email);
-        return myPageMapper.findApiSchedule(userid, batchlistid);
+        int offset = page * pageSize;
+        return myPageMapper.findApiSchedule(userid, batchlistid, offset, pageSize);
     }
 
-    public List<alarmDto> findAlarm(String email, Integer alarmid){
+    public List<alarmDto> findAlarm(String email, Integer alarmid, int page, int pageSize){
         int userid = mainMapper.findbyemail(email);
-        return myPageMapper.findAlarm(userid, alarmid);
+        int offset = page * pageSize;
+        return myPageMapper.findAlarm(userid, alarmid, offset, pageSize);
     }
 
     public int getNotReadAlarmCount(String email){

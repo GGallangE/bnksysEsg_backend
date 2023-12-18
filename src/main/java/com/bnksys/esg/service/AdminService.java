@@ -27,20 +27,23 @@ public class AdminService {
         return adminMapper.maxApiListId();
     }
 
-    public List<apiApplyDto> findApi_ApplyLIST(Integer apiapplyid) {
-        return adminMapper.findApi_ApplyLIST(apiapplyid);
+    public List<apiApplyDto> findApi_ApplyLIST(Integer apiapplyid, int page, int pageSize) {
+        int offset =  page * pageSize;
+        return adminMapper.findApi_ApplyLIST(apiapplyid, offset, pageSize);
     }
 
     public List<apiApplyDto> findApi_ApplyList_ByName(String applynm){return adminMapper.findApi_ApplyList_ByName(applynm); }
-    public List<inQuiryDto> findinQuiry(Integer inquiryid) {
-        return adminMapper.findinQuiry(inquiryid);
+    public List<inQuiryDto> findinQuiry(Integer inquiryid, int page, int pageSize) {
+        int offset = page * pageSize;
+        return adminMapper.findinQuiry(inquiryid, offset, pageSize);
     }
 
     public List<inQuiryDto> findinQuiryAnswer(int inquiryid) {
         return adminMapper.findinQuiryAnswer(inquiryid);
 
-    }public List<apiResultDto> findApiList(Integer apilistid) {
-        return adminMapper.findApiList(apilistid);
+    }public List<apiResultDto> findApiList(Integer apilistid, int page, int pageSize) {
+        int offset = page * pageSize;
+        return adminMapper.findApiList(apilistid, offset, pageSize);
     }
 
     public void updateApi_ApplyStatus(apiApplyDto apiapplyDto){

@@ -28,13 +28,14 @@ public class AdminController {
 
     @GetMapping("/apiapplylist")
     /* Api 신청현황 조희를 위한 메서드 */
-    public ResponseEntity<ListResponse<apiApplyDto>> findApi_ApplyLIST(@RequestParam(value = "apiapplyid", required = false) Integer apiapplyid){
+    public ResponseEntity<ListResponse<apiApplyDto>> findApi_ApplyLIST(@RequestParam(value = "apiapplyid", required = false) Integer apiapplyid
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "") int pageSize){
 
         // ListResponse 객체를 생성하여 초기화
         ListResponse<apiApplyDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         // adminService로 API 신청 현황을 조회하고 결과를 리스트로 받아옴
-        List<apiApplyDto> apiapplyresult = adminService.findApi_ApplyLIST(apiapplyid);
+        List<apiApplyDto> apiapplyresult = adminService.findApi_ApplyLIST(apiapplyid, page, pageSize);
 
         response.setSuccess(true);
         response.getData().put("data", apiapplyresult);
@@ -78,14 +79,15 @@ public class AdminController {
 
     @GetMapping("/apilist")
     /* 현재 관리중인 API 목록들을 조회 할 수있는 메서드 */
-    public ResponseEntity<ListResponse<apiResultDto>> findApiList(@RequestParam(value = "apilistid", required = false) Integer apilistid){
+    public ResponseEntity<ListResponse<apiResultDto>> findApiList(@RequestParam(value = "apilistid", required = false) Integer apilistid
+                ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
         // apilistid를 넘겨 주지않으면 전체 List를, 넘겨주면 각각 상세 List에 대한 정보를 넘겨준다.
 
         // ListResponse 객체를 생성하여 초기화
         ListResponse<apiResultDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         // adminService에서 List를 찾아서 반환
-        List<apiResultDto> apiresult = adminService.findApiList(apilistid);
+        List<apiResultDto> apiresult = adminService.findApiList(apilistid, page, pageSize);
 
         response.setSuccess(true);
         response.getData().put("data", apiresult);
@@ -124,11 +126,12 @@ public class AdminController {
 
     @GetMapping("/inquiry/list")
     /* 전체 문의 List를 조회하기 위한 메서드, inquiryid를 전달해 주면 상세 문의 내용을 볼 수 있다. */
-    public ResponseEntity<ListResponse<inQuiryDto>> findinQuiry(@RequestParam(value = "inquiryid", required = false) Integer inquiryid){
+    public ResponseEntity<ListResponse<inQuiryDto>> findinQuiry(@RequestParam(value = "inquiryid", required = false) Integer inquiryid
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
         ListResponse<inQuiryDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
         // 문의사항 List를 adminService를 통해 받아옴.
-        List<inQuiryDto> inquiryList = adminService.findinQuiry(inquiryid);
+        List<inQuiryDto> inquiryList = adminService.findinQuiry(inquiryid, page, pageSize);
 
         response.setSuccess(true);
         response.getData().put("data", inquiryList); // inquiryList 넣어줌
@@ -187,7 +190,7 @@ public class AdminController {
         Response response = new Response();
         try{
             // adminService엥서 공지사항 저장, 첨부파일 있을시 첨부파일도 함께 저장
-            adminService.saveNotice(noticedto.getNoticenm(), noticedto.getNoticecntn(), noticedto.getAtchfileid());
+                            adminService.saveNotice(noticedto.getNoticenm(), noticedto.getNoticecntn(), noticedto.getAtchfileid());
 
             response.setSuccess(true);
             response.getMessages().add("공지사항 등록 완료");
