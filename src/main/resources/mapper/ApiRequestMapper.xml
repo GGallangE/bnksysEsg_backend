@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bnksys.esg.mapper.ApiRequestMapper">
+    
+    <select id="getRequired_Items">
+        SELECT API_RQRD_ITEMS_ID
+             , API_LIST_ID
+             , RQRD_ITEM_NM
+             , RQRD_RQST_NM
+             , ITEM_EXPL
+             , SORT
+          FROM API_RQRD_ITEMS
+         WHERE API_LIST_ID = #{apilistid}
+    </select>
+    
+</mapper>
