@@ -13,5 +13,16 @@
           FROM API_RQRD_ITEMS
          WHERE API_LIST_ID = #{apilistid}
     </select>
+
+    <select id = "findurlAndkey">
+       SELECT apilist.API_URL API_URL
+            , apikey.API_KEY API_KEY
+         FROM API_LIST apilist
+   INNER JOIN API_KEY apikey
+           ON apilist.SITE_DVCD = apikey.SITE_DVCD
+          AND apilist.API_LIST_ID = #{apilistid};
+    </select>
+
+
     
 </mapper>

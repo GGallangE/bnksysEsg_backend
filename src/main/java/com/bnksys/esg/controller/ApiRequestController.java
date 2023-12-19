@@ -20,7 +20,7 @@ public class ApiRequestController {
 
     @PostMapping("/request")
     public ResponseEntity<String> requestApi(@RequestBody apiRequestDto apirequestDto) {
-        String methodType = "POST";
+        String methodType = "GET";
 
         try {
             String response;
