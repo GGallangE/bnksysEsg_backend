@@ -1,19 +1,28 @@
 package com.bnksys.esg.service;
 
 import com.bnksys.esg.data.apiurlAndkeyDto;
-import com.bnksys.esg.data.atchDetailFileDto;
 import com.bnksys.esg.data.requiredItemDto;
 import com.bnksys.esg.mapper.ApiRequestMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.StringJoiner;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class ApiRequestService {
@@ -23,44 +32,77 @@ public class ApiRequestService {
         this.apiRequestMapper = apiRequestMapper;
     }
 
-    public String postRequestApi(int apilistid, Map<String, String> params){
-        return "Aa";
+    public String getRequestApi(int apilistid, List<Map<String, String>> paramsList) throws IOException {
+        apiurlAndkeyDto apiInfo = apiRequestMapper.findurlAndkey(apilistid);
+        String baseUrl = apiInfo.getApiUrl();
+
+        StringJoiner combinedResponse = new StringJoiner(", ", "[", "]");
+
+        for (Map<String, String> userParams : paramsList) {
+            StringBuilder urlBuilder = new StringBuilder(baseUrl);
+            urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + URLEncoder.encode(apiInfo.getApiKey(), "UTF-8"));
+
+            for (Map.Entry<String, String> entry : userParams.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                urlBuilder.append("&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(value, "UTF-8"));
+            }
+
+            URL url = new URL(urlBuilder.toString());
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-type", "application/json");
+
+            BufferedReader rd;
+            if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {
+                rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            }
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
+            rd.close();
+            conn.disconnect();
+
+            combinedResponse.add(sb.toString());
+        }
+
+        return combinedResponse.toString();
     }
 
-    public String getRequestApi(int apilistid, Map<String, String> userParams) throws IOException {
+    public String postRequestApi(int apilistid, List<Map<String, String>> paramsList) throws Exception {
         apiurlAndkeyDto apiInfo = apiRequestMapper.findurlAndkey(apilistid);
+        String url = apiInfo.getApiUrl() + "?serviceKey=" + URLEncoder.encode(apiInfo.getApiKey(), "UTF-8");
 
-        StringBuilder urlBuilder = new StringBuilder(apiInfo.getApiurl());
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=" + URLEncoder.encode(apiInfo.getApikey(), "UTF-8"));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        for (Map.Entry<String, String> entry : userParams.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            urlBuilder.append("&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(value, "UTF-8"));
+        ObjectMapper objectMapper = new ObjectMapper();
+        RestTemplate restTemplate = new RestTemplate();
+
+        StringJoiner combinedResponse = new StringJoiner(", ", "[", "]");
+
+        for (Map<String, String> userParams : paramsList) {
+            ObjectNode jsonNode = objectMapper.createObjectNode();
+
+            for (Map.Entry<String, String> entry : userParams.entrySet()) {
+                ArrayNode arrayNode = objectMapper.createArrayNode();
+                arrayNode.add(entry.getValue());
+                jsonNode.set(entry.getKey(), arrayNode);
+            }
+
+            String jsonBody = objectMapper.writeValueAsString(jsonNode);
+            HttpEntity<String> entity = new HttpEntity<>(jsonBody, headers);
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(new URI(url), entity, String.class);
+
+            combinedResponse.add(responseEntity.getBody());
         }
 
-        URL url = new URL(urlBuilder.toString());
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-type", "application/json");
-        System.out.println("Response code: " + conn.getResponseCode());
-
-        BufferedReader rd;
-        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        } else {
-            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-        }
-
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = rd.readLine()) != null) {
-            sb.append(line);
-        }
-        rd.close();
-        conn.disconnect();
-
-        return sb.toString();
+        return combinedResponse.toString();
     }
 
     public List<requiredItemDto> getRequired_Items(int apilistid){ return apiRequestMapper.getRequired_Items(apilistid); }

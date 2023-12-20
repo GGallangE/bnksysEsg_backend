@@ -13,4 +13,20 @@ public class apiurlAndkeyDto {
 
     private String apikey;
 
+    public String getApiUrl() {
+        return apiurl;
+    }
+
+    public void setApiUrl(String apiurl) {
+        this.apiurl = apiurl;
+    }
+
+
+    public String getApiKey() {
+        return apikey;
+    }
+
+    public void setApiKey(String apikey) {
+        this.apikey = apikey;
+    }
 }

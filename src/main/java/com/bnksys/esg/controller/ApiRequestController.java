@@ -20,7 +20,7 @@ public class ApiRequestController {
 
     @PostMapping("/request")
     public ResponseEntity<String> requestApi(@RequestBody apiRequestDto apirequestDto) {
-        String methodType = "GET";
+        String methodType = "POST";
 
         try {
             String response;
@@ -29,13 +29,13 @@ public class ApiRequestController {
             } else if ("GET".equals(methodType)) {
                 response = apiRequestService.getRequestApi(apirequestDto.getApilistid(), apirequestDto.getParams());
             } else {
-                return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("Unsupported HTTP method");
+                return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("지원하지 않는 HTTP 방식입니다.");
             }
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during API request");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Api 요청중 에러.");
         }
     }
 
