@@ -68,7 +68,14 @@ public class ApiRequestService {
             rd.close();
             conn.disconnect();
 
-            combinedResponse.add(sb.toString());
+            List<Map<String, String>> mappingList = apiRequestMapper.findKor_Eng(apilistid);
+
+            if (mappingList.isEmpty()) {
+                combinedResponse.add(sb.toString());
+            } else {
+                String koreanResponse = convertEnglishToKorean(sb.toString(), mappingList);
+                combinedResponse.add(koreanResponse);
+            }
         }
 
         return combinedResponse.toString();
@@ -99,12 +106,33 @@ public class ApiRequestService {
             HttpEntity<String> entity = new HttpEntity<>(jsonBody, headers);
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(new URI(url), entity, String.class);
 
-            combinedResponse.add(responseEntity.getBody());
+            List<Map<String, String>> mappingList = apiRequestMapper.findKor_Eng(apilistid);
+
+            if (mappingList.isEmpty()) {
+                combinedResponse.add(responseEntity.getBody());
+            } else {
+                String koreanResponse = convertEnglishToKorean(responseEntity.getBody(), mappingList);
+                combinedResponse.add(koreanResponse);
+            }
         }
 
         return combinedResponse.toString();
     }
 
+
+    private String convertEnglishToKorean(String englishResponse, List<Map<String, String>> mappingList) {
+        for (Map<String, String> mapping : mappingList) {
+            String englishName = mapping.get("EN_NM");
+            String koreanName = mapping.get("KR_NM");
+
+            englishResponse = englishResponse.replaceAll(englishName, koreanName);
+        }
+
+        return englishResponse;
+    }
+
     public List<requiredItemDto> getRequired_Items(int apilistid){ return apiRequestMapper.getRequired_Items(apilistid); }
+
+    public String findMethod_Type(int apilistid){return apiRequestMapper.findMethod_Type(apilistid); }
 
 }

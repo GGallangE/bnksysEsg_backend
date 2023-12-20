@@ -23,6 +23,19 @@
           AND apilist.API_LIST_ID = #{apilistid};
     </select>
 
+    <select id = "findKor_Eng">
+        SELECT KR_NM
+             , EN_NM
+          FROM API_RSQE_ITEMS
+         WHERE API_LIST_ID = #{apilistid}
+    </select>
+
+    <select id = "findMethod_Type">
+        SELECT METHOD_TYPE
+          FROM API_LIST
+         WHERE API_LIST_ID = #{apilistid}
+    </select>
+
 
     
 </mapper>
