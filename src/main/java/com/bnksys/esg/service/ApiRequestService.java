@@ -125,7 +125,7 @@ public class ApiRequestService {
             String englishName = mapping.get("EN_NM");
             String koreanName = mapping.get("KR_NM");
 
-            englishResponse = englishResponse.replaceAll(englishName, koreanName);
+            englishResponse = englishResponse.replaceAll("\\b" + englishName + "\\b", koreanName);
         }
 
         return englishResponse;
