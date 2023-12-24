@@ -202,4 +202,72 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/api/key")
+    public ResponseEntity<ListResponse<apikeyDto>> findApiKey(@RequestParam(value = "apikeyid", required = false) Integer apikeyid
+        ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
+        ListResponse<apikeyDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<apikeyDto> apikeyList = adminService.findApiKey(apikeyid, page, pageSize);
+
+        response.setSuccess(true);
+        response.getData().put("data", apikeyList);
+        response.getMessages().add("api key 조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/key")
+    public ResponseEntity<Response> saveapikey(@RequestBody apikeyDto apikeydto){
+        Response response = new Response();
+        try{
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            if(apikeydto.getApikeyid() == 0){
+                adminService.saveapikey(apikeydto,email);
+            }else{
+                adminService.updateapikey(apikeydto,email);
+            }
+
+            response.setSuccess(true);
+            response.getMessages().add("Api Key 등록 완료");
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.setSuccess(false);
+            response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @GetMapping("/api/comcode")
+    public ResponseEntity<ListResponse<comCodeDto>> findComCode(@RequestParam(value = "id", required = false) Integer id
+        ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
+        ListResponse<comCodeDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<comCodeDto> comCodeList = adminService.findComCode(id, page, pageSize);
+
+        response.setSuccess(true);
+        response.getData().put("data", comCodeList);
+        response.getMessages().add("공통 코드 조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/comcode")
+    public ResponseEntity<Response> save_comcode(@RequestBody comCodeDto comcodeDto){
+        Response response = new Response();
+        try{
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            if(comcodeDto.getId() == 0){
+                adminService.save_comcode(comcodeDto,email);
+            }else{
+                adminService.update_comcode(comcodeDto,email);
+            }
+
+            response.setSuccess(true);
+            response.getMessages().add("공통코드 등록 완료");
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.setSuccess(false);
+            response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
 }

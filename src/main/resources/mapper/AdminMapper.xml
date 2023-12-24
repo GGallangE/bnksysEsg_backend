@@ -95,6 +95,32 @@
          LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
+    <select id = "findApiKey">
+      SELECT API_KEY_ID
+           , SITE_DVCD
+           , API_KEY
+           , STRDT
+           , EDT
+        FROM API_KEY
+      <if test="apikeyid != null">
+       WHERE API_KEY_ID = #{apikeyid}
+      </if>
+    ORDER BY SITE_DVCD
+       LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id = "findComCode">
+      SELECT ID
+           , CODE
+           , CODE_LABEL
+           , CODE_VALUE
+        FROM COM_CODE
+      <if test="id != null">
+       WHERE ID = #{id}
+      </if>
+    ORDER BY CODE,CODE_LABEL
+    </select>
+
     <select id = "findinQuiryAnswer">
         SELECT inquiry.INQUIRY_ID
              , INQUIRY_NM
@@ -126,6 +152,24 @@
                 CASE WHEN #{apiresultDto.apiapplyid} = 0 THEN NULL ELSE #{apiresultDto.apiapplyid} END)
     </insert>
 
+  <insert id = "saveapikey">
+    INSERT INTO API_KEY(SITE_DVCD, API_KEY, STRDT, EDT, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+    VALUES (#{apikeydto.sitedvcd}, #{apikeydto.apikey}, #{apikeydto.strdt}, #{apikeydto.edt}
+           , #{userid}
+           , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+           , #{userid}
+           , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
+  </insert>
+
+  <insert id = "save_comcode">
+    INSERT INTO COM_CODE(CODE, CODE_LABEL, CODE_VALUE, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+    VALUES (#{comcodeDto.code}, #{comcodeDto.codelabel}, #{comcodeDto.codevalue}
+           , #{userid}
+           , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+           , #{userid}
+           , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
+  </insert>
+
     <update id = "updateApiList">
         UPDATE API_LIST
            SET API_NM = #{apiresultDto.apinm}
@@ -135,7 +179,6 @@
              , API_APPLY_ID = CASE WHEN #{apiresultDto.apiapplyid} = 0 THEN NULL ELSE #{apiresultDto.apiapplyid} END
          WHERE API_LIST_ID = #{apiresultDto.apilistid}
     </update>
-
 
     <update id="updateApi_ApplyStatus">
         UPDATE API_APPLY
@@ -153,5 +196,25 @@
          WHERE PARENT_ID = #{inquiryDto.parentid}
     </update>
 
+  <update id = "updateapikey">
+       UPDATE API_KEY
+          SET SITE_DVCD = #{apikeydto.sitedvcd}
+            , API_KEY = #{apikeydto.apikey}
+            , STRDT = #{apikeydto.strdt}
+            , EDT = #{apikeydto.edt}
+            , LST_CHPR = #{userid}
+            , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+        WHERE API_KEY_ID = #{apikeydto.apikeyid}
+  </update>
+
+  <update id = "update_comcode">
+    UPDATE COM_CODE
+    SET CODE = #{comcodeDto.code}
+      , CODE_LABEL = #{comcodeDto.codelabel}
+      , CODE_VALUE = #{comcodeDto.codevalue}
+      , LST_CHPR = #{userid}
+      , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+  WHERE ID = #{comcodeDto.id}
+  </update>
 
 </mapper>

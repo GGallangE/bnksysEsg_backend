@@ -2,6 +2,8 @@ package com.bnksys.esg.service;
 
 import com.bnksys.esg.data.apiApplyDto;
 import com.bnksys.esg.data.apiResultDto;
+import com.bnksys.esg.data.apikeyDto;
+import com.bnksys.esg.data.comCodeDto;
 import com.bnksys.esg.data.inQuiryDto;
 import com.bnksys.esg.mapper.AdminMapper;
 import com.bnksys.esg.mapper.MainMapper;
@@ -41,9 +43,20 @@ public class AdminService {
     public List<inQuiryDto> findinQuiryAnswer(int inquiryid) {
         return adminMapper.findinQuiryAnswer(inquiryid);
 
-    }public List<apiResultDto> findApiList(Integer apilistid, int page, int pageSize) {
+    }
+    public List<apiResultDto> findApiList(Integer apilistid, int page, int pageSize) {
         int offset = page * pageSize;
         return adminMapper.findApiList(apilistid, offset, pageSize);
+    }
+
+    public List<apikeyDto> findApiKey(Integer apikeyid, int page, int pageSize) {
+        int offset = page * pageSize;
+        return adminMapper.findApiKey(apikeyid, offset, pageSize);
+    }
+
+    public List<comCodeDto> findComCode(Integer id, int page, int pageSize) {
+        int offset = page * pageSize;
+        return adminMapper.findComCode(id, offset, pageSize);
     }
 
     public void updateApi_ApplyStatus(apiApplyDto apiapplyDto){
@@ -70,5 +83,24 @@ public class AdminService {
 
     public void saveNotice(String noticenm, String noticecntn, int atchfileid){
         adminMapper.saveNotice(noticenm, noticecntn, atchfileid);
+    }
+
+    public void saveapikey(apikeyDto apikeydto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.saveapikey(apikeydto,userid);
+    }
+    public void updateapikey(apikeyDto apikeydto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.updateapikey(apikeydto,userid);
+    }
+
+    public void save_comcode(comCodeDto comcodeDto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.save_comcode(comcodeDto,userid);
+    }
+
+    public void update_comcode(comCodeDto comcodeDto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.update_comcode(comcodeDto,userid);
     }
 }
