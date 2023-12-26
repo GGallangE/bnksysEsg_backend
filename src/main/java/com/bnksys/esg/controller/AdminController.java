@@ -270,4 +270,72 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/api/need_request")
+    public ResponseEntity<ListResponse<apiNeedRequestDto>> findNeed_Request(@RequestParam(value = "apirqrditemsid", required = false) Integer apirqrditemsid
+        ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
+        ListResponse<apiNeedRequestDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<apiNeedRequestDto> NeedRequestList = adminService.findNeed_Request(apirqrditemsid, page, pageSize);
+
+        response.setSuccess(true);
+        response.getData().put("data", NeedRequestList);
+        response.getMessages().add("API 요청시 필수 항목 조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/need_request")
+    public ResponseEntity<Response> save_needrequest(@RequestBody apiNeedRequestDto apineedRequestDto){
+        Response response = new Response();
+        try{
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            if(apineedRequestDto.getApirqrditemsid() == 0){
+                adminService.save_needrequest(apineedRequestDto,email);
+            }else{
+                adminService.update_needrequest(apineedRequestDto,email);
+            }
+
+            response.setSuccess(true);
+            response.getMessages().add("API 요청시 필수 항목 등록 완료");
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.setSuccess(false);
+            response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @GetMapping("/api/need_response")
+    public ResponseEntity<ListResponse<apiNeedResponseDto>> findNeed_Response(@RequestParam(value = "apirsqeitemsid", required = false) Integer apirsqeitemsid
+        ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
+        ListResponse<apiNeedResponseDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<apiNeedResponseDto> NeedResponseList = adminService.findNeed_Response(apirsqeitemsid, page, pageSize);
+
+        response.setSuccess(true);
+        response.getData().put("data", NeedResponseList);
+        response.getMessages().add("API 반환시 필수 항목 조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/need_response")
+    public ResponseEntity<Response> save_needresponse(@RequestBody apiNeedResponseDto apineedResponseDto){
+        Response response = new Response();
+        try{
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            if(apineedResponseDto.getApirsqeitemsid() == 0){
+                adminService.save_needresponse(apineedResponseDto,email);
+            }else{
+                adminService.update_needresponse(apineedResponseDto,email);
+            }
+
+            response.setSuccess(true);
+            response.getMessages().add("API 반환시 필수 항목 등록 완료");
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.setSuccess(false);
+            response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
 }

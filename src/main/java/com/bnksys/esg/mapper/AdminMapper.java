@@ -1,6 +1,8 @@
 package com.bnksys.esg.mapper;
 
 import com.bnksys.esg.data.apiApplyDto;
+import com.bnksys.esg.data.apiNeedRequestDto;
+import com.bnksys.esg.data.apiNeedResponseDto;
 import com.bnksys.esg.data.apiResultDto;
 import com.bnksys.esg.data.apikeyDto;
 import com.bnksys.esg.data.comCodeDto;
@@ -33,23 +35,36 @@ public interface AdminMapper {
 
     List<comCodeDto> findComCode(@Param("id") Integer id, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
-    void updateApi_ApplyStatus(@Param("apiapplyDto") apiApplyDto apiapplyDto);
+    List<apiNeedRequestDto> findNeed_Request(@Param("apirqrditemsid") Integer apirqrditemsid, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
-    void updateinquiry_Answer(@Param("userid") int userid, @Param("inquiryDto")inQuiryDto inquiryDto);
+    List<apiNeedResponseDto> findNeed_Response(@Param("apirsqeitemsid") Integer apirsqeitemsid, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     void saveNotice(@Param("noticenm") String noticenm, @Param("noticecntn") String noticecntn, @Param("atchfileid") int atchfileid);
 
     void saveApiList(@Param("apiresultDto") apiResultDto apiresultDto);
 
-    void updateApiList(@Param("apiresultDto") apiResultDto apiresultDto);
-
     void saveinquiry_Answer(@Param("userid") int userid, @Param("inquiryDto")inQuiryDto inquiryDto);
 
     void saveapikey(@Param("apikeydto")apikeyDto apikeydto, @Param("userid") int userid);
 
-    void updateapikey(@Param("apikeydto")apikeyDto apikeydto, @Param("userid") int userid);
-
     void save_comcode(@Param("comcodeDto") comCodeDto comcodeDto, @Param("userid") int userid);
 
+    void save_needrequest(@Param("apineedRequestDto") apiNeedRequestDto apineedRequestDto, @Param("userid") int userid);
+
+    void save_needresponse(@Param("apineedResponseDto") apiNeedResponseDto apineedResponseDto, @Param("userid") int userid);
+
+    void updateApi_ApplyStatus(@Param("apiapplyDto") apiApplyDto apiapplyDto);
+
+    void updateinquiry_Answer(@Param("userid") int userid, @Param("inquiryDto")inQuiryDto inquiryDto);
+
+    void updateApiList(@Param("apiresultDto") apiResultDto apiresultDto);
+
+    void updateapikey(@Param("apikeydto")apikeyDto apikeydto, @Param("userid") int userid);
+
     void update_comcode(@Param("comcodeDto") comCodeDto comcodeDto, @Param("userid") int userid);
+
+    void update_needrequest(@Param("apineedRequestDto") apiNeedRequestDto apineedRequestDto, @Param("userid") int userid);
+
+    void update_needresponse(@Param("apineedResponseDto") apiNeedResponseDto apineedResponseDto, @Param("userid") int userid);
+
 }

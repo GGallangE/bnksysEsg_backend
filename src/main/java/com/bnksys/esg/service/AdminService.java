@@ -1,6 +1,8 @@
 package com.bnksys.esg.service;
 
 import com.bnksys.esg.data.apiApplyDto;
+import com.bnksys.esg.data.apiNeedRequestDto;
+import com.bnksys.esg.data.apiNeedResponseDto;
 import com.bnksys.esg.data.apiResultDto;
 import com.bnksys.esg.data.apikeyDto;
 import com.bnksys.esg.data.comCodeDto;
@@ -59,9 +61,16 @@ public class AdminService {
         return adminMapper.findComCode(id, offset, pageSize);
     }
 
-    public void updateApi_ApplyStatus(apiApplyDto apiapplyDto){
-        adminMapper.updateApi_ApplyStatus(apiapplyDto);
+    public List<apiNeedRequestDto> findNeed_Request(Integer apirqrditemsid, int page, int pageSize) {
+        int offset = page * pageSize;
+        return adminMapper.findNeed_Request(apirqrditemsid, offset, pageSize);
     }
+
+    public List<apiNeedResponseDto> findNeed_Response(Integer apirsqeitemsid, int page, int pageSize) {
+        int offset = page * pageSize;
+        return adminMapper.findNeed_Response(apirsqeitemsid, offset, pageSize);
+    }
+
 
     public void saveinquiry_Answer(String email, inQuiryDto inquiryDto){
         int userid = mainMapper.findbyemail(email);
@@ -70,6 +79,35 @@ public class AdminService {
 
     public void saveApiList(apiResultDto apiresultDto){
         adminMapper.saveApiList(apiresultDto);
+    }
+
+    public void saveNotice(String noticenm, String noticecntn, int atchfileid){
+        adminMapper.saveNotice(noticenm, noticecntn, atchfileid);
+    }
+
+    public void saveapikey(apikeyDto apikeydto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.saveapikey(apikeydto,userid);
+    }
+
+
+    public void save_comcode(comCodeDto comcodeDto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.save_comcode(comcodeDto,userid);
+    }
+
+    public void save_needrequest(apiNeedRequestDto apineedRequestDto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.save_needrequest(apineedRequestDto,userid);
+    }
+
+    public void save_needresponse(apiNeedResponseDto apineedResponseDto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.save_needresponse(apineedResponseDto,userid);
+    }
+
+    public void updateApi_ApplyStatus(apiApplyDto apiapplyDto){
+        adminMapper.updateApi_ApplyStatus(apiapplyDto);
     }
 
     public void updateApiList(apiResultDto apiresultDto){
@@ -81,26 +119,23 @@ public class AdminService {
         adminMapper.updateinquiry_Answer(userid, inquiryDto);
     }
 
-    public void saveNotice(String noticenm, String noticecntn, int atchfileid){
-        adminMapper.saveNotice(noticenm, noticecntn, atchfileid);
-    }
-
-    public void saveapikey(apikeyDto apikeydto, String email){
-        int userid = mainMapper.findbyemail(email);
-        adminMapper.saveapikey(apikeydto,userid);
-    }
     public void updateapikey(apikeyDto apikeydto, String email){
         int userid = mainMapper.findbyemail(email);
         adminMapper.updateapikey(apikeydto,userid);
-    }
-
-    public void save_comcode(comCodeDto comcodeDto, String email){
-        int userid = mainMapper.findbyemail(email);
-        adminMapper.save_comcode(comcodeDto,userid);
     }
 
     public void update_comcode(comCodeDto comcodeDto, String email){
         int userid = mainMapper.findbyemail(email);
         adminMapper.update_comcode(comcodeDto,userid);
     }
+    public void update_needrequest(apiNeedRequestDto apineedRequestDto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.update_needrequest(apineedRequestDto,userid);
+    }
+
+    public void update_needresponse(apiNeedResponseDto apineedResponseDto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.update_needresponse(apineedResponseDto,userid);
+    }
+
 }

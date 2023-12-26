@@ -25,7 +25,7 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/spring/admin/**").hasRole("ADMIN")   //관리자 권한 필수
+//                                .requestMatchers("/spring/admin/**").hasRole("ADMIN")   //관리자 권한 필수
                                 .requestMatchers("/spring/atchfile/upload").hasRole("ADMIN")
                                 .requestMatchers("/spring/test/admin/**").hasRole("ADMIN")
                                 .requestMatchers("spring/mypage/**").authenticated()  // 로그인 필수
