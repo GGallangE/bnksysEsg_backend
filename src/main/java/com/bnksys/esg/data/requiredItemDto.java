@@ -1,19 +1,19 @@
 package com.bnksys.esg.data;
 
 public class requiredItemDto {
-    private int rqrditemsid;
+    private int apirqrditemsid;
     private int apilistid;
     private String rqrditemnm;
     private String rqrdrqstnm;
     private String itemexpl;
     private int sort;
 
-    public int getRqrditemsid() {
-        return rqrditemsid;
+    public int getApirqrditemsid() {
+        return apirqrditemsid;
     }
 
-    public void setRqrditemsid(int rqrditemsid) {
-        this.rqrditemsid = rqrditemsid;
+    public void setApirqrditemsid(int apirqrditemsid) {
+        this.apirqrditemsid = apirqrditemsid;
     }
 
     public int getApilistid() {

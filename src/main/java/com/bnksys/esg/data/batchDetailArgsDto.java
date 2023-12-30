@@ -14,6 +14,16 @@ public class batchDetailArgsDto {
     private String arg9;
     private String arg10;
 
+    private String stcd;
+
+    public String getStcd() {
+        return stcd;
+    }
+
+    public void setStcd(String stcd) {
+        this.stcd = stcd;
+    }
+
     public int getBatchDetailListId() {
         return batchDetailListId;
     }
