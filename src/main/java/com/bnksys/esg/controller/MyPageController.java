@@ -133,6 +133,13 @@ public class MyPageController {
         String email = authentication.getName();
         List<batchListDto> batchList = myPageService.findApiSchedule(email, batchlistid, page, pageSize);
 
+        if(batchlistid != null && batchlistid != 0){
+            for (batchListDto batch : batchList) {
+                List<batchDetailArgsDto> details = myPageService.findDetailList(batch.getBatchlistid());
+                batch.setBatchDetailargsDto(details);
+            }
+        }
+
         response.setSuccess(true);
         response.getData().put("data", batchList);
         response.getMessages().add("API 예약 현황 조회 완료");
@@ -163,7 +170,7 @@ public class MyPageController {
         }
     }
     
-    @PostMapping("/myapischedule/updatetime")
+    @PostMapping("/myapischedule/update")
     public ResponseEntity<Response> updateApiScheduleTime(Authentication authentication, @RequestBody batchListDto batchlistDto){
         Response response = new Response();
         try{
@@ -184,9 +191,22 @@ public class MyPageController {
             }
             batchlistDto.setBatchtime(cronExpression);
             myPageService.updateApiScheduleTime(email,batchlistDto);
+
+
+
             String title = "API 전송 예약 시간 변경";
-            String p_content = "에 대한 결과 메일 발송 예약 시간이 변경 되었습니다.";
+            String p_content = "에 대한 결과 메일 발송 내용이 변경 되었습니다.";
             schNtfService.save_Alarm_Complete_Schedule(email, title, p_content, batchlistDto.getApilistid());
+
+            for (batchDetailArgsDto detail : batchlistDto.getBatchDetailargsDto()) {
+                if (detail.getBatchDetailListId() > 0) {
+                    // 이미 존재하는 detail에 대한 업데이트
+                    myPageService.update_BatchDetail(detail,email);
+                } else {
+                    // 새로운 detail에 대한 인서트
+                    myPageService.save_BatchDetail(detail, email);
+                }
+            }
 
             int userid = mainService.findUseridByEmail(email);
             dynamicSchedulingService.updateSchedule(batchlistDto.getBatchlistid(), batchlistDto.getApilistid(), userid, batchlistDto.getBatchtime());

@@ -29,14 +29,19 @@ public interface MyPageMapper {
 
     List<alarmDto> findAlarm(@Param("userid") int userid, @Param("alarmid") Integer alarmid, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
+    List<batchDetailArgsDto> findDetailList(@Param("batchlistid") Integer batchlistid);
+
     int isSameApiScheduleUser(@Param("email") String email,@Param("batchlistid") int batchlistid);
 
     int getNotReadAlarmCount(@Param("userid") int userid);
 
     void deleteApiSchedule(@Param("userid") int userid, @Param("batchlistid") int batchlistid);
 
+    void save_BatchDetail(@Param("detail") batchDetailArgsDto detail, @Param("userid") int userid);
+
     void updateApiScheduleTime(@Param("userid") int userid, @Param("batchlistDto") batchListDto batchlistDto);
 
     void update_readAlarm(@Param("userid") int userid, @Param("alarmid") int alarmid);
 
+    void update_BatchDetail(@Param("detail") batchDetailArgsDto detail, @Param("userid") int userid);
 }

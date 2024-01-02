@@ -186,6 +186,13 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
          LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
+    <select id = "findDetailList">
+      SELECT *
+        FROM BATCH_DETAIL_LIST
+       WHERE BATCH_LIST_ID = #{batchlistid}
+         AND STCD = "01"
+    </select>
+
     <select id = "getNotReadAlarmCount">
         SELECT COUNT(*) COUNT
           FROM ALARM
@@ -207,6 +214,16 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
            AND BATCH_LIST_ID = #{batchlistid}
     </update>
 
+    <insert id = "save_BatchDetail">
+        INSERT INTO BATCH_DETAIL_LIST (BATCH_LIST_ID, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6, ARG7, ARG8, ARG9, ARG10, STCD, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+        VALUES (#{detail.batchListId} , #{detail.arg1}, #{detail.arg2}, #{detail.arg3}, #{detail.arg4}, #{detail.arg5}, #{detail.arg6}, #{detail.arg7}
+               , #{detail.arg8}, #{detail.arg9}, #{detail.arg10}, "01"
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
+    </insert>
+
     <update id = "updateApiScheduleTime">
         UPDATE BATCH_LIST
            SET BATCH_TIME = #{batchlistDto.batchtime}
@@ -223,6 +240,24 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
            SET READ_CHECK = TRUE
          WHERE ALARM_ID = #{alarmid}
            AND RCV_USER = #{userid}
+    </update>
+
+    <update id = "update_BatchDetail">
+        UPDATE BATCH_DETAIL_LIST
+           SET ARG1 = #{detail.arg1}
+             , ARG2 = #{detail.arg2}
+             , ARG3 = #{detail.arg3}
+             , ARG4 = #{detail.arg4}
+             , ARG5 = #{detail.arg5}
+             , ARG6 = #{detail.arg6}
+             , ARG7 = #{detail.arg7}
+             , ARG8 = #{detail.arg8}
+             , ARG9 = #{detail.arg9}
+             , ARG10 = #{detail.arg10}
+             , STCD = #{detail.stcd}
+             , LST_CHPR = #{userid}
+             , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+         WHERE BATCH_DETAIL_LIST_ID = #{detail.batchDetailListId}
     </update>
 
 </mapper>

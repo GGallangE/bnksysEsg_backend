@@ -1,11 +1,21 @@
 package com.bnksys.esg.data;
 
-public class requiredItemDto {
+import lombok.Data;
+
+@Data
+public class apiNeedRequestDto {
     private int apirqrditemsid;
+
     private int apilistid;
+
+    private String apinm;
+
     private String rqrditemnm;
+
     private String rqrdrqstnm;
+
     private String itemexpl;
+
     private int sort;
 
     public int getApirqrditemsid() {
@@ -22,6 +32,14 @@ public class requiredItemDto {
 
     public void setApilistid(int apilistid) {
         this.apilistid = apilistid;
+    }
+
+    public String getApinm() {
+        return apinm;
+    }
+
+    public void setApinm(String apinm) {
+        this.apinm = apinm;
     }
 
     public String getRqrditemnm() {

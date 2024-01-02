@@ -16,6 +16,8 @@ public class batchListDto {
 
     private int total;
 
+    private List<batchDetailArgsDto> batchDetailargsDto;
+
     public int getTotal() {
         return total;
     }
@@ -23,8 +25,6 @@ public class batchListDto {
     public void setTotal(int total) {
         this.total = total;
     }
-
-    private List<batchDetailArgsDto> batchDetailargsDto;
 
     public List<batchDetailArgsDto> getBatchDetailargsDto() {
         return batchDetailargsDto;

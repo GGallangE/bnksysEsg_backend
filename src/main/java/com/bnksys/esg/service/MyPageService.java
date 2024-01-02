@@ -58,6 +58,10 @@ public class MyPageService {
         return myPageMapper.findAlarm(userid, alarmid, offset, pageSize);
     }
 
+    public List<batchDetailArgsDto> findDetailList(Integer batchlistid) {
+        return myPageMapper.findDetailList(batchlistid);
+    }
+
     public int getNotReadAlarmCount(String email){
         int userid = mainMapper.findbyemail(email);
         return myPageMapper.getNotReadAlarmCount(userid);
@@ -68,6 +72,11 @@ public class MyPageService {
         myPageMapper.deleteApiSchedule(userid, batchlistid);
     }
 
+    public void save_BatchDetail(batchDetailArgsDto detail, String email){
+        int userid = mainMapper.findbyemail(email);
+        myPageMapper.save_BatchDetail(detail, userid);
+    }
+
     public void updateApiScheduleTime(String email, batchListDto batchlistDto){
         int userid = mainMapper.findbyemail(email);
         myPageMapper.updateApiScheduleTime(userid, batchlistDto);
@@ -76,6 +85,11 @@ public class MyPageService {
     public void update_readAlarm(String email, int alarmid){
         int userid = mainMapper.findbyemail(email);
         myPageMapper.update_readAlarm(userid, alarmid);
+    }
+
+    public void update_BatchDetail(batchDetailArgsDto detail, String email){
+        int userid = mainMapper.findbyemail(email);
+        myPageMapper.update_BatchDetail(detail,userid);
     }
 
     public boolean isSameApiScheduleUser(String email, int batchlistid){

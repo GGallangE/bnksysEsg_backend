@@ -35,13 +35,13 @@
     </select>
 
     <select id = "findApi_ApplyLIST">
-        SELECT API_APPLY_ID
+        SELECT APIAPPLY.API_APPLY_ID
              , APIAPPLY.USER_ID USER_ID
-             , APPLY_NM
-             , APPLY_CNTN
-             , APPLY_DATE
-             , RPLY_DATE
-             , APPLY_DVCD
+             , APIAPPLY.APPLY_NM
+             , APIAPPLY.APPLY_CNTN
+             , APIAPPLY.APPLY_DATE
+             , APIAPPLY.RPLY_DATE
+             , APIAPPLY.APPLY_DVCD
              , user.USER_NAME USER_NAME
              , apilist.API_LIST_ID API_LIST_ID
              , apilist.API_NM apinm
@@ -53,7 +53,7 @@
             ON apilist.API_LIST_ID = APIAPPLY.API_LIST_ID
          WHERE 1 = 1
         <if test="apiapplyid != null">
-           AND API_APPLY_ID = #{apiapplyid}
+           AND APIAPPLY.API_APPLY_ID = #{apiapplyid}
         </if>
       ORDER BY API_APPLY_ID DESC
          LIMIT #{pageSize} OFFSET #{offset}
@@ -95,6 +95,33 @@
          LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
+    <select id = "findApiKey">
+      SELECT API_KEY_ID
+           , SITE_DVCD
+           , API_KEY
+           , STRDT
+           , EDT
+        FROM API_KEY
+      <if test="apikeyid != null">
+       WHERE API_KEY_ID = #{apikeyid}
+      </if>
+    ORDER BY SITE_DVCD
+       LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id = "findComCode">
+      SELECT ID
+           , CODE
+           , CODE_LABEL
+           , CODE_VALUE
+        FROM COM_CODE
+      <if test="id != null">
+       WHERE ID = #{id}
+      </if>
+    ORDER BY CODE,CODE_LABEL
+       LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
     <select id = "findinQuiryAnswer">
         SELECT inquiry.INQUIRY_ID
              , INQUIRY_NM
@@ -108,6 +135,40 @@
             ON user.USER_ID = inquiry.USER_ID
          WHERE PARENT_ID IS NOT NULL
            AND PARENT_ID = #{inquiryid}
+    </select>
+
+    <select id = "findNeed_Request">
+      SELECT ari.API_RQRD_ITEMS_ID
+           , ari.API_LIST_ID
+           , apilist.API_NM
+           , ari.RQRD_ITEM_NM
+           , ari.RQRD_RQST_NM
+           , ari.ITEM_EXPL
+           , ari.SORT
+        FROM API_RQRD_ITEMS ari
+  INNER JOIN API_LIST apilist
+          ON apilist.API_LIST_ID = ari.API_LIST_ID
+      <if test="apirqrditemsid != null">
+         AND ari.API_RQRD_ITEMS_ID = #{apirqrditemsid}
+      </if>
+    ORDER BY ari.API_RQRD_ITEMS_ID
+       LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id = "findNeed_Response">
+      SELECT ari.API_RSQE_ITEMS_ID
+           , ari.API_LIST_ID
+           , apilist.API_NM
+           , ari.KR_NM
+           , ari.EN_NM
+        FROM API_RSQE_ITEMS ari
+  INNER JOIN API_LIST apilist
+          ON apilist.API_LIST_ID = ari.API_LIST_ID
+      <if test="apirsqeitemsid != null">
+         AND ari.API_RSQE_ITEMS_ID = #{apirsqeitemsid}
+      </if>
+    ORDER BY ari.API_RSQE_ITEMS_ID
+       LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <insert id = "saveinquiry_Answer">
@@ -126,6 +187,42 @@
                 CASE WHEN #{apiresultDto.apiapplyid} = 0 THEN NULL ELSE #{apiresultDto.apiapplyid} END)
     </insert>
 
+  <insert id = "saveapikey">
+    INSERT INTO API_KEY(SITE_DVCD, API_KEY, STRDT, EDT, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+    VALUES (#{apikeydto.sitedvcd}, #{apikeydto.apikey}, #{apikeydto.strdt}, #{apikeydto.edt}
+           , #{userid}
+           , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+           , #{userid}
+           , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
+  </insert>
+
+  <insert id = "save_comcode">
+    INSERT INTO COM_CODE(CODE, CODE_LABEL, CODE_VALUE, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+    VALUES (#{comcodeDto.code}, #{comcodeDto.codelabel}, #{comcodeDto.codevalue}
+           , #{userid}
+           , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+           , #{userid}
+           , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
+  </insert>
+
+  <insert id = "save_needrequest">
+    INSERT INTO API_RQRD_ITEMS(API_LIST_ID, RQRD_ITEM_NM, RQRD_RQST_NM, ITEM_EXPL, SORT, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+    VALUES (#{apineedRequestDto.apilistid}, #{apineedRequestDto.rqrditemnm}, #{apineedRequestDto.rqrdrqstnm}, #{apineedRequestDto.itemexpl}, #{apineedRequestDto.sort}
+          , #{userid}
+          , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+          , #{userid}
+          , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
+  </insert>
+
+  <insert id = "save_needresponse">
+    INSERT INTO API_RSQE_ITEMS(API_LIST_ID, KR_NM, EN_NM, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+    VALUES (#{apineedResponseDto.apilistid}, #{apineedResponseDto.krnm}, #{apineedResponseDto.ennm}
+         , #{userid}
+         , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+         , #{userid}
+         , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
+  </insert>
+
     <update id = "updateApiList">
         UPDATE API_LIST
            SET API_NM = #{apiresultDto.apinm}
@@ -135,7 +232,6 @@
              , API_APPLY_ID = CASE WHEN #{apiresultDto.apiapplyid} = 0 THEN NULL ELSE #{apiresultDto.apiapplyid} END
          WHERE API_LIST_ID = #{apiresultDto.apilistid}
     </update>
-
 
     <update id="updateApi_ApplyStatus">
         UPDATE API_APPLY
@@ -153,5 +249,47 @@
          WHERE PARENT_ID = #{inquiryDto.parentid}
     </update>
 
+  <update id = "updateapikey">
+       UPDATE API_KEY
+          SET SITE_DVCD = #{apikeydto.sitedvcd}
+            , API_KEY = #{apikeydto.apikey}
+            , STRDT = #{apikeydto.strdt}
+            , EDT = #{apikeydto.edt}
+            , LST_CHPR = #{userid}
+            , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+        WHERE API_KEY_ID = #{apikeydto.apikeyid}
+  </update>
+
+  <update id = "update_comcode">
+    UPDATE COM_CODE
+    SET CODE = #{comcodeDto.code}
+      , CODE_LABEL = #{comcodeDto.codelabel}
+      , CODE_VALUE = #{comcodeDto.codevalue}
+      , LST_CHPR = #{userid}
+      , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+  WHERE ID = #{comcodeDto.id}
+  </update>
+
+  <update id = "update_needrequest">
+    UPDATE API_RQRD_ITEMS
+       SET API_LIST_ID = #{apineedRequestDto.apilistid}
+         , RQRD_ITEM_NM = #{apineedRequestDto.rqrditemnm}
+         , RQRD_RQST_NM = #{apineedRequestDto.rqrdrqstnm}
+         , ITEM_EXPL = #{apineedRequestDto.itemexpl}
+         , SORT = #{apineedRequestDto.sort}
+         , LST_CHPR = #{userid}
+         , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+     WHERE API_RQRD_ITEMS_ID = #{apineedRequestDto.apirqrditemsid}
+  </update>
+
+  <update id = "update_needresponse">
+    UPDATE API_RSQE_ITEMS
+       SET API_LIST_ID = #{apineedResponseDto.apilistid}
+         , KR_NM = #{apineedResponseDto.krnm}
+         , EN_NM = #{apineedResponseDto.ennm}
+         , LST_CHPR = #{userid}
+         , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+     WHERE API_RSQE_ITEMS_ID = #{apineedResponseDto.apirsqeitemsid}
+  </update>
 
 </mapper>
