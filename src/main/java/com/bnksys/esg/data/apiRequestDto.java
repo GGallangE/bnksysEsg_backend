@@ -9,7 +9,15 @@ import java.util.Map;
 public class apiRequestDto {
     private int apilistid;
     private List<Map<String, String>> params;
+    private String type;
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public apiRequestDto() {
     }

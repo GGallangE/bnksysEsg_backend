@@ -25,9 +25,9 @@ public class ApiRequestController {
         try {
             String response;
             if ("POST".equals(methodType)) {
-                response = apiRequestService.postRequestApi(apirequestDto.getApilistid(), apirequestDto.getParams());
+                response = apiRequestService.postRequestApi(apirequestDto.getApilistid(), apirequestDto.getParams(), apirequestDto.getType());
             } else if ("GET".equals(methodType)) {
-                response = apiRequestService.getRequestApi(apirequestDto.getApilistid(), apirequestDto.getParams());
+                response = apiRequestService.getRequestApi(apirequestDto.getApilistid(), apirequestDto.getParams(), apirequestDto.getType());
             } else {
                 return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("지원하지 않는 HTTP 방식입니다.");
             }
