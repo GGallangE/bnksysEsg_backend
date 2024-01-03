@@ -14,11 +14,20 @@ public class apiResultDto {
     private String dataformat;
     private String sitedvcd;
     private String usedvcd;
+    private String methodtype;
     private int apiapplyid;
     private String apiapplynm;
     private int countapiuses;
     private int favorite;
     private int total;
+
+    public String getMethodtype() {
+        return methodtype;
+    }
+
+    public void setMethodtype(String methodtype) {
+        this.methodtype = methodtype;
+    }
 
     public String getSitedvcd() {
         return sitedvcd;
