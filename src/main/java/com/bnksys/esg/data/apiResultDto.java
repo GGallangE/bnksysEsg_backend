@@ -10,11 +10,47 @@ public class apiResultDto {
     private int apiview;
     private String apirgdt;
     private String apiexpl;
+    private String apikeyword;
+    private String dataformat;
+    private String sitedvcd;
+    private String usedvcd;
     private int apiapplyid;
     private String apiapplynm;
     private int countapiuses;
     private int favorite;
     private int total;
+
+    public String getSitedvcd() {
+        return sitedvcd;
+    }
+
+    public void setSitedvcd(String sitedvcd) {
+        this.sitedvcd = sitedvcd;
+    }
+
+    public String getUsedvcd() {
+        return usedvcd;
+    }
+
+    public void setUsedvcd(String usedvcd) {
+        this.usedvcd = usedvcd;
+    }
+
+    public String getApikeyword() {
+        return apikeyword;
+    }
+
+    public void setApikeyword(String apikeyword) {
+        this.apikeyword = apikeyword;
+    }
+
+    public String getDataformat() {
+        return dataformat;
+    }
+
+    public void setDataformat(String dataformat) {
+        this.dataformat = dataformat;
+    }
 
     public int getTotal() {
         return total;

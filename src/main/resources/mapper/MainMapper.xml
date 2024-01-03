@@ -10,6 +10,10 @@
              , API_VIEW
              , API_EXPL
              , API_RGDT
+             , API_KEYWORD
+             , DATA_FORMAT
+             , SITE_DVCD
+             , USE_DVCD
              , API_APPLY_ID
              , COUNT_API_USES
              , COUNT(*) OVER() TOTAL
@@ -19,7 +23,9 @@
                   FROM API_USES
               GROUP BY API_LIST_ID ) apiuses
             ON apiuses.API_LIST_ID = apilist.API_LIST_ID
-        WHERE API_NM LIKE CONCAT('%', #{name}, '%')
+         WHERE (API_NM LIKE CONCAT('%', #{name}, '%')
+            OR API_EXPL LIKE CONCAT('%', #{name}, '%')
+            OR API_KEYWORD LIKE CONCAT('%', #{name}, '%'))
     <if test="sortBy == 'register' ">
       ORDER BY API_LIST_ID DESC
     </if>
