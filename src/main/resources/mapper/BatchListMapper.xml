@@ -15,4 +15,22 @@
          WHERE BATCH_LIST_ID = #{batchlistid}
     </select>
 
+    <select id = "find_apiformat">
+        SELECT API_FORMAT
+          FROM BATCH_LIST
+    </select>
+
+    <select id = "find_batchdetaillist">
+        SELECT *
+          FROM BATCH_DETAIL_LIST
+         WHERE BATCH_LIST_ID = #{batchlistid}
+           AND STCD = "01"
+    </select>
+
+    <select id = "find_requesttlist">
+        SELECT *
+          FROM API_RQRD_ITEMS
+         WHERE API_LIST_ID = #{apilistid}
+    </select>
+
 </mapper>

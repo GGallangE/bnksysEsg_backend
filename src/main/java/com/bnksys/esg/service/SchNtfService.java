@@ -21,7 +21,7 @@ public class SchNtfService {
         int batchlistid = schNtfMapper.MaxbatchlistId();
         batchlistDto.setBatchlistid(batchlistid);
         schNtfMapper.save_BatchSchedule(userid, batchlistDto);
-        schNtfMapper.save_BatchDetailArgs(batchlistid,batchlistDto.getBatchDetailargsDto());
+        schNtfMapper.save_BatchDetailArgs(userid,batchlistid,batchlistDto.getBatchDetailargsDto());
         return batchlistid;
     }
 

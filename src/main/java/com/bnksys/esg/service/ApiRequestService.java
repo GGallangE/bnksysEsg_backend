@@ -119,6 +119,11 @@ public class ApiRequestService {
             filePath = Paths.get(downloadFolderPath, sanitizedFileName + ".xml").toString();
             saveToFile(combinedResponse.toString(), filePath);
             return "ok";
+        } else if ("txt".equals(type)) {
+            String sanitizedFileName = apinm.replace('/', '_');
+            filePath = Paths.get(downloadFolderPath, sanitizedFileName + ".txt").toString();
+            saveToFile(combinedResponse.toString(), filePath);
+            return "ok";
         } else {
             return combinedResponse.toString();
         }
@@ -139,7 +144,6 @@ public class ApiRequestService {
         StringJoiner combinedResponse = new StringJoiner(", ", "[", "]");
 
         String filePath = "C:\\Users\\busan\\Downloads\\output.xlsx";
-        List<String> excelFilePaths = new ArrayList<>();
 
         for (Map<String, String> userParams : paramsList) {
             ObjectNode jsonNode = objectMapper.createObjectNode();
@@ -178,7 +182,12 @@ public class ApiRequestService {
         } else if ("excel".equals(type)) {
             String sanitizedFileName = apinm.replace('/', '_');
             filePath = Paths.get(downloadFolderPath, sanitizedFileName + ".xml").toString();
-            generateExcel_Get(combinedResponse, filePath);
+            generateExcel_Post(combinedResponse, filePath);
+            return "ok";
+        } else if ("txt".equals(type)) {
+            String sanitizedFileName = apinm.replace('/', '_');
+            filePath = Paths.get(downloadFolderPath, sanitizedFileName + ".txt").toString();
+            saveToFile(combinedResponse.toString(), filePath);
             return "ok";
         } else {
             return combinedResponse.toString();

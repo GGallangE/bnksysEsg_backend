@@ -1,6 +1,8 @@
 package com.bnksys.esg.service;
 
 
+import com.bnksys.esg.mapper.ApiRequestMapper;
+import com.bnksys.esg.mapper.BatchListMapper;
 import com.bnksys.esg.mapper.MainMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,15 @@ public class ApiBatchService {
 
     MainMapper mainMapper;
 
-    public ApiBatchService(MainMapper mainMapper){this.mainMapper = mainMapper;}
+    ApiRequestMapper apiRequestMapper;
+
+    BatchListMapper batchListMapper;
+
+    public ApiBatchService(MainMapper mainMapper, ApiRequestMapper apiRequestMapper, BatchListMapper batchListMapper){
+        this.mainMapper = mainMapper;
+        this.apiRequestMapper = apiRequestMapper;
+        this.batchListMapper = batchListMapper;
+    }
 
     public void apilist_Business(int batchlistid,int apilistid, int userid){
         /* 국세청_사업자등록정보 상태조회 서비스 */
@@ -31,5 +41,17 @@ public class ApiBatchService {
     }
     public void apilist_Test(int batchlistid,int apilistid, int userid){
         String email = mainMapper.findbyuserid(userid);
+    }
+
+    public void apirequest (int batchlistid,int apilistid, int userid){
+        String methodType = apiRequestMapper.findMethod_Type(apilistid);
+        String apiformat = batchListMapper.find_apiformat(batchlistid);
+        String email = mainMapper.findbyuserid(userid);
+        if(methodType.equals("POST")){
+            apiResponseService.request_post(email, batchlistid, apilistid, userid, apiformat);
+        }else{
+            apiResponseService.request_get(email, batchlistid, apilistid, userid, apiformat);
+        }
+
     }
 }
