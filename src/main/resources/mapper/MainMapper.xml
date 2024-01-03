@@ -141,7 +141,7 @@
         <if test="sort == 'recent' ">
             ORDER BY API_LIST_ID DESC
         </if>
-         LIMIT 2
+         LIMIT 5
     </select>
 
 </mapper>
