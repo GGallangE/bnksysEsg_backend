@@ -46,7 +46,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 
 	// json, xml
-	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.6'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.0'
 }
 
 tasks.named('test') {

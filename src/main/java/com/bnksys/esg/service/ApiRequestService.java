@@ -50,7 +50,10 @@ public class ApiRequestService {
 
     public String getRequestApi(int apilistid, List<Map<String, String>> paramsList, String type) throws IOException {
         apiurlAndkeyDto apiInfo = apiRequestMapper.findurlAndkey(apilistid);
+        String dataformat = apiRequestMapper.findDataFormat(apilistid);
+        String apinm = apiRequestMapper.findApiNm(apilistid);
         String baseUrl = apiInfo.getApiUrl();
+        String filePath = "C:\\Users\\busan\\Downloads\\";
 
         StringJoiner combinedResponse = new StringJoiner(", ", "[", "]");
 
@@ -62,6 +65,10 @@ public class ApiRequestService {
                 String key = entry.getKey();
                 String value = entry.getValue();
                 urlBuilder.append("&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(value, "UTF-8"));
+            }
+
+            if ("json".equals(type) && dataformat.equals("XML,JSON")) {
+                urlBuilder.append("&" + URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8"));
             }
 
             URL url = new URL(urlBuilder.toString());
@@ -95,12 +102,16 @@ public class ApiRequestService {
         }
 
         if ("excel".equals(type)) {
-            String filePath = "C:\\Users\\busan\\Downloads\\output1.xlsx";
+            filePath = filePath + apinm + ".xlsx";
             generateExcel_Get(combinedResponse, filePath);
             return "ok";
         }else if("json".equals(type)){
+            filePath = filePath + apinm + ".json";
+            saveToFile(combinedResponse.toString(), filePath);
             return "ok";
         } else if ("xml".equals(type)) {
+            filePath = filePath + apinm + ".xml";
+            saveToFile(combinedResponse.toString(), filePath);
             return "ok";
         } else {
             return combinedResponse.toString();
@@ -149,12 +160,9 @@ public class ApiRequestService {
         }
         String formattedResponse;
         if ("json".equals(type)) {
-            formattedResponse = convertXmlToJson(combinedResponse.toString());
-            String jsonFilePath = "C:\\Users\\busan\\Downloads\\output.json";
-            saveToFile(formattedResponse, jsonFilePath);
             return "ok";
         } else if ("xml".equals(type)) {
-            String xmlFilePath = "C:\\Users\\busan\\Downloads\\output.xml";
+            String xmlFilePath = "C:\\Users\\busan\\Downloads\\output312.xml";
             saveToFile(combinedResponse.toString(), xmlFilePath);
             return "ok";
         } else if ("excel".equals(type)) {
@@ -319,18 +327,6 @@ public class ApiRequestService {
         }
 
         return dataList;
-    }
-
-    private String convertXmlToJson(String inputString) {
-        try {
-            XmlMapper xmlMapper = new XmlMapper();
-            JsonNode jsonNode = xmlMapper.readTree(inputString);
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.writeValueAsString(jsonNode);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "{\"error\": \"Failed to convert XML to JSON.\"}";
-        }
     }
 
     private String convertEnglishToKorean(String englishResponse, List<Map<String, String>> mappingList) {

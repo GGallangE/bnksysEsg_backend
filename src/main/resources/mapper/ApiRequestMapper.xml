@@ -36,6 +36,17 @@
          WHERE API_LIST_ID = #{apilistid}
     </select>
 
+    <select id = "findDataFormat">
+        SELECT DATA_FORMAT
+          FROM API_LIST
+         WHERE API_LIST_ID = #{apilistid}
+    </select>
+
+    <select id = "findApiNm">
+        SELECT API_NM
+          FROM API_LIST
+         WHERE API_LIST_ID = #{apilistid}
+    </select>
 
     
 </mapper>

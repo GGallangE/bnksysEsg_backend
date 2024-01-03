@@ -20,4 +20,8 @@ public interface ApiRequestMapper {
     List<Map<String, String>> findKor_Eng(@Param("apilistid") int apilistid);
 
     String findMethod_Type(@Param("apilistid") int apilistid);
+
+    String findDataFormat(@Param("apilistid") int apilistid);
+
+    String findApiNm(@Param("apilistid") int apilistid);
 }

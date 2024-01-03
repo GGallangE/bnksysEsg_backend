@@ -11,7 +11,9 @@
              , API_EXPL
              , API_RGDT
              , API_KEYWORD
-             , 'JSON,XML' AS DATA_FORMAT
+             , DATA_FORMAT
+             , SITE_DVCD
+             , USE_DVCD
              , API_APPLY_ID
              , COUNT_API_USES
              , COUNT(*) OVER() TOTAL
