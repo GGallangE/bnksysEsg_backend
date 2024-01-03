@@ -16,12 +16,16 @@
 
     <insert id="save_BatchSchedule">
         INSERT INTO BATCH_LIST
-        VALUES (#{batchlistDto.batchlistid}, #{userid}, #{batchlistDto.apilistid}, #{batchlistDto.batchtime}, #{batchlistDto.frequency},
-                #{batchlistDto.time}, #{batchlistDto.dayofweek}, #{batchlistDto.dayofmonth}, "01")
+        VALUES (#{batchlistDto.batchlistid}, #{userid}, #{batchlistDto.apilistid}, #{batchlistDto.apiformat}, #{batchlistDto.batchtime}, #{batchlistDto.frequency},
+                #{batchlistDto.time}, #{batchlistDto.dayofweek}, #{batchlistDto.dayofmonth}, "01"
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
     </insert>
 
     <insert id="save_BatchDetailArgs">
-        INSERT INTO BATCH_DETAIL_LIST (BATCH_LIST_ID, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6, ARG7, ARG8, ARG9, ARG10)
+        INSERT INTO BATCH_DETAIL_LIST (BATCH_LIST_ID, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6, ARG7, ARG8, ARG9, ARG10, STCD, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
         VALUES
         <foreach collection="batchDetailargsDto" item="batchDetail" separator=",">
             (
@@ -35,8 +39,12 @@
             #{batchDetail.arg7},
             #{batchDetail.arg8},
             #{batchDetail.arg9},
-            #{batchDetail.arg10}
-            )
+            #{batchDetail.arg10},
+            "01"
+            , #{userid}
+            , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+            , #{userid}
+            , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
         </foreach>
     </insert>
 

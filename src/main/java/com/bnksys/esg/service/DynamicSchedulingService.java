@@ -65,12 +65,7 @@ public class DynamicSchedulingService implements SchedulingConfigurer {
 
         ScheduledFuture<?> scheduledTask = ((ThreadPoolTaskScheduler) taskScheduler).schedule(() -> {
             System.out.println("Executing task for SchedulingId: " + apilist);
-            try {
-                Method method = ApiBatchService.class.getMethod(methodName, int.class, int.class, int.class);
-                method.invoke(apiBatchService, batchlistid, apilistid, userid);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
+            apiBatchService.apirequest(batchlistid, apilistid, userid);
         }, new CronTrigger(cronExpression, TimeZone.getTimeZone("Asia/Seoul")));
 
         scheduledTasks.put(batchlistid, scheduledTask);

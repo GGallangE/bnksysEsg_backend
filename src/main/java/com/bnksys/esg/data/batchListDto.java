@@ -6,6 +6,8 @@ public class batchListDto {
     private int batchlistid;
     private int userid;
     private int apilistid;
+
+    private String apiformat;
     private String batchtime;
     private String frequency;
     private String time;
@@ -17,6 +19,14 @@ public class batchListDto {
     private int total;
 
     private List<batchDetailArgsDto> batchDetailargsDto;
+
+    public String getApiformat() {
+        return apiformat;
+    }
+
+    public void setApiformat(String apiformat) {
+        this.apiformat = apiformat;
+    }
 
     public int getTotal() {
         return total;

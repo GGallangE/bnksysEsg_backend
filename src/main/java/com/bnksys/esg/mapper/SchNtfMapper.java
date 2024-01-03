@@ -18,7 +18,7 @@ public interface SchNtfMapper {
 
     void save_BatchSchedule(@Param("userid") int userid, @Param("batchlistDto") batchListDto batchlistDto);
 
-    void save_BatchDetailArgs(@Param("batchlistid") int batchlistid, @Param("batchDetailargsDto") List<batchDetailArgsDto> batchDetailargsDto);
+    void save_BatchDetailArgs(@Param("userid") int userid, @Param("batchlistid") int batchlistid, @Param("batchDetailargsDto") List<batchDetailArgsDto> batchDetailargsDto);
 
     void save_Alarm(@Param("title") String title, @Param("content") String content, @Param("senduser") int senduser, @Param("rcvuser") int rcvuser);
 }

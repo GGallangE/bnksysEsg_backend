@@ -1,5 +1,6 @@
 package com.bnksys.esg.service;
 
+import com.bnksys.esg.data.apiNeedRequestDto;
 import com.bnksys.esg.data.batchDetailArgsDto;
 import com.bnksys.esg.mapper.BatchListMapper;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -90,5 +91,16 @@ public class ApiResponseService {
             e.printStackTrace();
         }
     }
+
+    public void request_get(String email, int batchlistid, int apilistid, int userid, String apiformat) {
+        List<batchDetailArgsDto> batchdetaillist = batchListMapper.find_batchdetaillist(batchlistid);
+        List<apiNeedRequestDto> requestlist = batchListMapper.find_requesttlist(apilistid);
+    }
+
+    public void request_post(String email, int batchlistid, int apilistid, int userid, String apiformat) {
+        List<batchDetailArgsDto> batchdetaillist = batchListMapper.find_batchdetaillist(batchlistid);
+        List<apiNeedRequestDto> requestlist = batchListMapper.find_requesttlist(apilistid);
+    }
+
 
 }
