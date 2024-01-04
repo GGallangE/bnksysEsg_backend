@@ -3,6 +3,7 @@ package com.bnksys.esg.service;
 import com.bnksys.esg.data.apiurlAndkeyDto;
 import com.bnksys.esg.data.requiredItemDto;
 import com.bnksys.esg.mapper.ApiRequestMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -24,6 +25,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,12 +34,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.client.RestTemplate;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import org.w3c.dom.Document;
+import org.xml.sax.SAXParseException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -49,7 +55,7 @@ public class ApiRequestService {
         this.apiRequestMapper = apiRequestMapper;
     }
 
-    public String getRequestApi(int apilistid, List<Map<String, String>> paramsList, String type) throws IOException {
+    public String getRequestApi(int apilistid, List<Map<String, String>> paramsList, String type) throws Exception {
         apiurlAndkeyDto apiInfo = apiRequestMapper.findurlAndkey(apilistid);
         String dataformat = apiRequestMapper.findDataFormat(apilistid);
         String apinm = apiRequestMapper.findApiNm(apilistid);
@@ -94,7 +100,7 @@ public class ApiRequestService {
 
             List<Map<String, String>> mappingList = apiRequestMapper.findKor_Eng(apilistid);
 
-            if (mappingList.isEmpty()) {
+            if (mappingList.isEmpty() || apilistid == 952) {
                 combinedResponse.add(sb.toString());
             } else {
                 String koreanResponse = convertEnglishToKorean(sb.toString(), mappingList);
@@ -125,7 +131,16 @@ public class ApiRequestService {
             saveToFile(combinedResponse.toString(), filePath);
             return "ok";
         } else {
-            return combinedResponse.toString();
+            String[] Responses = combinedResponse.toString().substring(1, combinedResponse.length() - 1).split(">, <");
+            JSONArray allItems = new JSONArray();
+            for (String response : Responses) {
+                response = "<" + response + ">";
+                JSONArray items = extractItemsFromXml(response);
+                for (int i = 0; i < items.length(); i++) {
+                    allItems.put(items.getJSONObject(i));
+                }
+            }
+            return "{\"data\":" + allItems.toString() + "}";
         }
     }
 
@@ -190,7 +205,8 @@ public class ApiRequestService {
             saveToFile(combinedResponse.toString(), filePath);
             return "ok";
         } else {
-            return combinedResponse.toString();
+            String reformattedResponse = reformatResponse(combinedResponse.toString());
+            return reformattedResponse;
         }
 //        return combinedResponse.toString();
 
@@ -354,6 +370,64 @@ public class ApiRequestService {
         return dataList;
     }
 
+    private JSONArray extractItemsFromXml(String xml) throws Exception {
+        xml = xml.trim();
+
+        if (xml.startsWith("<<")) {
+            xml = xml.substring(1);
+        }
+        if (xml.endsWith(">>")) {
+            xml = xml.substring(0, xml.length() - 1);
+        }
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+
+        Document doc;
+        try {
+            doc = builder.parse(new InputSource(new StringReader(xml)));
+        } catch (SAXParseException e) {
+            int errorPos = e.getColumnNumber();
+            throw e;
+        }
+        doc.getDocumentElement().normalize();
+
+        NodeList items = doc.getElementsByTagName("item");
+        JSONArray jsonItems = new JSONArray();
+
+        for (int i = 0; i < items.getLength(); i++) {
+            Element item = (Element) items.item(i);
+            NodeList childNodes = item.getChildNodes();
+            JSONObject jsonItem = new JSONObject();
+
+            for (int j = 0; j < childNodes.getLength(); j++) {
+                Node node = childNodes.item(j);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    jsonItem.put(node.getNodeName(), node.getTextContent());
+                }
+            }
+            jsonItems.put(jsonItem);
+        }
+        return jsonItems;
+    }
+
+    public String reformatResponse(String combinedResponse) {
+        JSONArray combinedJSONArray = new JSONArray(combinedResponse);
+        JSONArray simplifiedDataArray = new JSONArray();
+
+        for (int i = 0; i < combinedJSONArray.length(); i++) {
+            JSONObject responseObject = combinedJSONArray.getJSONObject(i);
+            JSONArray dataArray = responseObject.getJSONArray("data");
+            for (int j = 0; j < dataArray.length(); j++) {
+                JSONObject dataObject = dataArray.getJSONObject(j);
+                simplifiedDataArray.put(dataObject);
+            }
+        }
+
+        JSONObject finalResponse = new JSONObject();
+        finalResponse.put("data", simplifiedDataArray);
+        return finalResponse.toString();
+    }
 
     private String convertEnglishToKorean(String englishResponse, List<Map<String, String>> mappingList) {
         for (Map<String, String> mapping : mappingList) {
