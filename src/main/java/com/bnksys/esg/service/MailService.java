@@ -22,11 +22,11 @@ public class MailService {
     @Autowired
     JavaMailSender javaMailSender;
 
-    public void sendMailwithExcel(String to, byte[] excelData, String filePath) {
+    public void sendMailwithExcel(String apiname,String to, byte[] excelData, String filePath) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            String subject = "BNKSYS_API 중계 시스템 예약 전송";
+            String subject = apiname;
             String message = to + "님께 API 전송 결과를 전송하였습니다.";
 
             mimeMessageHelper.setTo(to);
@@ -34,12 +34,12 @@ public class MailService {
             mimeMessageHelper.setText(message, true);
 
             ByteArrayResource file = new ByteArrayResource(excelData);
-            mimeMessageHelper.addAttachment(filePath + ".xlsx", file);
+            mimeMessageHelper.addAttachment(filePath, file);
 
             javaMailSender.send(mimeMessage);
-            System.out.println("Success - 메일 전송 성공(엑셀)");
+            System.out.println("Success - 메일 전송 성공"+filePath);
         } catch (MessagingException e) {
-            System.out.println("Fail - 메일 전송 실패(엑셀)");
+            System.out.println("Fail - 메일 전송 실패"+filePath);
             throw new RuntimeException(e);
         }
     }

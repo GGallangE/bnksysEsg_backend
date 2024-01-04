@@ -43,32 +43,18 @@ public class TestController {
 
     }
 
-    @PostMapping("/checkapi")
-    public ResponseEntity<Response> checkapi(){
-        Response response = new Response();
-        try{
-            apiResponseService.apilist_Business("ehrbs2997@naver.com",6,1);
-            response.setSuccess(true);
-            response.getMessages().add("수정 완료");
-            return ResponseEntity.ok(response);
-        }catch (Exception e){
-            response.setSuccess(false);
-            response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
-    }
-
     @GetMapping("/checkemail")
     public ResponseEntity<Response> checkemail(@RequestParam("email") String email, @RequestParam("batchlistid") int batchlistid,
                                                @RequestParam("apilistid") int apilistid, @RequestParam("userid") int userid,
-                                               @RequestParam("apiformat") String apiformat, @RequestParam("method") String method){
+                                               @RequestParam("apiformat") String apiformat){
         Response response = new Response();
         try{
-            if("get".equals(method)){
-                apiResponseService.request_get(email, batchlistid, apilistid, userid, apiformat);
-            }else{
-                apiResponseService.request_post(email, batchlistid, apilistid, userid, apiformat);
-            }
+//            if("get".equals(method)){
+//                apiResponseService.request_get(email, batchlistid, apilistid, userid, apiformat);
+//            }else{
+//                apiResponseService.request_post(email, batchlistid, apilistid, userid, apiformat);
+//            }
+            apiResponseService.request_get(email, batchlistid, apilistid, userid,apiformat);
 
             response.setSuccess(true);
             response.getMessages().add("수정 완료");
