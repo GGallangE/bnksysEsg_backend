@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Service
 public class MailService {
@@ -22,7 +24,7 @@ public class MailService {
     @Autowired
     JavaMailSender javaMailSender;
 
-    public void sendMailwithExcel(String apiname,String to, byte[] excelData, String filePath) {
+    public void sendMailwithAttachment(String apiname,String to, byte[] data, String fileName) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -33,14 +35,16 @@ public class MailService {
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(message, true);
 
-            ByteArrayResource file = new ByteArrayResource(excelData);
-            mimeMessageHelper.addAttachment(filePath, file);
+            ByteArrayResource file = new ByteArrayResource(data);
+            mimeMessageHelper.addAttachment(fileName, file);
 
             javaMailSender.send(mimeMessage);
-            System.out.println("Success - 메일 전송 성공"+filePath);
+            System.out.println("Success - 메일 전송 성공"+fileName);
         } catch (MessagingException e) {
-            System.out.println("Fail - 메일 전송 실패"+filePath);
+            System.out.println("Fail - 메일 전송 실패"+fileName);
             throw new RuntimeException(e);
+        }finally {
+            deleteFile(fileName);
         }
     }
 
@@ -60,6 +64,16 @@ public class MailService {
         } catch (MessagingException e) {
             System.out.println("Fail - 메일 전송 실패");
             throw new RuntimeException(e);
+        }
+    }
+
+    private void deleteFile(String fileName) {
+        try {
+            Files.deleteIfExists(Paths.get(fileName));
+            System.out.println("File deleted successfully: " + fileName);
+        } catch (IOException e) {
+            System.out.println("Failed to delete the file: " + fileName);
+            e.printStackTrace();
         }
     }
 }

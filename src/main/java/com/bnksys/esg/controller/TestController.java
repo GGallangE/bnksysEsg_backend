@@ -49,12 +49,7 @@ public class TestController {
                                                @RequestParam("apiformat") String apiformat){
         Response response = new Response();
         try{
-//            if("get".equals(method)){
-//                apiResponseService.request_get(email, batchlistid, apilistid, userid, apiformat);
-//            }else{
-//                apiResponseService.request_post(email, batchlistid, apilistid, userid, apiformat);
-//            }
-            apiResponseService.request_get(email, batchlistid, apilistid, userid,apiformat);
+            apiResponseService.request(email, batchlistid, apilistid, userid,apiformat);
 
             response.setSuccess(true);
             response.getMessages().add("수정 완료");

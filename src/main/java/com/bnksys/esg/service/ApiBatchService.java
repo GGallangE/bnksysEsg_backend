@@ -29,7 +29,6 @@ public class ApiBatchService {
     public void apirequest (int batchlistid,int apilistid, int userid) throws Exception {
         String apiformat = apiRequestMapper.findApiFormat(batchlistid);
         String email = mainMapper.findbyuserid(userid);
-        apiResponseService.request_get(email, batchlistid, apilistid, userid, apiformat);
-
+        apiResponseService.request(email, batchlistid, apilistid, userid, apiformat);
     }
 }
