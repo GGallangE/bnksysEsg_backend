@@ -142,6 +142,7 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
         SELECT BATCH_LIST_ID
              , batchlist.USER_ID USER_ID
              , batchlist.API_LIST_ID
+             , API_FORMAT
              , FREQUENCY
              , TIME
              , DAY_OF_WEEK

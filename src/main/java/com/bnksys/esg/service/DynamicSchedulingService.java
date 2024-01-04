@@ -1,6 +1,5 @@
 package com.bnksys.esg.service;
 
-import com.bnksys.esg.Enum.ApiList;
 import com.bnksys.esg.data.batchListDto;
 import org.apache.poi.ss.formula.functions.Now;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,15 +55,11 @@ public class DynamicSchedulingService implements SchedulingConfigurer {
     }
 
     public void scheduleTask(int batchlistid, int apilistid, int userid, String cronExpression) {
-        ApiList apilist = ApiList.fromSchedulingId(apilistid);
-        String methodName = apilist.getFunctionName();
-
         TaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
         ((ThreadPoolTaskScheduler) taskScheduler).setPoolSize(20);
         ((ThreadPoolTaskScheduler) taskScheduler).initialize();
 
         ScheduledFuture<?> scheduledTask = ((ThreadPoolTaskScheduler) taskScheduler).schedule(() -> {
-            System.out.println("Executing task for SchedulingId: " + apilist);
             apiBatchService.apirequest(batchlistid, apilistid, userid);
         }, new CronTrigger(cronExpression, TimeZone.getTimeZone("Asia/Seoul")));
 
