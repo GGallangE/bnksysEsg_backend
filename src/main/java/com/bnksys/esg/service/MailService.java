@@ -70,9 +70,7 @@ public class MailService {
     private void deleteFile(String fileName) {
         try {
             Files.deleteIfExists(Paths.get(fileName));
-            System.out.println("File deleted successfully: " + fileName);
         } catch (IOException e) {
-            System.out.println("Failed to delete the file: " + fileName);
             e.printStackTrace();
         }
     }
