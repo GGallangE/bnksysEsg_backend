@@ -57,4 +57,26 @@ public class TestController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    @GetMapping("/checkemail")
+    public ResponseEntity<Response> checkemail(@RequestParam("email") String email, @RequestParam("batchlistid") int batchlistid,
+                                               @RequestParam("apilistid") int apilistid, @RequestParam("userid") int userid,
+                                               @RequestParam("apiformat") String apiformat, @RequestParam("method") String method){
+        Response response = new Response();
+        try{
+            if("get".equals(method)){
+                apiResponseService.request_get(email, batchlistid, apilistid, userid, apiformat);
+            }else{
+                apiResponseService.request_post(email, batchlistid, apilistid, userid, apiformat);
+            }
+
+            response.setSuccess(true);
+            response.getMessages().add("수정 완료");
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.setSuccess(false);
+            response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 }

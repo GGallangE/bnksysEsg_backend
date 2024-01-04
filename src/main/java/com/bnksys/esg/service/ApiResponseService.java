@@ -5,6 +5,9 @@ import com.bnksys.esg.data.batchDetailArgsDto;
 import com.bnksys.esg.mapper.BatchListMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -26,6 +29,7 @@ import org.springframework.web.util.UriUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -95,12 +99,72 @@ public class ApiResponseService {
     public void request_get(String email, int batchlistid, int apilistid, int userid, String apiformat) {
         List<batchDetailArgsDto> batchdetaillist = batchListMapper.find_batchdetaillist(batchlistid);
         List<apiNeedRequestDto> requestlist = batchListMapper.find_requesttlist(apilistid);
+        ArrayNode mappedResults = BatchDetails_RequestList_Get(batchdetaillist, requestlist);
+        System.out.println(mappedResults);
     }
 
     public void request_post(String email, int batchlistid, int apilistid, int userid, String apiformat) {
         List<batchDetailArgsDto> batchdetaillist = batchListMapper.find_batchdetaillist(batchlistid);
         List<apiNeedRequestDto> requestlist = batchListMapper.find_requesttlist(apilistid);
+        ArrayNode mappedResults = BatchDetails_RequestList_Post(batchdetaillist, requestlist);
+        System.out.println(mappedResults);
     }
 
+    public ArrayNode BatchDetails_RequestList_Get(List<batchDetailArgsDto> batchdetaillist, List<apiNeedRequestDto> requestlist) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode jsonArray = objectMapper.createArrayNode();
 
+        for (batchDetailArgsDto batchDetail : batchdetaillist) {
+            ObjectNode jsonObject = objectMapper.createObjectNode();
+
+            for (apiNeedRequestDto request : requestlist) {
+                String requestFieldName = request.getRqrdrqstnm();
+                int argIndex = request.getSort();
+                String argValue = ArgValueByIndex(batchDetail, argIndex);
+
+                if (argValue != null) {
+                    jsonObject.put(requestFieldName, argValue);
+                }
+            }
+
+            jsonArray.add(jsonObject);
+        }
+
+        return jsonArray;
+    }
+
+    public ArrayNode BatchDetails_RequestList_Post(List<batchDetailArgsDto> batchdetaillist, List<apiNeedRequestDto> requestlist) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode jsonArray = objectMapper.createArrayNode();
+
+        for (batchDetailArgsDto batchDetail : batchdetaillist) {
+            ObjectNode jsonObject = objectMapper.createObjectNode();
+
+            for (apiNeedRequestDto request : requestlist) {
+                String requestFieldName = request.getRqrdrqstnm();
+                int argIndex = request.getSort();
+                String argValue = ArgValueByIndex(batchDetail, argIndex);
+
+                if (argValue != null) {
+                    ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+                    arrayNode.add(argValue);
+                    jsonObject.set(requestFieldName, arrayNode);
+                }
+            }
+            jsonArray.add(jsonObject);
+        }
+
+        return jsonArray;
+    }
+
+    private String ArgValueByIndex(batchDetailArgsDto detail, int index) {
+        try {
+            Field field = detail.getClass().getDeclaredField("arg" + index);
+            field.setAccessible(true);
+            return (String) field.get(detail);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
