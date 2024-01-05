@@ -48,5 +48,11 @@
          WHERE API_LIST_ID = #{apilistid}
     </select>
 
+    <select id ="findApiFormat">
+        SELECT API_FORMAT
+          FROM BATCH_LIST
+         WHERE BATCH_LIST_ID = #{batchlistid}
+    </select>
+
     
 </mapper>

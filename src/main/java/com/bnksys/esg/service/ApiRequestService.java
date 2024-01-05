@@ -212,7 +212,7 @@ public class ApiRequestService {
 
     }
 
-    private void saveToFile(String content, String filePath) {
+    public void saveToFile(String content, String filePath) {
         try (PrintWriter writer = new PrintWriter(filePath)) {
             writer.write(content);
         } catch (IOException e) {
@@ -220,7 +220,7 @@ public class ApiRequestService {
         }
     }
 
-    private void generateExcel_Post(StringJoiner combinedResponse, String filePath) {
+    public void generateExcel_Post(StringJoiner combinedResponse, String filePath) {
         List<Map<String, String>> dataList = convertStringJoinerToList_Post(combinedResponse);
 
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -253,7 +253,7 @@ public class ApiRequestService {
         }
     }
 
-    private List<Map<String, String>> convertStringJoinerToList_Post(StringJoiner combinedResponse) {
+    public List<Map<String, String>> convertStringJoinerToList_Post(StringJoiner combinedResponse) {
         List<Map<String, String>> dataList = new ArrayList<>();
 
         String jsonArray = combinedResponse.toString();
@@ -285,7 +285,7 @@ public class ApiRequestService {
         return dataList;
     }
 
-    private void generateExcel_Get(StringJoiner combinedResponse, String filePath) {
+    public void generateExcel_Get(StringJoiner combinedResponse, String filePath) {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Data");
 
@@ -324,7 +324,7 @@ public class ApiRequestService {
 
 
 
-    private List<Map<String, String>> convertList_Get(StringJoiner combinedResponse) {
+    public List<Map<String, String>> convertList_Get(StringJoiner combinedResponse) {
         List<Map<String, String>> dataList = new ArrayList<>();
 
         String[] responses = combinedResponse.toString().split(", ");
@@ -370,7 +370,7 @@ public class ApiRequestService {
         return dataList;
     }
 
-    private JSONArray extractItemsFromXml(String xml) throws Exception {
+    public JSONArray extractItemsFromXml(String xml) throws Exception {
         xml = xml.trim();
 
         if (xml.startsWith("<<")) {
@@ -429,7 +429,7 @@ public class ApiRequestService {
         return finalResponse.toString();
     }
 
-    private String convertEnglishToKorean(String englishResponse, List<Map<String, String>> mappingList) {
+    public String convertEnglishToKorean(String englishResponse, List<Map<String, String>> mappingList) {
         for (Map<String, String> mapping : mappingList) {
             String englishName = Pattern.quote(mapping.get("EN_NM"));
             String koreanName = Matcher.quoteReplacement(mapping.get("KR_NM"));

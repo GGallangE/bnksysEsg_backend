@@ -20,10 +20,20 @@
              , PRV_ORG
              , API_EXPL
              , API_RGDT
+             , DATA_FORMAT
+             , METHOD_TYPE
+             , SITE_DVCD
+             , USE_DVCD
+             , API_KEYWORD
+             , API_URL
+             , site.CODE_VALUE SITENM
              , apilist.API_APPLY_ID
              , apiapply.APPLY_NM API_APPLY_NM
              , COUNT(*) OVER() TOTAL
           FROM API_LIST apilist
+     LEFT JOIN COM_CODE site
+            ON site.CODE = "SITE"
+           AND site.CODE_LABEL = apilist.SITE_DVCD
      LEFT JOIN API_APPLY apiapply
             ON apilist.API_APPLY_ID = apiapply.API_APPLY_ID
          WHERE 1 = 1
@@ -32,6 +42,35 @@
         </if>
       ORDER BY API_LIST_ID DESC
          LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id = "findApiList_Search">
+       SELECT apilist.API_LIST_ID
+            , API_NM
+            , PRV_ORG
+            , API_EXPL
+            , API_RGDT
+            , DATA_FORMAT
+            , METHOD_TYPE
+            , SITE_DVCD
+            , USE_DVCD
+            , API_KEYWORD
+            , site.CODE_VALUE SITENM
+            , apilist.API_APPLY_ID
+            , apiapply.APPLY_NM API_APPLY_NM
+            , COUNT(*) OVER() TOTAL
+         FROM API_LIST apilist
+   INNER JOIN COM_CODE site
+           ON site.CODE = "SITE"
+          AND site.CODE_LABEL = apilist.SITE_DVCD
+    LEFT JOIN API_APPLY apiapply
+           ON apilist.API_APPLY_ID = apiapply.API_APPLY_ID
+        WHERE 1 = 1
+          AND (API_NM LIKE CONCAT('%', #{string}, '%')
+           OR API_EXPL LIKE CONCAT('%', #{string}, '%')
+           OR API_KEYWORD LIKE CONCAT('%', #{string}, '%'))
+     ORDER BY API_LIST_ID DESC
+        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "findApi_ApplyLIST">
@@ -96,17 +135,37 @@
     </select>
 
     <select id = "findApiKey">
-      SELECT API_KEY_ID
-           , SITE_DVCD
-           , API_KEY
-           , STRDT
-           , EDT
-        FROM API_KEY
+      SELECT apikey.API_KEY_ID
+           , apikey.SITE_DVCD
+           , site.CODE_VALUE SITENM
+           , apikey.API_KEY
+           , apikey.STRDT
+           , apikey.EDT
+        FROM API_KEY apikey
+  INNER JOIN COM_CODE site
+          ON site.CODE = "SITE"
+         AND site.CODE_LABEL = apikey.SITE_DVCD
       <if test="apikeyid != null">
        WHERE API_KEY_ID = #{apikeyid}
       </if>
     ORDER BY SITE_DVCD
        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id = "findApiKey_Search">
+        SELECT apikey.API_KEY_ID
+             , apikey.SITE_DVCD
+             , site.CODE_VALUE SITENM
+             , apikey.API_KEY
+             , apikey.STRDT
+             , apikey.EDT
+          FROM API_KEY apikey
+    INNER JOIN COM_CODE site
+            ON site.CODE = "SITE"
+           AND site.CODE_LABEL = apikey.SITE_DVCD
+         WHERE site.CODE_VALUE LIKE CONCAT('%', #{name}, '%')
+      ORDER BY SITE_DVCD
+        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id = "findComCode">
@@ -120,6 +179,28 @@
       </if>
     ORDER BY CODE,CODE_LABEL
        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id = "findAdmin_ComCode_Search">
+        SELECT ID
+             , CODE
+             , CODE_LABEL
+             , CODE_VALUE
+          FROM COM_CODE
+         WHERE CODE LIKE CONCAT('%', #{code}, '%')
+      ORDER BY CODE_LABEL
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id ="findComCode_Search">
+        SELECT ID
+        , CODE
+        , CODE_LABEL
+        , CODE_VALUE
+        FROM COM_CODE
+       WHERE CODE = #{code}
+         AND CODE_VALUE LIKE CONCAT('%', #{codevalue}, '%')
+    ORDER BY CODE,CODE_LABEL
     </select>
 
     <select id = "findinQuiryAnswer">
@@ -182,9 +263,15 @@
     </insert>
 
     <insert id="saveApiList">
-        INSERT INTO API_LIST(API_LIST_ID, API_NM, PRV_ORG, API_VIEW, API_EXPL, API_RGDT, API_APPLY_ID)
+        INSERT INTO API_LIST(API_LIST_ID, API_NM, PRV_ORG, API_VIEW, API_EXPL, API_RGDT, API_APPLY_ID, DATA_FORMAT, API_KEYWORD
+                            , SITE_DVCD, USE_DVCD, METHOD_TYPE, API_URL, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
         VALUES (#{apiresultDto.apilistid}, #{apiresultDto.apinm}, #{apiresultDto.prvorg}, 0, #{apiresultDto.apiexpl}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),
-                CASE WHEN #{apiresultDto.apiapplyid} = 0 THEN NULL ELSE #{apiresultDto.apiapplyid} END)
+                CASE WHEN #{apiresultDto.apiapplyid} = 0 THEN NULL ELSE #{apiresultDto.apiapplyid} END, #{apiresultDto.dataformat}, #{apiresultDto.apikeyword}
+               , #{apiresultDto.sitedvcd}, #{apiresultDto.usedvcd}, #{apiresultDto.methodtype}, #{apiresultDto.apiurl}
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
     </insert>
 
   <insert id = "saveapikey">
@@ -230,6 +317,14 @@
              , API_EXPL = #{apiresultDto.apiexpl}
              , API_RGDT = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
              , API_APPLY_ID = CASE WHEN #{apiresultDto.apiapplyid} = 0 THEN NULL ELSE #{apiresultDto.apiapplyid} END
+             , DATA_FORMAT = #{apiresultDto.dataformat}
+             , API_KEYWORD = #{apiresultDto.apikeyword}
+             , SITE_DVCD = #{apiresultDto.sitedvcd}
+             , USE_DVCD = #{apiresultDto.usedvcd}
+             , METHOD_TYPE = #{apiresultDto.methodtype}
+             , API_URL = #{apiresultDto.apiurl}
+             , LST_CHPR = #{userid}
+             , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
          WHERE API_LIST_ID = #{apiresultDto.apilistid}
     </update>
 

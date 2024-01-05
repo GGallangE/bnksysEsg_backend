@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Service
 public class MailService {
@@ -22,25 +24,27 @@ public class MailService {
     @Autowired
     JavaMailSender javaMailSender;
 
-    public void sendMailwithExcel(String to, byte[] excelData, String filePath) {
+    public void sendMailwithAttachment(String apiname,String to, byte[] data, String fileName) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            String subject = "BNKSYS_API 중계 시스템 예약 전송";
+            String subject = apiname;
             String message = to + "님께 API 전송 결과를 전송하였습니다.";
 
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(message, true);
 
-            ByteArrayResource file = new ByteArrayResource(excelData);
-            mimeMessageHelper.addAttachment(filePath + ".xlsx", file);
+            ByteArrayResource file = new ByteArrayResource(data);
+            mimeMessageHelper.addAttachment(fileName, file);
 
             javaMailSender.send(mimeMessage);
-            System.out.println("Success - 메일 전송 성공(엑셀)");
+            System.out.println("Success - 메일 전송 성공"+fileName);
         } catch (MessagingException e) {
-            System.out.println("Fail - 메일 전송 실패(엑셀)");
+            System.out.println("Fail - 메일 전송 실패"+fileName);
             throw new RuntimeException(e);
+        }finally {
+            deleteFile(fileName);
         }
     }
 
@@ -60,6 +64,14 @@ public class MailService {
         } catch (MessagingException e) {
             System.out.println("Fail - 메일 전송 실패");
             throw new RuntimeException(e);
+        }
+    }
+
+    private void deleteFile(String fileName) {
+        try {
+            Files.deleteIfExists(Paths.get(fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

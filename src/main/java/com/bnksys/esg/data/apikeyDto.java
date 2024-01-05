@@ -9,11 +9,21 @@ public class apikeyDto {
 
     private String sitedvcd;
 
+    private String sitenm;
+
     private String apikey;
 
     private String strdt;
 
     private String edt;
+
+    public String getSitenm() {
+        return sitenm;
+    }
+
+    public void setSitenm(String sitenm) {
+        this.sitenm = sitenm;
+    }
 
     public int getApikeyid() {
         return apikeyid;

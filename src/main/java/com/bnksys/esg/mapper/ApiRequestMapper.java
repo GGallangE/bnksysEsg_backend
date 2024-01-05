@@ -24,4 +24,6 @@ public interface ApiRequestMapper {
     String findDataFormat(@Param("apilistid") int apilistid);
 
     String findApiNm(@Param("apilistid") int apilistid);
+
+    String findApiFormat(@Param("batchlistid") int batchlistid);
 }

@@ -26,32 +26,9 @@ public class ApiBatchService {
         this.batchListMapper = batchListMapper;
     }
 
-    public void apilist_Business(int batchlistid,int apilistid, int userid){
-        /* 국세청_사업자등록정보 상태조회 서비스 */
+    public void apirequest (int batchlistid,int apilistid, int userid) throws Exception {
+        String apiformat = apiRequestMapper.findApiFormat(batchlistid);
         String email = mainMapper.findbyuserid(userid);
-        System.out.println("1번쨰 도착");
-        apiResponseService.apilist_Business(email, batchlistid, apilistid);
-        System.out.println("메일 완료~~~~~");
-    }
-    public void apilist_Electronic(int batchlistid,int apilistid, int userid){
-        String email = mainMapper.findbyuserid(userid);
-    }
-    public void apilist_Business2(int batchlistid,int apilistid, int userid){
-        String email = mainMapper.findbyuserid(userid);
-    }
-    public void apilist_Test(int batchlistid,int apilistid, int userid){
-        String email = mainMapper.findbyuserid(userid);
-    }
-
-    public void apirequest (int batchlistid,int apilistid, int userid){
-        String methodType = apiRequestMapper.findMethod_Type(apilistid);
-        String apiformat = batchListMapper.find_apiformat(batchlistid);
-        String email = mainMapper.findbyuserid(userid);
-        if(methodType.equals("POST")){
-            apiResponseService.request_post(email, batchlistid, apilistid, userid, apiformat);
-        }else{
-            apiResponseService.request_get(email, batchlistid, apilistid, userid, apiformat);
-        }
-
+        apiResponseService.request(email, batchlistid, apilistid, userid, apiformat);
     }
 }
