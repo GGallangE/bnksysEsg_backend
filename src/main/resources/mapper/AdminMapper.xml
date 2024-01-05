@@ -226,12 +226,16 @@
            , ari.RQRD_RQST_NM
            , ari.ITEM_EXPL
            , ari.SORT
+           , COUNT(*) OVER() TOTAL
         FROM API_RQRD_ITEMS ari
   INNER JOIN API_LIST apilist
           ON apilist.API_LIST_ID = ari.API_LIST_ID
       <if test="apirqrditemsid != null">
          AND ari.API_RQRD_ITEMS_ID = #{apirqrditemsid}
       </if>
+     <if test="apinm != null">
+         AND apilist.API_NM LIKE CONCAT('%', #{apinm}, '%')
+     </if>
     ORDER BY ari.API_RQRD_ITEMS_ID
        LIMIT #{pageSize} OFFSET #{offset}
     </select>
@@ -242,11 +246,15 @@
            , apilist.API_NM
            , ari.KR_NM
            , ari.EN_NM
+           , COUNT(*) OVER() TOTAL
         FROM API_RSQE_ITEMS ari
   INNER JOIN API_LIST apilist
           ON apilist.API_LIST_ID = ari.API_LIST_ID
       <if test="apirsqeitemsid != null">
          AND ari.API_RSQE_ITEMS_ID = #{apirsqeitemsid}
+      </if>
+      <if test="apinm != null">
+         AND apilist.API_NM LIKE CONCAT('%', #{apinm}, '%')
       </if>
     ORDER BY ari.API_RSQE_ITEMS_ID
        LIMIT #{pageSize} OFFSET #{offset}

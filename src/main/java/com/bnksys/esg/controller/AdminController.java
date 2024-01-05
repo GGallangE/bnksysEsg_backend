@@ -330,11 +330,12 @@ public class AdminController {
     }
 
     @GetMapping("/api/need_request")
-    public ResponseEntity<ListResponse<apiNeedRequestDto>> findNeed_Request(@RequestParam(value = "apirqrditemsid", required = false) Integer apirqrditemsid
-        ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
+    public ResponseEntity<ListResponse<apiNeedRequestDto>> findNeed_Request(@RequestParam(value = "apirqrditemsid", required = false) Integer apirqrditemsid,
+                                                                            @RequestParam(value = "apinm", required = false) String apinm,
+        @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
         ListResponse<apiNeedRequestDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
-
-        List<apiNeedRequestDto> NeedRequestList = adminService.findNeed_Request(apirqrditemsid, page, pageSize);
+        if(apinm == null || apinm =="") apinm = null;
+        List<apiNeedRequestDto> NeedRequestList = adminService.findNeed_Request(apirqrditemsid, apinm, page, pageSize);
 
         response.setSuccess(true);
         response.getData().put("data", NeedRequestList);
@@ -365,10 +366,12 @@ public class AdminController {
 
     @GetMapping("/api/need_response")
     public ResponseEntity<ListResponse<apiNeedResponseDto>> findNeed_Response(@RequestParam(value = "apirsqeitemsid", required = false) Integer apirsqeitemsid
+                                                                              ,@RequestParam(value = "apinm", required = false) String apinm
         ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
         ListResponse<apiNeedResponseDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
 
-        List<apiNeedResponseDto> NeedResponseList = adminService.findNeed_Response(apirsqeitemsid, page, pageSize);
+        if(apinm == null || apinm =="") apinm = null;
+        List<apiNeedResponseDto> NeedResponseList = adminService.findNeed_Response(apirsqeitemsid, apinm, page, pageSize);
 
         response.setSuccess(true);
         response.getData().put("data", NeedResponseList);

@@ -43,9 +43,9 @@ public interface AdminMapper {
 
     List<comCodeDto> findAdmin_ComCode_Search(@Param("code") String code, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
-    List<apiNeedRequestDto> findNeed_Request(@Param("apirqrditemsid") Integer apirqrditemsid, @Param("offset") int offset, @Param("pageSize") int pageSize);
+    List<apiNeedRequestDto> findNeed_Request(@Param("apirqrditemsid") Integer apirqrditemsid, @Param("apinm") String apinm, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
-    List<apiNeedResponseDto> findNeed_Response(@Param("apirsqeitemsid") Integer apirsqeitemsid, @Param("offset") int offset, @Param("pageSize") int pageSize);
+    List<apiNeedResponseDto> findNeed_Response(@Param("apirsqeitemsid") Integer apirsqeitemsid, @Param("apinm") String apinm, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     void saveNotice(@Param("noticenm") String noticenm, @Param("noticecntn") String noticecntn, @Param("atchfileid") int atchfileid);
 
