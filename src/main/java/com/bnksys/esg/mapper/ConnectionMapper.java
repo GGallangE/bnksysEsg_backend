@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ConnectionMapper {
 
-    List<apiResultDto> getResultByapilistId(@Param("apilistid") int apilistid);
+    List<apiResultDto> getResultByapilistId(@Param("email") String email, @Param("apilistid") int apilistid);
 
     void increseViewCount(@Param("apilistid") int apilistid);
 }
