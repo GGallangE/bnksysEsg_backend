@@ -13,13 +13,31 @@ public class apiResultDto {
     private String apikeyword;
     private String dataformat;
     private String sitedvcd;
+    private String sitenm;
     private String usedvcd;
     private String methodtype;
+    private String apiurl;
     private int apiapplyid;
     private String apiapplynm;
     private int countapiuses;
     private int favorite;
     private int total;
+
+    public String getApiurl() {
+        return apiurl;
+    }
+
+    public void setApiurl(String apiurl) {
+        this.apiurl = apiurl;
+    }
+
+    public String getSitenm() {
+        return sitenm;
+    }
+
+    public void setSitenm(String sitenm) {
+        this.sitenm = sitenm;
+    }
 
     public String getMethodtype() {
         return methodtype;

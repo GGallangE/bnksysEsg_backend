@@ -51,14 +51,35 @@ public class AdminService {
         return adminMapper.findApiList(apilistid, offset, pageSize);
     }
 
+    public List<apiResultDto> findApiList_Search(String string, int page, int pageSize) {
+        int offset = page * pageSize;
+        return adminMapper.findApiList_Search(string, offset, pageSize);
+    }
+
+
     public List<apikeyDto> findApiKey(Integer apikeyid, int page, int pageSize) {
         int offset = page * pageSize;
         return adminMapper.findApiKey(apikeyid, offset, pageSize);
     }
 
+    public List<apikeyDto> findApiKey_Search(String name, int page, int pageSize) {
+        int offset = page * pageSize;
+        return adminMapper.findApiKey_Search(name, offset, pageSize);
+    }
+
+
     public List<comCodeDto> findComCode(Integer id, int page, int pageSize) {
         int offset = page * pageSize;
         return adminMapper.findComCode(id, offset, pageSize);
+    }
+
+    public List<comCodeDto> findComCode_Search(String codevalue, String code) {
+        return adminMapper.findComCode_Search(codevalue, code);
+    }
+
+    public List<comCodeDto> findAdmin_ComCode_Search(String code, int page, int pageSize) {
+        int offset = page * pageSize;
+        return adminMapper.findAdmin_ComCode_Search(code, offset, pageSize);
     }
 
     public List<apiNeedRequestDto> findNeed_Request(Integer apirqrditemsid, int page, int pageSize) {
@@ -77,8 +98,9 @@ public class AdminService {
         adminMapper.saveinquiry_Answer(userid, inquiryDto);
     }
 
-    public void saveApiList(apiResultDto apiresultDto){
-        adminMapper.saveApiList(apiresultDto);
+    public void saveApiList(apiResultDto apiresultDto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.saveApiList(apiresultDto,userid);
     }
 
     public void saveNotice(String noticenm, String noticecntn, int atchfileid){
@@ -110,8 +132,9 @@ public class AdminService {
         adminMapper.updateApi_ApplyStatus(apiapplyDto);
     }
 
-    public void updateApiList(apiResultDto apiresultDto){
-        adminMapper.updateApiList(apiresultDto);
+    public void updateApiList(apiResultDto apiresultDto, String email){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.updateApiList(apiresultDto,userid);
     }
 
     public void updateinquiry_Answer(String email, inQuiryDto inquiryDto){

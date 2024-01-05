@@ -8,6 +8,7 @@ import com.bnksys.esg.service.AtchFileService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,7 +81,7 @@ public class AdminController {
     @GetMapping("/apilist")
     /* 현재 관리중인 API 목록들을 조회 할 수있는 메서드 */
     public ResponseEntity<ListResponse<apiResultDto>> findApiList(@RequestParam(value = "apilistid", required = false) Integer apilistid
-                ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
+                ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int pageSize){
         // apilistid를 넘겨 주지않으면 전체 List를, 넘겨주면 각각 상세 List에 대한 정보를 넘겨준다.
 
         // ListResponse 객체를 생성하여 초기화
@@ -94,23 +95,42 @@ public class AdminController {
         response.getMessages().add("API LIST 조회 완료");
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/apilist_search")
+    /* 현재 관리중인 API 목록들을 조회 할 수있는 메서드 */
+    public ResponseEntity<ListResponse<apiResultDto>> findApiList_Search(@RequestParam(value = "string", required = false) String string
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int pageSize){
+        // apilistid를 넘겨 주지않으면 전체 List를, 넘겨주면 각각 상세 List에 대한 정보를 넘겨준다.
+
+        // ListResponse 객체를 생성하여 초기화
+        ListResponse<apiResultDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        // adminService에서 List를 찾아서 반환
+        List<apiResultDto> apiresult = adminService.findApiList_Search(string, page, pageSize);
+
+        response.setSuccess(true);
+        response.getData().put("data", apiresult);
+        response.getMessages().add("API LIST 검색 완료");
+        return ResponseEntity.ok(response);
+    }
     
     @PostMapping("/apilist/save")
     /* 관리자가 새로운 APILIST 생성하기 위한 메서드 */
-    public ResponseEntity<Response> saveApiList(@RequestBody apiResultDto apiresultDto){
+    public ResponseEntity<Response> saveApiList(@RequestBody apiResultDto apiresultDto, Authentication authentication){
         Response response = new Response();
 
         try{
+            String email = authentication.getName();
             // 신규등록시
             if(0 == apiresultDto.getApilistid()){
                 int apilistid = adminService.maxApiListId(); // 현재 API_LIST TABLE의 PK값 + 1 받아옴.
                 apiresultDto.setApilistid(apilistid);
-                adminService.saveApiList(apiresultDto);
+                adminService.saveApiList(apiresultDto,email);
                 response.getMessages().add("등록 완료");
             }
             // 수정시
             else{
-                adminService.updateApiList(apiresultDto);
+                adminService.updateApiList(apiresultDto,email);
                 response.getMessages().add("수정 완료");
             }
 
@@ -214,6 +234,19 @@ public class AdminController {
         response.getMessages().add("api key 조회 완료");
         return ResponseEntity.ok(response);
     }
+    
+    @GetMapping("/api/key_search")
+    public ResponseEntity<ListResponse<apikeyDto>> findApiKey_Search(@RequestParam(value = "name", required = false) String name
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
+        ListResponse<apikeyDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<apikeyDto> apikeyList = adminService.findApiKey_Search(name, page, pageSize);
+
+        response.setSuccess(true);
+        response.getData().put("data", apikeyList);
+        response.getMessages().add("api key 검색 완료");
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/api/key")
     public ResponseEntity<Response> saveapikey(@RequestBody apikeyDto apikeydto){
@@ -234,6 +267,32 @@ public class AdminController {
             response.getMessages().add("비정상적인 에러 발생: " + e.getMessage());
             return ResponseEntity.badRequest().body(response);
         }
+    }
+
+    @GetMapping("/api/comcode_search")
+    public ResponseEntity<ListResponse<comCodeDto>> findComCode_Search(@RequestParam(value = "codevalue", required = false) String codevalue,
+                                                                       @RequestParam(value = "code", required = false) String code){
+        ListResponse<comCodeDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<comCodeDto> comCodeList = adminService.findComCode_Search(codevalue, code);
+
+        response.setSuccess(true);
+        response.getData().put("data", comCodeList);
+        response.getMessages().add("공통 코드 조회 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/admin_comcode_search")
+    public ResponseEntity<ListResponse<comCodeDto>> findAdmin_ComCode_Search(@RequestParam(value = "code", required = false) String code
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize){
+        ListResponse<comCodeDto> response = new ListResponse<>(new HashMap<>(), false, new ArrayList<>());
+
+        List<comCodeDto> comCodeList = adminService.findAdmin_ComCode_Search(code,page,pageSize);
+
+        response.setSuccess(true);
+        response.getData().put("data", comCodeList);
+        response.getMessages().add("공통 코드 조회 완료");
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/api/comcode")
