@@ -103,8 +103,9 @@ public class AdminService {
         adminMapper.saveApiList(apiresultDto,userid);
     }
 
-    public void saveNotice(String noticenm, String noticecntn, int atchfileid){
-        adminMapper.saveNotice(noticenm, noticecntn, atchfileid);
+    public void saveNotice(String email, String noticenm, String noticecntn, int atchfileid){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.saveNotice(userid, noticenm, noticecntn, atchfileid);
     }
 
     public void saveapikey(apikeyDto apikeydto, String email){

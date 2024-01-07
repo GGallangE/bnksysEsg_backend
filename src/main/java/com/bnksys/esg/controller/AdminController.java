@@ -204,13 +204,14 @@ public class AdminController {
 
     @PostMapping("/notice/create")
     /* 관리자가 공지사항 작성하는 메서드 */
-    public ResponseEntity<Response> savenotice(@RequestBody noticeDto noticedto){
+    public ResponseEntity<Response> savenotice(@RequestBody noticeDto noticedto, Authentication authentication){
         // 첨부파일은 선택, 공지사항 관련 변수들은 필수
 
         Response response = new Response();
         try{
+            String email = authentication.getName();
             // adminService엥서 공지사항 저장, 첨부파일 있을시 첨부파일도 함께 저장
-                            adminService.saveNotice(noticedto.getNoticenm(), noticedto.getNoticecntn(), noticedto.getAtchfileid());
+            adminService.saveNotice(email, noticedto.getNoticenm(), noticedto.getNoticecntn(), noticedto.getAtchfileid());
 
             response.setSuccess(true);
             response.getMessages().add("공지사항 등록 완료");

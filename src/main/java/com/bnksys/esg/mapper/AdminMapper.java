@@ -47,7 +47,7 @@ public interface AdminMapper {
 
     List<apiNeedResponseDto> findNeed_Response(@Param("apirsqeitemsid") Integer apirsqeitemsid, @Param("apinm") String apinm, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
-    void saveNotice(@Param("noticenm") String noticenm, @Param("noticecntn") String noticecntn, @Param("atchfileid") int atchfileid);
+    void saveNotice(@Param("userid") int userid, @Param("noticenm") String noticenm, @Param("noticecntn") String noticecntn, @Param("atchfileid") int atchfileid);
 
     void saveApiList(@Param("apiresultDto") apiResultDto apiresultDto, @Param("userid") int userid);
 
