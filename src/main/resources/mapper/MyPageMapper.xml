@@ -9,6 +9,8 @@
              , PRV_ORG
              , API_VIEW
              , API_RGDT
+             , API_EXPL
+             , API_KEYWORD
              , COUNT_API_USES
              , AUI.FAVORITE FAVORITE
         FROM API_LIST apilist
@@ -35,7 +37,9 @@
           , PRV_ORG
           , API_VIEW
           , API_RGDT
-          , COUNT_API_USES
+          , API_KEYWORD
+          , API_EXPL
+          , apiusess.COUNT_API_USES_A AS COUNT_API_USES
           , AUI.FAVORITE FAVORITE
           , COUNT(*) OVER() TOTAL
        FROM (
@@ -44,7 +48,8 @@
                  , PRV_ORG
                  , API_VIEW
                  , API_RGDT
-                 , COUNT(apiuses.API_LIST_ID) OVER (PARTITION BY apiuses.API_LIST_ID) AS COUNT_API_USES
+                 , API_KEYWORD
+                 , API_EXPL
             FROM API_LIST apilist
       INNER JOIN API_USES apiuses
               ON apilist.API_LIST_ID = apiuses.API_LIST_ID
@@ -59,6 +64,11 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
              WHERE USER_ID = (SELECT USER_ID FROM USER WHERE Email = #{email})
                AND STCD = "01") AUI
         ON AUI.API_LIST_ID = DISTINCT_API.API_LIST_ID
+LEFT JOIN (SELECT API_LIST_ID
+                , count(*) COUNT_API_USES_A
+           FROM API_USES
+           GROUP BY API_LIST_ID ) apiusess
+          ON apiusess.API_LIST_ID = DISTINCT_API.API_LIST_ID
   ORDER BY apiuses.API_USE_DATE DESC
      LIMIT #{pageSize} OFFSET #{offset}
     </select>
@@ -232,6 +242,9 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
              , TIME = #{batchlistDto.time}
              , DAY_OF_WEEK = #{batchlistDto.dayofweek}
              , DAY_OF_MONTH = #{batchlistDto.dayofmonth}
+             , API_FORMAT = #{batchlistDto.apiformat}
+             , LST_CHPR = #{userid}
+             , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
          WHERE USER_ID = #{userid}
            AND BATCH_LIST_ID = #{batchlistDto.batchlistid}
     </update>
@@ -239,6 +252,8 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
     <update id = "update_readAlarm">
         UPDATE ALARM
            SET READ_CHECK = TRUE
+             , LST_CHPR = #{userid}
+             , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
          WHERE ALARM_ID = #{alarmid}
            AND RCV_USER = #{userid}
     </update>
