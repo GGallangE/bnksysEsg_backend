@@ -23,6 +23,7 @@
                 FROM API_USES
             GROUP BY API_LIST_ID ) apiuses
           ON apiuses.API_LIST_ID = apilist.API_LIST_ID
+       WHERE apilist.API_LIST_ID = #{apilistid}
     </select>
 
     <update id = "increseViewCount" parameterType="int">
