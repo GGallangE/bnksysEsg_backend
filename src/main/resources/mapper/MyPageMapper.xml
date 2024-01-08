@@ -232,6 +232,9 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
              , TIME = #{batchlistDto.time}
              , DAY_OF_WEEK = #{batchlistDto.dayofweek}
              , DAY_OF_MONTH = #{batchlistDto.dayofmonth}
+             , API_FORMAT = #{batchlistDto.apiformat}
+             , LST_CHPR = #{userid}
+             , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
          WHERE USER_ID = #{userid}
            AND BATCH_LIST_ID = #{batchlistDto.batchlistid}
     </update>
@@ -239,6 +242,8 @@ INNER JOIN (SELECT API_LIST_ID, MAX(API_USE_DATE) API_USE_DATE FROM API_USES GRO
     <update id = "update_readAlarm">
         UPDATE ALARM
            SET READ_CHECK = TRUE
+             , LST_CHPR = #{userid}
+             , LST_CH_DTTI = CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
          WHERE ALARM_ID = #{alarmid}
            AND RCV_USER = #{userid}
     </update>
