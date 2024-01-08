@@ -16,7 +16,7 @@ public interface UserApiMapper {
 
     int findbyemail(String email);
 
-    void saveApiUses(int userId, int apilistid);
+    void saveApiUses(@Param("userid") int userId, @Param("apilistid") int apilistid);
 
     int countIntrsApi(int userId, int apilistid);
 

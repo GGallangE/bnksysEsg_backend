@@ -10,8 +10,12 @@
     </select>
 
     <insert id="saveApiUses" parameterType="java.lang.Integer">
-        INSERT INTO API_USES (USER_ID, API_LIST_ID, API_VIEW_DATE)
-        VALUES (#{arg0}, #{arg1}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'))
+        INSERT INTO API_USES (USER_ID, API_LIST_ID, API_USE_DATE, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+        VALUES (#{userid}, #{apilistid}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
     </insert>
 
     <insert id="saveIntrsApi">

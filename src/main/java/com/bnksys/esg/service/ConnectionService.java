@@ -17,8 +17,8 @@ public class ConnectionService {
         this.connectionMapper = connectionMapper;
     }
 
-    public List<apiResultDto> getResultByapilistId(int apilistid) {
-        return connectionMapper.getResultByapilistId(apilistid);
+    public List<apiResultDto> getResultByapilistId(String email,int apilistid) {
+        return connectionMapper.getResultByapilistId(email, apilistid);
     }
 
     public void increseViewCount(int apilistid){

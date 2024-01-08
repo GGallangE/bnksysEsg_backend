@@ -47,6 +47,7 @@
              , API_RGDT
              , API_APPLY_ID
              , DATA_FORMAT
+             , API_KEYWORD
              , SITE_DVCD
              , USE_DVCD
              , API_APPLY_ID

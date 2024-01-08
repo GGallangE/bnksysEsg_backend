@@ -82,14 +82,14 @@ public class AdminService {
         return adminMapper.findAdmin_ComCode_Search(code, offset, pageSize);
     }
 
-    public List<apiNeedRequestDto> findNeed_Request(Integer apirqrditemsid, int page, int pageSize) {
+    public List<apiNeedRequestDto> findNeed_Request(Integer apirqrditemsid, String apinm, int page, int pageSize) {
         int offset = page * pageSize;
-        return adminMapper.findNeed_Request(apirqrditemsid, offset, pageSize);
+        return adminMapper.findNeed_Request(apirqrditemsid, apinm, offset, pageSize);
     }
 
-    public List<apiNeedResponseDto> findNeed_Response(Integer apirsqeitemsid, int page, int pageSize) {
+    public List<apiNeedResponseDto> findNeed_Response(Integer apirsqeitemsid, String apinm, int page, int pageSize) {
         int offset = page * pageSize;
-        return adminMapper.findNeed_Response(apirsqeitemsid, offset, pageSize);
+        return adminMapper.findNeed_Response(apirsqeitemsid, apinm, offset, pageSize);
     }
 
 
@@ -103,8 +103,9 @@ public class AdminService {
         adminMapper.saveApiList(apiresultDto,userid);
     }
 
-    public void saveNotice(String noticenm, String noticecntn, int atchfileid){
-        adminMapper.saveNotice(noticenm, noticecntn, atchfileid);
+    public void saveNotice(String email, String noticenm, String noticecntn, int atchfileid){
+        int userid = mainMapper.findbyemail(email);
+        adminMapper.saveNotice(userid, noticenm, noticecntn, atchfileid);
     }
 
     public void saveapikey(apikeyDto apikeydto, String email){

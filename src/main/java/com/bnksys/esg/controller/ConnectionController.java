@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,8 +35,10 @@ public class ConnectionController {
             setViewedTodayCookie(response, apilistid);
         }
 
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (email.equals("anonymousUser")) email = null;
 
-        List<apiResultDto> result = connectionService.getResultByapilistId(apilistid);
+        List<apiResultDto> result = connectionService.getResultByapilistId(email,apilistid);
 
         Map<String, List<apiResultDto>> response_api = new HashMap<>();
         response_api.put("data", result);

@@ -4,9 +4,25 @@
 <mapper namespace="com.bnksys.esg.mapper.ConnectionMapper">
 
     <select id = "getResultByapilistId" resultType="apiResultDto">
-        SELECT *
-          FROM API_LIST
-         WHERE API_LIST_ID = #{apilistid}
+        SELECT apilist.API_LIST_ID API_LIST_ID
+             , API_NM
+             , PRV_ORG
+             , API_VIEW
+             , API_EXPL
+             , API_RGDT
+             , API_KEYWORD
+             , DATA_FORMAT
+             , SITE_DVCD
+             , USE_DVCD
+             , API_APPLY_ID
+             , COUNT_API_USES
+             , COUNT(*) OVER() TOTAL
+        FROM API_LIST apilist
+   LEFT JOIN (SELECT API_LIST_ID
+                   , count(*) COUNT_API_USES
+                FROM API_USES
+            GROUP BY API_LIST_ID ) apiuses
+          ON apiuses.API_LIST_ID = apilist.API_LIST_ID
     </select>
 
     <update id = "increseViewCount" parameterType="int">

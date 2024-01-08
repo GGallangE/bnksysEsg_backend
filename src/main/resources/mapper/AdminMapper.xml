@@ -226,12 +226,16 @@
            , ari.RQRD_RQST_NM
            , ari.ITEM_EXPL
            , ari.SORT
+           , COUNT(*) OVER() TOTAL
         FROM API_RQRD_ITEMS ari
   INNER JOIN API_LIST apilist
           ON apilist.API_LIST_ID = ari.API_LIST_ID
       <if test="apirqrditemsid != null">
          AND ari.API_RQRD_ITEMS_ID = #{apirqrditemsid}
       </if>
+     <if test="apinm != null">
+         AND apilist.API_NM LIKE CONCAT('%', #{apinm}, '%')
+     </if>
     ORDER BY ari.API_RQRD_ITEMS_ID
        LIMIT #{pageSize} OFFSET #{offset}
     </select>
@@ -242,24 +246,36 @@
            , apilist.API_NM
            , ari.KR_NM
            , ari.EN_NM
+           , COUNT(*) OVER() TOTAL
         FROM API_RSQE_ITEMS ari
   INNER JOIN API_LIST apilist
           ON apilist.API_LIST_ID = ari.API_LIST_ID
       <if test="apirsqeitemsid != null">
          AND ari.API_RSQE_ITEMS_ID = #{apirsqeitemsid}
       </if>
+      <if test="apinm != null">
+         AND apilist.API_NM LIKE CONCAT('%', #{apinm}, '%')
+      </if>
     ORDER BY ari.API_RSQE_ITEMS_ID
        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <insert id = "saveinquiry_Answer">
-        INSERT INTO INQUIRY(INQUIRY_NM, INQUIRY_CNTN, REG_DT, PARENT_ID, USER_ID)
-        VALUES (#{inquiryDto.inquirynm}, #{inquiryDto.inquirycntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), #{inquiryDto.parentid}, #{userid})
+        INSERT INTO INQUIRY(INQUIRY_NM, INQUIRY_CNTN, REG_DT, PARENT_ID, USER_ID, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+        VALUES (#{inquiryDto.inquirynm}, #{inquiryDto.inquirycntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), #{inquiryDto.parentid}, #{userid}
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
     </insert>
 
     <insert id = "saveNotice">
-        INSERT INTO NOTICE(NOTICE_NM, NOTICE_CNTN, REG_DT, ATCH_FILE_ID, HIT)
-        VALUES(#{noticenm}, #{noticecntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), CASE WHEN #{atchfileid} = 0 THEN NULL ELSE #{atchfileid} END, 0)
+        INSERT INTO NOTICE(NOTICE_NM, NOTICE_CNTN, REG_DT, ATCH_FILE_ID, HIT, USER_ID, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+        VALUES(#{noticenm}, #{noticecntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), CASE WHEN #{atchfileid} = 0 THEN NULL ELSE #{atchfileid} END, 0, #{userid}
+              , #{userid}
+              , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+              , #{userid}
+              , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
     </insert>
 
     <insert id="saveApiList">
