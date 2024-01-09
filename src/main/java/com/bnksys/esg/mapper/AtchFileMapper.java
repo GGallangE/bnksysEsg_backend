@@ -13,7 +13,7 @@ public interface AtchFileMapper {
 
     int maxAtchFileId();
 
-    void saveAtchFile(@Param("atchfileid") int atchfileid);
+    void saveAtchFile(@Param("userid") int userid, @Param("atchfileid") int atchfileid);
 
     atchDetailFileDto findAtchDetailFile(@Param("atchDetailFileId") int atchDetailFileId);
 }

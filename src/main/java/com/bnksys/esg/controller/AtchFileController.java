@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,12 +29,13 @@ public class AtchFileController {
 
     @PostMapping("/upload")
     /* 첨부파일 업로드를 위한 메소드 */
-    public ResponseEntity<Response> saveAtchFile(@RequestParam("files")MultipartFile[] files){
+    public ResponseEntity<Response> saveAtchFile(@RequestParam("files")MultipartFile[] files, Authentication authentication){
         Response response = new Response();
 
         try {
+            String email = authentication.getName();
             // atchFileService를 통해 첨부파일 저장
-            int atchfileid = atchFileService.saveAtchFile(files);
+            int atchfileid = atchFileService.saveAtchFile(email,files);
             response.setSuccess(true);
             response.getMessages().add(String.valueOf(atchfileid));
             return ResponseEntity.ok(response);
