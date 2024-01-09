@@ -16,7 +16,11 @@
 
     <insert id = "saveAtchFile">
         INSERT INTO ATCH_FILE
-        VALUES(#{atchfileid}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'))
+        VALUES(#{atchfileid}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+              , #{userid}
+              , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+              , #{userid}
+              , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))))
     </insert>
 
     <insert id = "saveAtchDetailFile">

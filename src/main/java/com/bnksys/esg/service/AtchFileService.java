@@ -2,6 +2,7 @@ package com.bnksys.esg.service;
 
 import com.bnksys.esg.data.atchDetailFileDto;
 import com.bnksys.esg.mapper.AtchFileMapper;
+import com.bnksys.esg.mapper.MainMapper;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.UrlResource;
@@ -23,18 +24,25 @@ public class AtchFileService {
     private static final String FILE_UPLOAD_PATH = "C:/dev/file/";
     AtchFileMapper atchFileMapper;
 
-    public AtchFileService(AtchFileMapper atchFileMapper){this.atchFileMapper = atchFileMapper;}
+    MainMapper mainMapper;
+
+    public AtchFileService(AtchFileMapper atchFileMapper, MainMapper mainMapper){
+        this.atchFileMapper = atchFileMapper;
+        this.mainMapper = mainMapper;
+    }
 
     @Transactional
-    public int saveAtchFile(MultipartFile[] files) throws IOException {
+    public int saveAtchFile(String email, MultipartFile[] files) throws IOException {
 
         File directory = new File(FILE_UPLOAD_PATH);
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
+        int userid = mainMapper.findbyemail(email);
+
         int atchfileid = atchFileMapper.maxAtchFileId();
-        atchFileMapper.saveAtchFile(atchfileid);
+        atchFileMapper.saveAtchFile(userid, atchfileid);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String currentTime = LocalDateTime.now().format(formatter);

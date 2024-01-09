@@ -146,7 +146,11 @@ public class ApiRequestService {
 
     public String postRequestApi(int apilistid, List<Map<String, String>> paramsList, String type) throws Exception {
         apiurlAndkeyDto apiInfo = apiRequestMapper.findurlAndkey(apilistid);
+        String dataformat = apiRequestMapper.findDataFormat(apilistid);
         String url = apiInfo.getApiUrl() + "?serviceKey=" + URLEncoder.encode(apiInfo.getApiKey(), "UTF-8");
+        if ("xml".equals(type) && dataformat.equals("XML,JSON")) {
+            url += "&returnType=XML";
+        }
         String apinm = apiRequestMapper.findApiNm(apilistid);
         String downloadFolderPath = System.getProperty("user.home") + File.separator + "Downloads" + File.separator;
 
