@@ -200,7 +200,7 @@ public class ApiRequestService {
             return "ok";
         } else if ("excel".equals(type)) {
             String sanitizedFileName = apinm.replace('/', '_');
-            filePath = Paths.get(downloadFolderPath, sanitizedFileName + ".xml").toString();
+            filePath = Paths.get(downloadFolderPath, sanitizedFileName + ".xlsx").toString();
             generateExcel_Post(combinedResponse, filePath);
             return "ok";
         } else if ("txt".equals(type)) {
