@@ -327,7 +327,6 @@ public class ApiRequestService {
     }
 
 
-
     public List<Map<String, String>> convertList_Get(StringJoiner combinedResponse) {
         List<Map<String, String>> dataList = new ArrayList<>();
 
