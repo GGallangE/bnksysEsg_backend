@@ -159,6 +159,7 @@ LEFT JOIN (SELECT API_LIST_ID
              , DAY_OF_MONTH
              , STCD
              , apilist.API_NM apinm
+             , apilist.DATA_FORMAT DATA_FORMAT
              , COUNT(*) OVER() TOTAL
           FROM BATCH_LIST batchlist
     INNER JOIN API_LIST apilist

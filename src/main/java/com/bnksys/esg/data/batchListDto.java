@@ -6,7 +6,6 @@ public class batchListDto {
     private int batchlistid;
     private int userid;
     private int apilistid;
-
     private String apiformat;
     private String batchtime;
     private String frequency;
@@ -17,6 +16,16 @@ public class batchListDto {
     private String apinm;
 
     private int total;
+
+    private String dataformat;
+
+    public String getDataformat() {
+        return dataformat;
+    }
+
+    public void setDataformat(String dataformat) {
+        this.dataformat = dataformat;
+    }
 
     private List<batchDetailArgsDto> batchDetailargsDto;
 
