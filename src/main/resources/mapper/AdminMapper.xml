@@ -331,7 +331,6 @@
            SET API_NM = #{apiresultDto.apinm}
              , PRV_ORG = #{apiresultDto.prvorg}
              , API_EXPL = #{apiresultDto.apiexpl}
-             , API_RGDT = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
              , API_APPLY_ID = CASE WHEN #{apiresultDto.apiapplyid} = 0 THEN NULL ELSE #{apiresultDto.apiapplyid} END
              , DATA_FORMAT = #{apiresultDto.dataformat}
              , API_KEYWORD = #{apiresultDto.apikeyword}

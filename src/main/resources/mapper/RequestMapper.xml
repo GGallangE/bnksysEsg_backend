@@ -4,13 +4,21 @@
 <mapper namespace="com.bnksys.esg.mapper.RequestMapper">
 
     <insert id="saveApplyApi">
-        INSERT INTO API_APPLY(USER_ID, APPLY_NM, APPLY_CNTN, APPLY_DATE, RPLY_DATE, APPLY_DVCD)
-        VALUES (#{userid}, #{apiapplyDto.applynm}, #{apiapplyDto.applycntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, "01")
+        INSERT INTO API_APPLY(USER_ID, API_LIST_ID, APPLY_NM, APPLY_CNTN, APPLY_DATE, RPLY_DATE, APPLY_DVCD, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+        VALUES (#{userid}, #{apiapplyDto.apilistid}, #{apiapplyDto.applynm}, #{apiapplyDto.applycntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, "01"
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
     </insert>
 
     <insert id ="saveInquiry">
-        INSERT INTO INQUIRY(INQUIRY_NM, INQUIRY_CNTN, REG_DT, PARENT_ID, USER_ID)
-        VALUES (#{inquiryDto.inquirynm}, #{inquiryDto.inquirycntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, #{userid})
+        INSERT INTO INQUIRY(INQUIRY_NM, INQUIRY_CNTN, REG_DT, PARENT_ID, USER_ID, FST_RGRP, FST_RG_DTTI, LST_CHPR, LST_CH_DTTI)
+        VALUES (#{inquiryDto.inquirynm}, #{inquiryDto.inquirycntn}, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), NULL, #{userid}
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))
+               , #{userid}
+               , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0')))
     </insert>
 
 </mapper>
