@@ -25,6 +25,10 @@ public class MainService {
         return mainMapper.getApiList(name, sortBy, offset, pageSize);
     }
 
+    public List<apiResultDto> getApiList_search(String name) {
+        return mainMapper.getApiList_search(name);
+    }
+
     public List<apiResultDto> getApiList_auth(String name, String sortBy, String email, int page, int pageSize) {
         int offset = page * pageSize;
         int userid = mainMapper.findbyemail(email);

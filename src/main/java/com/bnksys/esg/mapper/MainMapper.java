@@ -15,6 +15,8 @@ public interface MainMapper {
 
     List<apiResultDto> getApiList(@Param("name") String name, @Param("sortBy") String sortBy, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
+    List<apiResultDto> getApiList_search(@Param("name") String name);
+
     List<apiResultDto> getApiList_auth(@Param("name") String name, @Param("sortBy") String sortBy, @Param("userid") int userid, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     List<apiResultDto> getapiList_Top5(@Param("sort") String sort);
