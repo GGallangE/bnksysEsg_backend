@@ -18,6 +18,8 @@ public interface BatchListMapper {
 
     String find_apiformat(@Param("apilistid") int apilistid);
 
+    String findemail_batchlist(@Param("batchlistid") int batchlistid);
+
     List<batchDetailArgsDto> find_batchdetaillist(@Param("batchlistid") int batchlistid);
 
     List<apiNeedRequestDto> find_requesttlist(@Param("apilistid") int apilistid);

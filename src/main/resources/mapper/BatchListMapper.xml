@@ -27,6 +27,12 @@
            AND STCD = "01"
     </select>
 
+    <select id = "findemail_batchlist">
+        SELECT EMAIL
+          FROM BATCH_LIST
+         WHERE BATCH_LIST_ID = #{batchlistid}
+    </select>
+
     <select id = "find_requesttlist">
         SELECT *
           FROM API_RQRD_ITEMS
