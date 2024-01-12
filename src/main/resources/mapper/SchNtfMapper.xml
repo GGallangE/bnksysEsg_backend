@@ -16,7 +16,7 @@
 
     <insert id="save_BatchSchedule">
         INSERT INTO BATCH_LIST
-        VALUES (#{batchlistDto.batchlistid}, #{userid}, #{batchlistDto.apilistid}, #{batchlistDto.apiformat}, #{batchlistDto.batchtime}, #{batchlistDto.frequency},
+        VALUES (#{batchlistDto.batchlistid}, #{userid}, #{batchlistDto.apilistid}, #{batchlistDto.email}, #{batchlistDto.apiformat}, #{batchlistDto.batchtime}, #{batchlistDto.frequency},
                 #{batchlistDto.time}, #{batchlistDto.dayofweek}, #{batchlistDto.dayofmonth}, "01"
                , #{userid}
                , CONCAT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'), LPAD(FLOOR(EXTRACT(MICROSECOND FROM SYSDATE(3)) / 1000), 3, '0'))

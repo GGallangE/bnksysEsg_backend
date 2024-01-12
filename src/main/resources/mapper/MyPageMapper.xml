@@ -152,6 +152,7 @@ LEFT JOIN (SELECT API_LIST_ID
         SELECT BATCH_LIST_ID
              , batchlist.USER_ID USER_ID
              , batchlist.API_LIST_ID
+             , EMAIL
              , API_FORMAT
              , FREQUENCY
              , TIME
@@ -239,6 +240,7 @@ LEFT JOIN (SELECT API_LIST_ID
     <update id = "updateApiScheduleTime">
         UPDATE BATCH_LIST
            SET BATCH_TIME = #{batchlistDto.batchtime}
+             , EMAIL = #{batchlistDto.email}
              , FREQUENCY = #{batchlistDto.frequency}
              , TIME = #{batchlistDto.time}
              , DAY_OF_WEEK = #{batchlistDto.dayofweek}

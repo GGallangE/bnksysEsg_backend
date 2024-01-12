@@ -69,6 +69,7 @@ public class ApiResponseService {
         List<batchDetailArgsDto> batchdetaillist = batchListMapper.find_batchdetaillist(batchlistid);
         List<apiNeedRequestDto> requestlist = batchListMapper.find_requesttlist(apilistid);
         String apiname = schNtfMapper.getApiName(apilistid);
+        String sendemail = batchListMapper.findemail_batchlist(batchlistid);
         List<Map<String, String>> mappedResults = BatchDetails_RequestList(batchdetaillist, requestlist);
         String filePath;
         if ("GET".equals(methodType)){
@@ -77,7 +78,7 @@ public class ApiResponseService {
             filePath = postRequestApi(apilistid, mappedResults, apiformat);
         }
         byte[] file = Files.readAllBytes(Paths.get(filePath));
-        mailService.sendMailwithAttachment(apiname,email, file, new File(filePath).getName());
+        mailService.sendMailwithAttachment(apiname,sendemail, file, new File(filePath).getName());
         String title = "API 전송 예약 완료";
         String p_content = "에 대한 결과 메일 발송이 예약 되었습니다.";
         schNtfService.save_Alarm_Complete_Schedule(email, title, p_content, apilistid);
