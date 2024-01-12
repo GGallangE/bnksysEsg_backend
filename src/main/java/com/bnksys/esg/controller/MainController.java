@@ -46,6 +46,16 @@ public class MainController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/search/apiapply")
+    public ResponseEntity<Map<String, List<apiResultDto>>> getApiList_search(@RequestParam String name) {
+        List<apiResultDto> apiResults;
+
+        apiResults = mainService.getApiList_search(name);
+        Map<String, List<apiResultDto>> response = new HashMap<>();
+        response.put("data", apiResults);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/notice")
     /* 공지사항 Top 5를 뽑아주는 메서드 */
     public ResponseEntity<ListResponse<noticeDto>> getNoticeList(@RequestParam String mainsort

@@ -38,6 +38,13 @@
         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
+    <select id = "getApiList_search">
+        SELECT API_LIST_ID
+             , API_NM
+          FROM API_LIST
+         WHERE API_NM LIKE CONCAT('%', #{name}, '%')
+    </select>
+
     <select id = "getApiList_auth">
         SELECT apilist.API_LIST_ID API_LIST_ID
              , API_NM
