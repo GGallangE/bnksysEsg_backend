@@ -7,7 +7,11 @@ import com.bnksys.esg.response.ListResponse;
 import com.bnksys.esg.response.Response;
 import com.bnksys.esg.service.UseCaseService;
 import com.bnksys.esg.utils.AuthenticationUtils;
+import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -149,6 +155,22 @@ public class UseCaseController {
         }
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/imgurl/{filePath}")
+    public ResponseEntity<byte[]> loadImage(@RequestParam String filePath) throws IOException {
+        Response response = new Response();
+        String str = null;
+        Resource resource = null;
+        if (filePath != null && filePath != "" ) {
+            resource = new InputStreamResource(Files.newInputStream(Path.of(filePath)));
+
+            response.setSuccess(true);
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/octect-stream")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+str+";")
+                .body(IOUtils.toByteArray(resource.getInputStream()));
     }
 
     private void createUploadDir() {
