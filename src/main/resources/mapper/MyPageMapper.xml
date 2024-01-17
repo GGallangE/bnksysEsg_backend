@@ -12,6 +12,7 @@
              , API_EXPL
              , API_KEYWORD
              , COUNT_API_USES
+             , COUNT(*) OVER() TOTAL
              , AUI.FAVORITE FAVORITE
         FROM API_LIST apilist
   INNER JOIN (

@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -157,20 +159,24 @@ public class UseCaseController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/imgurl/{filePath}")
+    @GetMapping("/loadimg")
     public ResponseEntity<byte[]> loadImage(@RequestParam String filePath) throws IOException {
         Response response = new Response();
-        String str = null;
-        Resource resource = null;
-        if (filePath != null && filePath != "" ) {
-            resource = new InputStreamResource(Files.newInputStream(Path.of(filePath)));
+
+        if (filePath != null && !filePath.isEmpty()) {
+            Path file = Paths.get(UPLOAD_DIR, filePath);
+            Resource resource = new InputStreamResource(Files.newInputStream(file));
 
             response.setSuccess(true);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + filePath + ";")
+                    .body(IOUtils.toByteArray(resource.getInputStream()));
+        } else {
+            response.setSuccess(false);
+            return ResponseEntity.badRequest().body(IOUtils.toByteArray(new ByteArrayInputStream("Invalid file path".getBytes())));
         }
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, "application/octect-stream")
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+str+";")
-                .body(IOUtils.toByteArray(resource.getInputStream()));
     }
 
     private void createUploadDir() {
